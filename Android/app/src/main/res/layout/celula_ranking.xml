@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/PosicaoRanking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="1#"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="4dp"/>
+
+        <ImageView
+                android:id="@+id/FotoRanking"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:contentDescription="@string/FotoPerfilRanking"
+                android:layout_margin="4dp"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
+
+            <TextView
+                    android:id="@+id/NomeRanking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Extra Supermecado"/>
+            <TextView
+                    android:id="@+id/StatusLocal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Aberto"
+                    android:layout_gravity="end|center_vertical"
+                    android:textAlignment="viewEnd"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

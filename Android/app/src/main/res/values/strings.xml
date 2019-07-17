@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">+Tempo</string>
+
+    <string name="Login">LOGIN</string>
+    <string name="Username">Username</string>
+    <string name="Senha">Senha</string>
+    <string name="Relembrar">Lembre-se de mim</string>
+    <string name="Conectar">Conectar</string>
+    <string name="ConectarGoogle">Conectar com o Google</string>
+    <string name="Apresentacao">
+        Bem vindo ao +Tempo \n
+        Aqui você poder ver em tempo real
+        como as filas estão nos mercados e
+        suas availiações feitas pelos os
+        próprios consumidores e
+        você também poderá ajudar
+    </string>
+    <string name="DescricaoImagemLocal">Icone do Local</string>
+    <string name="Locais">Locais</string>
+    <string name="Favoritos">Favoritos</string>
+    <string name="Configuracoes">Perfil</string>
+    <string name="Pesquisa">Procurar</string>
+    <string name="Favoritar">Favoritar</string>
+    <string name="Fila">Fila do caixa</string>
+    <string name="Availiacao">Avaliação Local</string>
+    <string name="FilaMomento">Como está a fila do caixa no momento ?</string>
+    <string name="PicoFila">Pico da Fila</string>
+    <string name="ComoSeSentem">Como as pessoas se sentem</string>
+    <string name="VerTodos">Ver Todos</string>
+    <string name="RostoTriste">Rosto Triste</string>
+    <string name="RostoFeliz">Rosto Feliz</string>
+    <string name="ToqueAvaliar">Toque para avaliar</string>
+    <string name="DigiteAvaliacao">Digite a sua Avaliacao</string>
+    <string name="OrdenarListaNomesPrompt">Ordenar</string>
+    <string-array name="OrdenarListaNomes">
+        <item>A a Z</item>
+        <item>Z a A</item>
+        <item>Mais bem avaliados</item>
+        <item>Menos bem avaliados</item>
+    </string-array>
+    <string name="Titulo">Titulo</string>
+    <string name="Enviar">Enviar</string>
+    <string name="Cancelar">Cancelar</string>
+    <string name="EstouAcordo">Estou de acordo</string>
+    <string name="FotoPerfil">Foto perfil</string>
+    <string name="RaioPesquisa">Raio pesquisa</string>
+    <string name="SeusPontos">Seus Pontos</string>
+    <string name="Cadsatro">Cadastro</string>
+    <string name="AvaliacaoFila">Avaliação Fila</string>
+    <string name="AvaliacaoLocal">Availiação Local</string>
+    <string name="Total">Total</string>
+    <string name="Feedback">Feedback</string>
+    <string name="FotoPerfilRanking">Foto Perfil Ranking</string>
+    <string name="Nome">Nome</string>
+    <string name="Email">Email</string>
+    <string name="Data">Data de Nascimento</string>
+    <string name="CriarConta">Criar Conta</string>
+    <string name="Concordar">Concordo</string>
+
+    <string name="Termos">
+        Termos de utilizacao
+        \n 1
+        \n 2
+        \n 3
+        \n 4
+        \n 5
+        \n 6
+        \n 7
+        \n 8
+        \n 9
+        \n 10
+        \n 11
+        \n 12
+        \n 13
+        \n 14
+    </string>
+    <string name="CriarUsuario">Crie a usa conta</string>
+    <string name="DataNascimento">Clique para colocar a data de nascimento</string>
+    <string name="VisualizarTermos">Clique aqui para visualizar os termos</string>
+    <string name="Atencao">Atenção</string>
+    <string name="Aguarde">Aguarde um momento criando conta</string>
+    <string name="Camera">Camera</string>
+    <string name="Galeria">Galeria</string>
+    <string name="Arquivos">Arquivos</string>
+    <string name="Escolha">Aonde deseja buscar a foto ?</string>
+    <string name="ErroNome">Por favor colocar seu nome</string>
+    <string name="ErroEmail">Email está fora do padrão</string>
+    <string name="ErroSenha">Por favor coloque uma senha maior</string>
+    <string name="DataTexto">Data</string>
+    <string name="ErroCriar">Não foi possivel criar a conta</string>
+</resources>

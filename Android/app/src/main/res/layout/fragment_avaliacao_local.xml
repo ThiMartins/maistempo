@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+            android:id="@+id/ComoSente"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/ComoSeSentem"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"/>
+
+    <Button
+            android:id="@+id/VerTodasAvaliacoes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="16dp"
+            android:background="@android:color/transparent"
+            android:text="@string/VerTodos"
+            android:textColor="@color/colorAccent"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toEndOf="@+id/ComoSente"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"/>
+    <ImageView
+            android:id="@+id/Triste"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/cara_triste"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/VerTodasAvaliacoes"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/RostoTriste"/>
+    <ImageView
+            android:id="@+id/Feliz"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/cara_feliz"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/VerTodasAvaliacoes"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/RostoFeliz"/>
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ProgressoVotosAvaliacao"
+            app:layout_constraintStart_toEndOf="@id/Triste"
+            app:layout_constraintEnd_toStartOf="@id/Feliz"
+            app:layout_constraintTop_toBottomOf="@id/VerTodasAvaliacoes"
+            android:layout_marginTop="32dp"/>
+
+    <TextView
+            android:id="@+id/NumeroAvaliacoesTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/Feliz"
+            android:layout_margin="16dp"
+            tools:text="800 Avaliações"/>
+
+    <View
+            android:id="@+id/ViewSeparar"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/NumeroAvaliacoesTexto"
+            android:background="@android:color/darker_gray"/>
+
+    <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ViewSeparar"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/ToqueAvaliar"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/RatingLocal"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:textAlignment="center"/>
+
+    <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ViewSeparar"
+            android:layout_margin="16dp" style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:id="@+id/RatingLocal"/>
+
+    <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/RatingLocal"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:autofillHints="no"
+            android:hint="@string/DigiteAvaliacao"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
