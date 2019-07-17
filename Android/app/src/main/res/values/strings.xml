@@ -56,23 +56,10 @@
     <string name="Data">Data de Nascimento</string>
     <string name="CriarConta">Criar Conta</string>
     <string name="Concordar">Concordo</string>
-
     <string name="Termos">
         Termos de utilizacao
-        \n 1
-        \n 2
-        \n 3
-        \n 4
-        \n 5
-        \n 6
-        \n 7
-        \n 8
-        \n 9
-        \n 10
-        \n 11
-        \n 12
-        \n 13
-        \n 14
+        \n 1 \n 2 \n 3 \n 4 \n 5 \n 6 \n 7
+        \n 8 \n 9 \n 10 \n 11 \n 12 \n 13 \n 14
     </string>
     <string name="CriarUsuario">Crie a usa conta</string>
     <string name="DataNascimento">Clique para colocar a data de nascimento</string>
@@ -88,4 +75,12 @@
     <string name="ErroSenha">Por favor coloque uma senha maior</string>
     <string name="DataTexto">Data</string>
     <string name="ErroCriar">Não foi possivel criar a conta</string>
+    <string name="ExceptionSenhaFraca">Senha muito fraca</string>
+    <string name="ExceptionContaExistente">Conta já existente</string>
+    <string name="ExceptionEmailIncorrecto">Email fora do padrão</string>
+    <string name="SenhaIncorreta">Senha incorreta</string>
+    <string name="ContaNaoExistente">Esta conta não existe</string>
+    <string name="AddImagem">AdicionarImagem</string>
+    <string name="IrApresentacao">Apresentação</string>
+    <string name="IrNovoUsuario">Criar Usuario</string>
 </resources>
