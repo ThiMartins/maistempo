@@ -10,20 +10,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import com.tapadoo.alerter.Alerter
-import dev.tantto.maistempo.Google.Autenticacao
-import dev.tantto.maistempo.Google.EnviarFotoCloud
-import dev.tantto.maistempo.Google.GoogleFIrebaseCloudStorage
-import dev.tantto.maistempo.Google.GoogleFirebaseAutenticacao
+import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaLogin
@@ -31,9 +27,7 @@ import java.text.DateFormat
 import java.util.*
 
 class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTela:TelaLogin)
-    : Fragment(), EnviarFotoCloud, Autenticacao{
-
-    private val Alerta = Alerter.create(ReferenciaTela)
+    : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
     private val MODO_CAMERA = 0
     private val MODO_GALERIA = 1
@@ -66,6 +60,7 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
         DataTexto = Fragmento.findViewById<EditText>(R.id.DataNascimento)
         Criar = Fragmento.findViewById<Button>(R.id.NovaConta)
         EscolherData = Fragmento.findViewById<Button>(R.id.AbrirDataPicker)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Foto?.clipToOutline = true
         }
@@ -116,11 +111,7 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
     }
 
     private fun Alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {
-        Alerta.setText(Titulo)
-        Alerta.setTitle(Mensagem)
-        Alerta.setBackgroundColor(R.color.colorPrimary)
-        Alerta.setDuration(Duracao)
-        Alerta.show()
+        Alertas.CriarTela(ReferenciaTela, Mensagem, Titulo, Duracao).show()
     }
 
     private fun PegarFoto() {
@@ -182,9 +173,18 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
         ReferenciaTela.LoginConcluido(Pessoa)
     }
 
+    override fun ErroCriarUsuario(erro: TiposErrosCriar) {
+        if(erro == TiposErrosCriar.SENHA_FRACA){
+            Alerta(R.string.ExceptionSenhaFraca, R.string.Atencao, 5000)
+        } else if (erro == TiposErrosCriar.CRENDENCIAL_INVALIDA){
+            Alerta(R.string.ExceptionEmailIncorrecto, R.string.Atencao, 5000)
+        } else if (erro == TiposErrosCriar.CONTA_EXISTENTE){
+            Alerta(R.string.ExceptionContaExistente, R.string.Atencao, 5000)
+        }
+    }
+
     override fun EnviadaSucesso(Foto:Uri?) {
         CriarUsuario(Foto.toString())
-
     }
 
     override fun FalhaEnviar(Erro: String) {
