@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "217444761602",
+    "firebase_url": "https://maistempo-desenvolvendo.firebaseio.com",
+    "project_id": "maistempo-desenvolvendo",
+    "storage_bucket": "maistempo-desenvolvendo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217444761602:android:cdc8d4d3f9d7d762",
+        "android_client_info": {
+          "package_name": "dev.tantto.maistempo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217444761602-45meuriqa97c3t4jfh03rk0m48chifbl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.tantto.maistempo",
+            "certificate_hash": "ca7193e413d124a68573888ab6199a8a3987087c"
+          }
+        },
+        {
+          "client_id": "217444761602-gp5i4asim4au5m3nrfsb5pdq2r1otaun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOccbSSj-qkW6Q4BKYRCVU0l6WPJYKMkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217444761602-gp5i4asim4au5m3nrfsb5pdq2r1otaun.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

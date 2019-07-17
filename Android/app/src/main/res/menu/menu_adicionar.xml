@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:title="@string/Cancelar"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/cancelar_white"
+            android:id="@+id/CancelarAvaliacao"/>
+    <item
+            android:title="@string/Enviar"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/adicionar_white"
+            android:id="@+id/EnviarAvaliacao"/>
+</menu>
