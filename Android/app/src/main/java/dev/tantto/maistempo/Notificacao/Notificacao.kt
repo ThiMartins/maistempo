@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaPrincipal
+import dev.tantto.maistempo.telas.TelaPrincipal
 
 class Notificacao {
 

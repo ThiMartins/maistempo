@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.os.Bundle
 import android.view.Menu

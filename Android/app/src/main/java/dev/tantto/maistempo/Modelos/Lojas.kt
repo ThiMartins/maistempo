@@ -1,6 +1,13 @@
 package dev.tantto.maistempo.Modelos
 
-import android.media.Image
 import java.io.Serializable
 
-class Lojas(var Titulo:String, var Status:String, var Imagem:Int?) : Serializable
+data class Lojas(
+    var titulo:String,
+    var status:List<String>,
+    var imagem:String,
+    var latitude:Long,
+    var longitude:Long,
+    var Local:String,
+    var fila:List<String>
+) : Serializable

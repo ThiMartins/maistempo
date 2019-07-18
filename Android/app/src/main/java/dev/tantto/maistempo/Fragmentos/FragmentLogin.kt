@@ -16,7 +16,7 @@ import dev.tantto.maistempo.Google.AutenticacaoLogin
 import dev.tantto.maistempo.Google.GoogleFirebaseAutenticacao
 import dev.tantto.maistempo.Google.TiposErrosLogar
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaLogin
+import dev.tantto.maistempo.telas.TelaLogin
 
 @SuppressLint("ValidFragment")
 class FragmentLogin(private var Contexto:Context, private var ReferecenciaTela:TelaLogin) : Fragment(), AutenticacaoLogin{
@@ -50,7 +50,6 @@ class FragmentLogin(private var Contexto:Context, private var ReferecenciaTela:T
         Conectar?.setOnClickListener {
             Verificar()
         }
-
         BotaoApresentacao?.setOnClickListener {
             ReferecenciaTela.MudarTela(0)
         }
@@ -65,7 +64,7 @@ class FragmentLogin(private var Contexto:Context, private var ReferecenciaTela:T
         }
     }
 
-    override fun UsuarioLogado(User: FirebaseUser) {
+    override fun UsuarioLogado(User: FirebaseUser?) {
         ReferecenciaTela.LoginConcluido(User)
     }
 

@@ -2,13 +2,16 @@ package dev.tantto.maistempo.Dados
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.firebase.auth.FirebaseUser
 
 class Dados(private val Contexto:Context) {
 
-    private val NOME_TABELA = "ValoresTempo"
-    private val EMAIL = "EMAIL"
-    private val SENHA = "SENHA"
-    private val LOGADO = "LOGADO"
+    companion object {
+        private val NOME_TABELA = "ValoresTempo"
+        private val EMAIL = "EMAIL"
+        private val SENHA = "SENHA"
+        private val LOGADO = "LOGADO"
+    }
 
     fun SalvarLogin(Email:String, Senha:String){
         val Preferencia = RecuperarPreferencias()

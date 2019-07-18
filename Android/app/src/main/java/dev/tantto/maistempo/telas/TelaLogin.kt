@@ -1,17 +1,17 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
+import dev.tantto.maistempo.Dados.Dados
 import dev.tantto.maistempo.Fragmentos.FragmentApresentacao
 import dev.tantto.maistempo.Fragmentos.FragmentLogin
 import dev.tantto.maistempo.Fragmentos.FragmentNovoUsuario
+import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
 class TelaLogin : AppCompatActivity() {
@@ -59,9 +59,13 @@ class TelaLogin : AppCompatActivity() {
         }
     }
 
-    fun LoginConcluido(Pessoa:FirebaseUser?){
+    fun LoginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
+        Dados(this).SalvarLogin(User?.email!!, "YukiMakoto")
         val Iniciar = Intent(this, TelaPrincipal::class.java)
-        Iniciar.putExtra(Telas.GET_USER, Pessoa)
+        Iniciar.putExtra(Telas.GET_USER, User)
+        if(Pessoa != null){
+            Iniciar.putExtra(Telas.GET_PESSOA, Pessoa)
+        }
         startActivity(Iniciar)
     }
 

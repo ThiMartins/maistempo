@@ -16,8 +16,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="8dp"
             android:scrollHorizontally="true"
-            android:text="@string/Termos"
-            tools:text="@string/Termos"/>
+            android:text="@string/Termos"/>
     <CheckBox
             android:text="@string/EstouAcordo"
             android:layout_width="wrap_content"

@@ -50,24 +50,24 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/TabAvalicao"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/View">
+        app:layout_constraintTop_toBottomOf="@id/View" >
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Fila"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Availiacao"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/PaginaResumo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"

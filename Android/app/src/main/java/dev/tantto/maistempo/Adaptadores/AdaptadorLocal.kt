@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaResumo
+import dev.tantto.maistempo.telas.TelaResumo
 
 class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>) : RecyclerView.Adapter<AdaptadorLocal.Holder>() {
 
@@ -47,9 +47,9 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
         }
 
         fun AdicionandoValores(Elementos:Lojas){
-            Titulo?.text = Elementos.Titulo
-            Status?.text = Elementos.Status
-            Imagem?.setImageResource(R.drawable.icone)
+            Titulo?.text = Elementos.titulo
+            Status?.text = Elementos.status[0]
+            Imagem?.setImageResource(R.drawable.maistempocircle)
         }
 
         fun Click(position: Lojas){
@@ -65,7 +65,7 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
     fun Filtro(Filtragem:String){
         if(Filtragem.isNotEmpty()){
             Lista = Lista.filter {
-                it.Titulo.contains(Filtragem)
+                it.titulo.contains(Filtragem)
             }
 
         } else{

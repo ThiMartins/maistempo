@@ -15,7 +15,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".Telas.TelaSplash">
+        <activity android:name=".telas.TelaSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -30,21 +30,21 @@
         </service>
 
         <activity
-                android:name=".Telas.TelaLogin"
+                android:name=".telas.TelaLogin"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize"/>
         <activity
-                android:name=".Telas.TelaPrincipal"
+                android:name=".telas.TelaPrincipal"
                 android:screenOrientation="portrait">
         </activity>
         <activity
-                android:name=".Telas.TelaResumo"
+                android:name=".telas.TelaResumo"
                 android:screenOrientation="portrait"/>
         <activity
-                android:name=".Telas.TelaTermos"
+                android:name=".telas.TelaTermos"
                 android:screenOrientation="portrait" />
         <activity
-                android:name=".Telas.TelaGeral"
+                android:name=".telas.TelaGeral"
                 android:screenOrientation="portrait" />
     </application>
 
