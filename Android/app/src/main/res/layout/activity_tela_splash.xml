@@ -5,25 +5,30 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Telas.TelaSplash">
+        android:background="@color/colorPrimary"
+        tools:context=".telas.TelaSplash">
 
     <ImageView
             android:layout_width="150dp"
-            android:layout_height="150dp" app:srcCompat="@drawable/icone"
+            android:layout_height="150dp"
+            android:src="@mipmap/ic_launcher_round"
             android:id="@+id/imageView"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toTopOf="@+id/progressBar" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="131dp" android:layout_marginRight="131dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="130dp"
-            android:layout_marginStart="130dp" android:layout_marginTop="94dp"
-            app:layout_constraintTop_toTopOf="parent" android:contentDescription="@string/app_name"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="131dp"
+            android:layout_marginRight="131dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="130dp"
+            android:layout_marginStart="130dp"
+            android:layout_marginTop="94dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name"/>
     <ProgressBar
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/progressBar"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="278dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="182dp"
             android:layout_marginRight="182dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="181dp" android:layout_marginStart="181dp"/>
+            android:layout_marginLeft="181dp" android:layout_marginStart="181dp"
+            android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@+id/imageView"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

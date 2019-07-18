@@ -83,4 +83,8 @@
     <string name="AddImagem">AdicionarImagem</string>
     <string name="IrApresentacao">Apresentação</string>
     <string name="IrNovoUsuario">Criar Usuario</string>
+    <string name="TermosDeUso">Termos de uso</string>
+    <string name="Concordo">Não, eu concordo</string>
+    <string name="Discordo">Sim, eu discordo</string>
+    <string name="MensagemTermos">Você tem certeza que não concorda com os nossos termos</string>
 </resources>

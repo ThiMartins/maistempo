@@ -1,6 +1,5 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -18,6 +17,7 @@ class TelaTermos : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_termo_de_uso)
         Checado = findViewById(R.id.TermoCheked)
+        title = getString(R.string.TermosDeUso)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -33,13 +33,14 @@ class TelaTermos : AppCompatActivity() {
                 this.finish()
             } else {
                 val Alerta = AlertDialog.Builder(this)
-                Alerta.setTitle("Atenção")
-                Alerta.setMessage("Você tem certeza que não concorda com os nossos termos")
-                Alerta.setPositiveButton("Sim", DialogInterface.OnClickListener { dialog, which ->
+                Alerta.setTitle(R.string.Atencao)
+                Alerta.setMessage(R.string.MensagemTermos)
+                //SetOnClik // o _ é para se nao precisa dar variaveis
+                Alerta.setPositiveButton(R.string.Concordo) { _, _ ->
                     startActivity(Intent(this, TelaLogin::class.java))
                     this.finishAffinity()
-                })
-                Alerta.setNegativeButton("Não", null)
+                }
+                Alerta.setNegativeButton(R.string.Discordo, null)
                 Alerta.show()
             }
         }

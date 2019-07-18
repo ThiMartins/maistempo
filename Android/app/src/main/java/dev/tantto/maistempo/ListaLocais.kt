@@ -4,35 +4,28 @@ import dev.tantto.maistempo.Modelos.Lojas
 
 class ListaLocais {
 
-    private var Lista:List<Lojas> = listOf(
-        Lojas("Extra", "Aberto", null),
-        Lojas("Carrefour", "Aberto", null),
-        Lojas("Tauste", "Fechado", null),
-        Lojas("Dia", "Aberto", null),
-        Lojas("Bom Brasil", "Aberto", null),
-        Lojas("Galvez", "Fechado", null),
-        Lojas("Paulistão", "Aberto", null),
-        Lojas("McDonalds", "Aberto", null),
-        Lojas("Burguer King", "Fechado", null),
-        Lojas("Giraffas", "Aberto", null),
-        Lojas("Habbibs", "Aberto", null),
-        Lojas("Bar", "Fechado", null)
-    )
+    companion object {
+        private var Lista:List<Lojas> = listOf()
 
-    fun Adicionar(Loja:Lojas){
-        Lista += Loja
-    }
+        fun Refazer(Tabela:List<Lojas>){
+            Lista = Tabela
+        }
 
-    fun Recuperar(Index:Int) : Lojas{
-        return Lista[Index]
-    }
+        fun Adicionar(Loja:Lojas){
+            Lista += Loja
+        }
 
-    fun RecuperarTudo() : List<Lojas>{
-        return Lista
-    }
+        fun Recuperar(Index:Int) : Lojas{
+            return Lista[Index]
+        }
 
-    fun Tamanho() : Int{
-        return Lista.size
+        fun RecuperarTudo() : List<Lojas>{
+            return Lista
+        }
+
+        fun Tamanho() : Int{
+            return Lista.size
+        }
     }
 
 }

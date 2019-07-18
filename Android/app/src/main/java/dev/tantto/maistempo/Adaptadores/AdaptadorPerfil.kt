@@ -13,10 +13,10 @@ import dev.tantto.maistempo.ListaPerfil
 import dev.tantto.maistempo.Modelos.Geral
 import dev.tantto.maistempo.Modelos.Tipo
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaGeral
-import dev.tantto.maistempo.Telas.TelaLogin
-import dev.tantto.maistempo.Telas.TelaRanking
-import dev.tantto.maistempo.Telas.TelaTermos
+import dev.tantto.maistempo.telas.TelaGeral
+import dev.tantto.maistempo.telas.TelaLogin
+import dev.tantto.maistempo.telas.TelaRanking
+import dev.tantto.maistempo.telas.TelaTermos
 
 class AdaptadorPerfil(private val Contexto: Context, private val lista:List<Geral>) : RecyclerView.Adapter<AdaptadorPerfil.Holder>() {
 
@@ -42,6 +42,7 @@ class AdaptadorPerfil(private val Contexto: Context, private val lista:List<Gera
             } else if (Modo == Tipo.TERMOS){
                 Iniciar = Intent(Contexto, TelaTermos::class.java)
             } else {
+                //Desconectar e salvar no sharedPreferences
                 Iniciar = Intent(Contexto, TelaLogin::class.java)
             }
             Contexto.startActivity(Iniciar)

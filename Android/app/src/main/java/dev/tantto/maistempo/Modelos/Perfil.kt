@@ -12,5 +12,6 @@ data class Perfil(
     var PontosFila:Int = 0,
     var PontosLocais:Int = 0,
     var PontosTotais:Int = 0,
-    var Nascimento:String = ""
+    var Nascimento:String = "",
+    var Tipo:String = "admin"
 ) : Serializable

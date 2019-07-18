@@ -17,12 +17,11 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
-import com.tapadoo.alerter.Alerter
 import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaLogin
+import dev.tantto.maistempo.telas.TelaLogin
 import java.text.DateFormat
 import java.util.*
 
@@ -168,9 +167,9 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
         )
     }
 
-    override fun UsuarioCriado(Pessoa: FirebaseUser?) {
+    override fun UsuarioCriado(User: FirebaseUser?, Pessoa: Perfil) {
         //Salvar SharedPreferences
-        ReferenciaTela.LoginConcluido(Pessoa)
+        ReferenciaTela.LoginConcluido(User, Pessoa)
     }
 
     override fun ErroCriarUsuario(erro: TiposErrosCriar) {

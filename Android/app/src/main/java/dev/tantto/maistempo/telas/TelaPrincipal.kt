@@ -1,29 +1,30 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
 import dev.tantto.maistempo.Fragmentos.FragmentLocal
 import dev.tantto.maistempo.Fragmentos.FragmentPerfil
+import dev.tantto.maistempo.Google.GoogleRealtimeInterface
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.ListaPerfil
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaPrincipal : AppCompatActivity() {
+class TelaPrincipal : AppCompatActivity(), GoogleRealtimeInterface {
 
     private var TodosLocais:FragmentLocal? = null
     private var FavoritosLocais:FragmentLocal? = null
     private var Perfil:FragmentPerfil? = null
     private var Tabs:TabLayout? = null
     private var Pagina:ViewPager? = null
+    private var Pessoa:Perfil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +37,18 @@ class TelaPrincipal : AppCompatActivity() {
         ConfigurandoPager()
         SetandoTabItens()
 
+        if(intent.hasExtra(Telas.GET_USER)){
+            if(intent.hasExtra(Telas.GET_PESSOA)){
+                val User = intent.getSerializableExtra(Telas.GET_PESSOA) as Perfil
+            }
+        }
+
     }
 
+
     private fun SetantoFragmentos() {
-        TodosLocais = FragmentLocal(this, ListaLocais().RecuperarTudo())
-        FavoritosLocais = FragmentLocal(this, ListaLocais().RecuperarTudo().asReversed())
+        TodosLocais = FragmentLocal(this, ListaLocais.RecuperarTudo())
+        FavoritosLocais = FragmentLocal(this, ListaLocais.RecuperarTudo().asReversed())
         Perfil = FragmentPerfil(this, ListaPerfil().RecuperarTudo())
     }
 
@@ -77,6 +85,18 @@ class TelaPrincipal : AppCompatActivity() {
         })
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun DadosRecebidos(User: FirebaseUser?, Dados: Perfil) {
+        Pessoa = Dados
+    }
+
+    fun Geral(){
+        val Iniciar = Intent(this, TelaGeral::class.java)
+        if(Pessoa != null){
+            Iniciar.putExtra(Telas.GET_PESSOA, Pessoa)
+        }
+        startActivity(Iniciar)
     }
 
 }
