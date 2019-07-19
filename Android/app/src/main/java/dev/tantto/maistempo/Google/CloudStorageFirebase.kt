@@ -1,17 +1,9 @@
 package dev.tantto.maistempo.Google
 
 import android.net.Uri
-import android.os.Environment
-import android.util.Log
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageException
-import java.io.File
-import java.io.FileInputStream
-import java.net.URI
-import java.util.*
 
-class GoogleFIrebaseCloudStorage {
+class CloudStorageFirebase {
 
     companion object {
         private val Store = FirebaseStorage.getInstance()

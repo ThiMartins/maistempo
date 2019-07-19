@@ -5,7 +5,7 @@ import com.google.firebase.messaging.RemoteMessage
 import dev.tantto.maistempo.Notificacao.Notificacao
 
 
-class GoogleFirebaseCloudMessasing : FirebaseMessagingService() {
+class CloudMessasingFirebase : FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage?) {
         super.onMessageReceived(p0)

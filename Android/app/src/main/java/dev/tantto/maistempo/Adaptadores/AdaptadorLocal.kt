@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.telas.TelaResumo
+import dev.tantto.maistempo.Telas.TelaResumo
 
 class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>) : RecyclerView.Adapter<AdaptadorLocal.Holder>() {
 

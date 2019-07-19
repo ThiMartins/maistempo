@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.telas
+package dev.tantto.maistempo.Telas
 
 class Telas {
     companion object{
