@@ -6,8 +6,9 @@ data class Lojas(
     var titulo:String,
     var status:List<String>,
     var imagem:String,
-    var latitude:Long,
-    var longitude:Long,
+    var latitude:Double,
+    var longitude:Double,
     var Local:String,
-    var fila:List<String>
+    var fila:List<String>,
+    var cidade:String
 ) : Serializable

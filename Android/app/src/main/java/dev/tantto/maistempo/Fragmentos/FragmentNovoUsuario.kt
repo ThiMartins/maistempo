@@ -21,12 +21,14 @@ import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.telas.TelaLogin
+import dev.tantto.maistempo.Telas.TelaLogin
 import java.text.DateFormat
 import java.util.*
 
-class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTela:TelaLogin)
-    : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
+class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
+
+    private lateinit var Contexto:Context
+    private lateinit var ReferenciaTela:TelaLogin
 
     private val MODO_CAMERA = 0
     private val MODO_GALERIA = 1
@@ -43,7 +45,7 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
     private var EscolherData:Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val Fragmento = LayoutInflater.from(Contexto).inflate(R.layout.fragment_novo_usuario, container, false)
+        val Fragmento = inflater.inflate(R.layout.fragment_novo_usuario, container, false)
 
         ConfigurandoView(Fragmento)
         Eventos()
@@ -63,6 +65,12 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Foto?.clipToOutline = true
         }
+    }
+
+    fun setandoReferencia(Contexto:Context, ref:TelaLogin) : FragmentNovoUsuario{
+        this.Contexto = Contexto
+        ReferenciaTela = ref
+        return this
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -119,15 +127,15 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
         Caixa.setItems(arrayOf("Camera", "Galeria", "Arquivos"), DialogInterface.OnClickListener { dialog, which ->
             val Iniciar = Intent()
             if (which == 0) {
-                Iniciar.setAction(MediaStore.ACTION_IMAGE_CAPTURE)
+                Iniciar.action = MediaStore.ACTION_IMAGE_CAPTURE
                 startActivityForResult(Iniciar, MODO_CAMERA)
             } else if (which == 1) {
-                Iniciar.setType("image/*")
-                Iniciar.setAction(Intent.ACTION_PICK)
+                Iniciar.type = "image/*"
+                Iniciar.action = Intent.ACTION_PICK
                 startActivityForResult(Iniciar, MODO_GALERIA)
             } else if (which == 2) {
-                Iniciar.setType("image/*")
-                Iniciar.setAction(Intent.ACTION_GET_CONTENT)
+                Iniciar.type = "image/*"
+                Iniciar.action = Intent.ACTION_GET_CONTENT
                 startActivityForResult(Iniciar, MODO_ARQUIVOS)
             }
         })
@@ -140,7 +148,7 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
                 if (Senha?.text?.toString()?.length!! > 6){
                     Alerta(R.string.Atencao, R.string.Aguarde)
                     if(CaminhoFoto != null){
-                        GoogleFIrebaseCloudStorage.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                        CloudStorageFirebase.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                     } else {
                         CriarUsuario()
                     }
@@ -156,7 +164,7 @@ class FragmentNovoUsuario(private val Contexto:Context, private val ReferenciaTe
     }
 
     private fun CriarUsuario(Valor:String = "") {
-        GoogleFirebaseAutenticacao.CriarUsuario(
+        FirebaseAutenticacao.CriarUsuario(
             Perfil(
                 Titulo = Nome?.text.toString(),
                 Email = Email?.text.toString(),

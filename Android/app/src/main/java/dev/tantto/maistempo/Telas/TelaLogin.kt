@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.telas
+package dev.tantto.maistempo.Telas
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -53,20 +53,26 @@ class TelaLogin : AppCompatActivity() {
 
     private fun ReferenciandoFragments() {
         if (Login == null && Apresentacao == null) {
-            Login = FragmentLogin(this, this)
-            Apresentacao = FragmentApresentacao(this)
-            Novo = FragmentNovoUsuario(this, this)
+            Login = FragmentLogin().setandoReferencia(this)
+            Apresentacao = FragmentApresentacao()
+            Novo = FragmentNovoUsuario().setandoReferencia(this, this)
         }
     }
 
     fun LoginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
-        Dados(this).SalvarLogin(User?.email!!, "YukiMakoto")
+        Dados(this).SalvarLogin(User?.email!!, "YukiMakoto", "Sorocaba")
         val Iniciar = Intent(this, TelaPrincipal::class.java)
         Iniciar.putExtra(Telas.GET_USER, User)
         if(Pessoa != null){
             Iniciar.putExtra(Telas.GET_PESSOA, Pessoa)
         }
         startActivity(Iniciar)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Login?.setandoReferencia(this)
+        Novo?.setandoReferencia(this, this)
     }
 
 }

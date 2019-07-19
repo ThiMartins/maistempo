@@ -5,14 +5,14 @@ import dev.tantto.maistempo.Modelos.Lojas
 class ListaLocais {
 
     companion object {
-        private var Lista:List<Lojas> = listOf()
+        private var Lista = mutableListOf<Lojas>()
 
-        fun Refazer(Tabela:List<Lojas>){
+        fun Refazer(Tabela:MutableList<Lojas>){
             Lista = Tabela
         }
 
         fun Adicionar(Loja:Lojas){
-            Lista += Loja
+            Lista.add(Loja)
         }
 
         fun Recuperar(Index:Int) : Lojas{

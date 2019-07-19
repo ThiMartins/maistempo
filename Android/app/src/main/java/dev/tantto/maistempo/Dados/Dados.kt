@@ -2,7 +2,6 @@ package dev.tantto.maistempo.Dados
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.firebase.auth.FirebaseUser
 
 class Dados(private val Contexto:Context) {
 
@@ -10,26 +9,25 @@ class Dados(private val Contexto:Context) {
         private val NOME_TABELA = "ValoresTempo"
         private val EMAIL = "EMAIL"
         private val SENHA = "SENHA"
-        private val LOGADO = "LOGADO"
+        private val CIDADE = "CIDADE"
     }
 
-    fun SalvarLogin(Email:String, Senha:String){
+    fun SalvarLogin(Email:String, Senha:String, Cidade:String){
         val Preferencia = RecuperarPreferencias()
         val Editor = Preferencia?.edit()
         Editor?.putString(EMAIL, Email)
         Editor?.putString(SENHA, Senha)
-        Editor?.putBoolean(LOGADO, true)
+        Editor?.putString(CIDADE, Cidade)
         Editor?.apply()
     }
 
     private fun RecuperarPreferencias(): SharedPreferences? {
-        val Preferencia = Contexto.getSharedPreferences(NOME_TABELA, 0)
-        return Preferencia
+        return Contexto.getSharedPreferences(NOME_TABELA, 0)
     }
 
-    fun Logado() : Boolean{
+    fun Local() : String{
         val Preferencia = RecuperarPreferencias()
-        return Preferencia?.getBoolean(LOGADO, false)!!
+        return Preferencia?.getString(CIDADE, "")!!
     }
 
 }

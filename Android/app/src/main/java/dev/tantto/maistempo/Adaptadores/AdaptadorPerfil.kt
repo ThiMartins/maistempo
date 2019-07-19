@@ -13,10 +13,10 @@ import dev.tantto.maistempo.ListaPerfil
 import dev.tantto.maistempo.Modelos.Geral
 import dev.tantto.maistempo.Modelos.Tipo
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.telas.TelaGeral
-import dev.tantto.maistempo.telas.TelaLogin
-import dev.tantto.maistempo.telas.TelaRanking
-import dev.tantto.maistempo.telas.TelaTermos
+import dev.tantto.maistempo.Telas.TelaGeral
+import dev.tantto.maistempo.Telas.TelaLogin
+import dev.tantto.maistempo.Telas.TelaRanking
+import dev.tantto.maistempo.Telas.TelaTermos
 
 class AdaptadorPerfil(private val Contexto: Context, private val lista:List<Geral>) : RecyclerView.Adapter<AdaptadorPerfil.Holder>() {
 
@@ -35,15 +35,12 @@ class AdaptadorPerfil(private val Contexto: Context, private val lista:List<Gera
         holder.Card?.setOnClickListener {
             val Modo = ListaPerfil().Recuperar(position).Modo
             val Iniciar:Intent
-            if(Modo == Tipo.GERAL){
-                Iniciar = Intent(Contexto, TelaGeral::class.java)
-            } else if(Modo == Tipo.RANKING){
-                Iniciar = Intent(Contexto, TelaRanking::class.java)
-            } else if (Modo == Tipo.TERMOS){
-                Iniciar = Intent(Contexto, TelaTermos::class.java)
-            } else {
-                //Desconectar e salvar no sharedPreferences
-                Iniciar = Intent(Contexto, TelaLogin::class.java)
+            Iniciar = when (Modo) {
+                Tipo.GERAL -> Intent(Contexto, TelaGeral::class.java)
+                Tipo.RANKING -> Intent(Contexto, TelaRanking::class.java)
+                Tipo.TERMOS -> Intent(Contexto, TelaTermos::class.java)
+                else -> //Desconectar e salvar no sharedPreferences
+                    Intent(Contexto, TelaLogin::class.java)
             }
             Contexto.startActivity(Iniciar)
         }

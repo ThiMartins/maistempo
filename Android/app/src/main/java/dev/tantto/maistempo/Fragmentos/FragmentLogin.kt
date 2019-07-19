@@ -1,7 +1,5 @@
 package dev.tantto.maistempo.Fragmentos
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,30 +9,44 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
+import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Google.AutenticacaoLogin
-import dev.tantto.maistempo.Google.GoogleFirebaseAutenticacao
+import dev.tantto.maistempo.Google.FirebaseAutenticacao
 import dev.tantto.maistempo.Google.TiposErrosLogar
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.telas.TelaLogin
+import dev.tantto.maistempo.Telas.TelaLogin
 
-@SuppressLint("ValidFragment")
-class FragmentLogin(private var Contexto:Context, private var ReferecenciaTela:TelaLogin) : Fragment(), AutenticacaoLogin{
+class FragmentLogin: Fragment(), AutenticacaoLogin{
 
-    var UserName:EditText? = null
-    var Senha:EditText? = null
-    var SalvarUsuario:CheckBox? = null
-    var Conectar:Button? = null
+    private lateinit var ReferecenciaTela:TelaLogin
+
+    private var UserName:EditText? = null
+    private var Senha:EditText? = null
+    private var SalvarUsuario:CheckBox? = null
+    private var Conectar:Button? = null
     private var BotaoApresentacao:Button? = null
     private var BotaoNovo:Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val View = LayoutInflater.from(Contexto).inflate(R.layout.fragment_login, container, false)
-        RecuperarView(View)
+        val View = inflater.inflate(R.layout.fragment_login, container, false)
+        recuperarView(View)
         return View
     }
 
-    private fun RecuperarView(View: View) {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(Chaves.CHAVE_USERNAME.valor, UserName?.text.toString())
+        outState.putString(Chaves.CHAVE_SENHA.valor, Senha?.text.toString())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        UserName?.setText(savedInstanceState?.getString(Chaves.CHAVE_USERNAME.valor))
+        Senha?.setText(savedInstanceState?.getString(Chaves.CHAVE_SENHA.valor))
+    }
+
+    private fun recuperarView(View: View) {
         UserName = View.findViewById(R.id.UserName)
         Senha = View.findViewById(R.id.Senha)
         SalvarUsuario = View.findViewById(R.id.LembrarLogin)
@@ -42,13 +54,18 @@ class FragmentLogin(private var Contexto:Context, private var ReferecenciaTela:T
         BotaoApresentacao = View.findViewById<Button>(R.id.IrApresentacao)
         BotaoNovo = View.findViewById<Button>(R.id.IrNovo)
 
-        Eventos()
+        eventos()
 
     }
 
-    private fun Eventos() {
+    fun setandoReferencia(ref:TelaLogin) : FragmentLogin{
+        ReferecenciaTela = ref
+        return this
+    }
+
+    private fun eventos() {
         Conectar?.setOnClickListener {
-            Verificar()
+            verificar()
         }
         BotaoApresentacao?.setOnClickListener {
             ReferecenciaTela.MudarTela(0)
@@ -58,9 +75,9 @@ class FragmentLogin(private var Contexto:Context, private var ReferecenciaTela:T
         }
     }
 
-    private fun Verificar(){
+    private fun verificar(){
         if(UserName?.text?.isNotEmpty()!! && Senha?.text?.isNotEmpty()!!){
-            GoogleFirebaseAutenticacao.LogarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
+            FirebaseAutenticacao.LogarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
         }
     }
 

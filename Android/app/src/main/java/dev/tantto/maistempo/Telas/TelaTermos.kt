@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.telas
+package dev.tantto.maistempo.Telas
 
 import android.content.Intent
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.telas
+package dev.tantto.maistempo.Telas
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,13 +11,13 @@ import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
 import dev.tantto.maistempo.Fragmentos.FragmentLocal
 import dev.tantto.maistempo.Fragmentos.FragmentPerfil
-import dev.tantto.maistempo.Google.GoogleRealtimeInterface
+import dev.tantto.maistempo.Google.DatabasePerfilInterface
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.ListaPerfil
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaPrincipal : AppCompatActivity(), GoogleRealtimeInterface {
+class TelaPrincipal : AppCompatActivity(), DatabasePerfilInterface {
 
     private var TodosLocais:FragmentLocal? = null
     private var FavoritosLocais:FragmentLocal? = null

@@ -9,43 +9,33 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-            android:allowBackup="true"
+            android:allowBackup="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".telas.TelaSplash">
+
+        <activity android:name=".Telas.TelaSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <service android:name=".Google.GoogleFirebaseCloudMessasing">
+        <service android:name=".Google.CloudMessasingFirebase">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
-        <activity
-                android:name=".telas.TelaLogin"
-                android:screenOrientation="portrait"
-                android:windowSoftInputMode="adjustResize"/>
-        <activity
-                android:name=".telas.TelaPrincipal"
-                android:screenOrientation="portrait">
-        </activity>
-        <activity
-                android:name=".telas.TelaResumo"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".telas.TelaTermos"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".telas.TelaGeral"
-                android:screenOrientation="portrait" />
+        <activity android:name=".Telas.TelaLogin"/>
+        <activity android:name=".Telas.TelaPrincipal" />
+        <activity android:name=".Telas.TelaResumo" />
+        <activity android:name=".Telas.TelaTermos" />
+        <activity android:name=".Telas.TelaGeral" />
+
     </application>
 
 </manifest>

@@ -15,7 +15,7 @@ enum class TiposErrosLogar{
     SENHA_INCORRETA
 }
 
-class GoogleFirebaseAutenticacao{
+class FirebaseAutenticacao{
 
     companion object {
 
@@ -41,7 +41,7 @@ class GoogleFirebaseAutenticacao{
         fun CriarUsuario(Pessoa:Perfil, Interface:AutenticacaoCriar){
             Autenticacao.createUserWithEmailAndPassword(Pessoa.Email, Pessoa.Senha).addOnCompleteListener {
                 if(it.isSuccessful){
-                    GoogleFirebaseRealtimeDatabase.SalvarDados(Pessoa)
+                    DatabaseFirebaseSalvar.SalvarDados(Pessoa)
                     val User = it.result
                     Interface.UsuarioCriado(User?.user, Pessoa)
                 } else {
