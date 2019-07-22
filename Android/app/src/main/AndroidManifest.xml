@@ -35,6 +35,7 @@
         <activity android:name=".Telas.TelaResumo" />
         <activity android:name=".Telas.TelaTermos" />
         <activity android:name=".Telas.TelaGeral" />
+        <activity android:name=".Telas.TelaRanking" />
 
     </application>
 

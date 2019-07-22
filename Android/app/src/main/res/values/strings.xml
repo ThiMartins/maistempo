@@ -80,11 +80,22 @@
     <string name="ExceptionEmailIncorrecto">Email fora do padrão</string>
     <string name="SenhaIncorreta">Senha incorreta</string>
     <string name="ContaNaoExistente">Esta conta não existe</string>
-    <string name="AddImagem">AdicionarImagem</string>
+    <string name="AddImagem">Adicionar Imagem</string>
     <string name="IrApresentacao">Apresentação</string>
     <string name="IrNovoUsuario">Criar Usuario</string>
     <string name="TermosDeUso">Termos de uso</string>
     <string name="Concordo">Não, eu concordo</string>
     <string name="Discordo">Sim, eu discordo</string>
     <string name="MensagemTermos">Você tem certeza que não concorda com os nossos termos</string>
+    <string-array name="ItensOpcaoFoto">
+        <item>Camera</item>
+        <item>Galeria</item>
+        <item>Arquivos</item>
+    </string-array>
+    <string name="Avalicoes"> Availações</string>
+    <string name="Endereco">Endereço:</string>
+    <string name="Telefone">Telefone:</string>
+    <string name="Status">Status:</string>
+    <string name="UmKM">1 KM</string>
+    <string name="CincoKM">5 KM</string>
 </resources>

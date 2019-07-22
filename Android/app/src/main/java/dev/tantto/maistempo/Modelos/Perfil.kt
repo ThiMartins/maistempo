@@ -1,17 +1,18 @@
 package dev.tantto.maistempo.Modelos
 
+import android.graphics.Bitmap
 import java.io.Serializable
 
 data class Perfil(
-    var Titulo:String = "User",
-    var Imagem:String = "",
-    var Email:String = "email",
-    var Raio:Int = 1,
-    var PontosCadastro:Int = 0,
-    var PontosFila:Int = 0,
-    var PontosLocais:Int = 0,
-    var PontosTotais:Int = 0,
-    var Nascimento:String = "",
-    var Tipo:String = "admin",
-    var Senha:String = ""
+    var titulo:String = "User",
+    var imagem:Bitmap? = null,
+    var email:String = "email",
+    var raio:String = "1",
+    var pontosCadastro:String = "0",
+    var pontosFila:String = "0",
+    var pontosLocais:String = "0",
+    var pontosTotais:String = "0",
+    var nascimento:String = "",
+    var tipo:String = "admin",
+    var senha:String = ""
 ) : Serializable

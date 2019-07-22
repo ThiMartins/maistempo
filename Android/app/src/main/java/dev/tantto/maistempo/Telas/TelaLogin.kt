@@ -52,11 +52,9 @@ class TelaLogin : AppCompatActivity() {
     }
 
     private fun ReferenciandoFragments() {
-        if (Login == null && Apresentacao == null) {
-            Login = FragmentLogin().setandoReferencia(this)
-            Apresentacao = FragmentApresentacao()
-            Novo = FragmentNovoUsuario().setandoReferencia(this, this)
-        }
+        Login = FragmentLogin().setandoReferencia(this)
+        Apresentacao = FragmentApresentacao()
+        Novo = FragmentNovoUsuario().setandoReferencia(this, this)
     }
 
     fun LoginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){

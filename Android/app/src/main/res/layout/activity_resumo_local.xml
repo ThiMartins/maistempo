@@ -7,20 +7,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <ImageView
+            android:id="@+id/FotoResumo"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:contentDescription="@string/DescricaoImagemLocal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="16dp"
+            android:background="@drawable/borda_imagem"/>
+
     <TextView
         android:id="@+id/EnderecoResumo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/FotoResumo"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="22dp"
         tools:text="Endereco:"/>
 
     <TextView
         android:id="@+id/TelefoneResumo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/FotoResumo"
         app:layout_constraintTop_toBottomOf="@id/EnderecoResumo"
         android:layout_margin="8dp"
         tools:text="Telefone:"/>
@@ -29,7 +41,7 @@
         android:id="@+id/StatusResumo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/FotoResumo"
         app:layout_constraintTop_toBottomOf="@id/TelefoneResumo"
         android:layout_margin="8dp"
         tools:text="Aberto - Fecha as 22:00"/>
@@ -40,7 +52,7 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/StatusResumo"
+        app:layout_constraintTop_toBottomOf="@id/FotoResumo"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"

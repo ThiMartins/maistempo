@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import dev.tantto.maistempo.Google.FirebaseAutenticacao
 import dev.tantto.maistempo.ListaPerfil
 import dev.tantto.maistempo.Modelos.Geral
 import dev.tantto.maistempo.Modelos.Tipo
@@ -35,12 +36,14 @@ class AdaptadorPerfil(private val Contexto: Context, private val lista:List<Gera
         holder.Card?.setOnClickListener {
             val Modo = ListaPerfil().Recuperar(position).Modo
             val Iniciar:Intent
+            if(Modo == Tipo.SAIR){
+                FirebaseAutenticacao.deslogarUser()
+            }
             Iniciar = when (Modo) {
                 Tipo.GERAL -> Intent(Contexto, TelaGeral::class.java)
                 Tipo.RANKING -> Intent(Contexto, TelaRanking::class.java)
                 Tipo.TERMOS -> Intent(Contexto, TelaTermos::class.java)
-                else -> //Desconectar e salvar no sharedPreferences
-                    Intent(Contexto, TelaLogin::class.java)
+                else -> Intent(Contexto, TelaLogin::class.java)
             }
             Contexto.startActivity(Iniciar)
         }

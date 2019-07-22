@@ -128,7 +128,7 @@
 
 
         <Button
-                android:id="@+id/NovaConta"
+                android:id="@+id/CriarNovaConta"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -140,23 +140,13 @@
                 android:background="@drawable/borda_botao"
                 android:textColor="@android:color/white"/>
 
-        <TextView
-                android:id="@+id/VerTermos"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/NovaConta"
-                android:layout_margin="16dp"
-                android:text="@string/VisualizarTermos"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
         <Space
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="140dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/VerTermos"/>
+                app:layout_constraintTop_toBottomOf="@+id/CriarNovaConta"
+                android:layout_marginTop="8dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -24,6 +24,6 @@ class baixarImagemAsyncTask : AsyncTask<String, Int, Bitmap>() {
 
 interface LojasRecuperadas{
 
-    fun DadosRecebidos(Lista: MutableList<Lojas>)
+    fun DadosRecebidosImagens(Lista: MutableList<Lojas>)
 
 }
