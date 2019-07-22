@@ -1,7 +1,16 @@
 package dev.tantto.maistempo.Google
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
+import java.io.File
+
+enum class TipoDonwload(var Valor:String){
+    ICONE("iconesLojas"),
+    PERFIl("images")
+}
 
 class CloudStorageFirebase {
 
@@ -12,7 +21,7 @@ class CloudStorageFirebase {
             val Referecia = Store.reference.child("images/$Email")
             if (Caminho != null){
                 Referecia.putFile(Caminho).addOnCompleteListener{
-                    Interface.EnviadaSucesso(it.result?.uploadSessionUri)
+                    Interface.EnviadaSucesso()
 
                 }.addOnFailureListener {
                     Interface.FalhaEnviar(it.localizedMessage)
@@ -27,12 +36,32 @@ class CloudStorageFirebase {
         }
 
     }
+
+    fun DonwloadCloud(Email: String, Tipo:TipoDonwload, Interface:DownloadFotoCloud){
+        val Refencia = Store.getReference("${Tipo.Valor}/$Email")
+        val arquivo = File.createTempFile("perfil", "jpg")
+        Refencia.getFile(arquivo).addOnCompleteListener {
+            if(it.isSuccessful){
+                val image = BitmapFactory.decodeFile(arquivo.absolutePath)
+                Interface.ImagemBaixada(image)
+                Log.i("Debug", "Finalizado")
+            } else {
+                Log.i("Debug", "Erro")
+            }
+        }
+    }
 }
 
 interface EnviarFotoCloud{
 
-    fun EnviadaSucesso(Foto:Uri?)
+    fun EnviadaSucesso()
     fun FalhaEnviar(Erro:String)
     fun EnviarProgresso(Progresso:Double)
+
+}
+
+interface DownloadFotoCloud{
+
+    fun ImagemBaixada(Imagem:Bitmap)
 
 }

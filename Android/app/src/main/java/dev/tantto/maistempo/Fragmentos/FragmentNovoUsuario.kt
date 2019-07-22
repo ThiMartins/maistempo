@@ -3,7 +3,6 @@ package dev.tantto.maistempo.Fragmentos
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -46,20 +45,18 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val Fragmento = inflater.inflate(R.layout.fragment_novo_usuario, container, false)
-
-        ConfigurandoView(Fragmento)
-        Eventos()
-
+        configurandoView(Fragmento)
+        eventos()
         return Fragmento
     }
 
-    private fun ConfigurandoView(Fragmento:View) {
+    private fun configurandoView(Fragmento:View) {
         Nome = Fragmento.findViewById<EditText>(R.id.NomeNovo)
         Email = Fragmento.findViewById<EditText>(R.id.EmailNovo)
         Senha = Fragmento.findViewById<EditText>(R.id.SenhaNovo)
         Foto = Fragmento.findViewById<ImageView>(R.id.FotoNovoUsuario)
         DataTexto = Fragmento.findViewById<EditText>(R.id.DataNascimento)
-        Criar = Fragmento.findViewById<Button>(R.id.NovaConta)
+        Criar = Fragmento.findViewById<Button>(R.id.CriarNovaConta)
         EscolherData = Fragmento.findViewById<Button>(R.id.AbrirDataPicker)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -77,7 +74,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
-            val FotoSelecionada = data.extras.get("data") as Bitmap
+            val FotoSelecionada = data.extras?.get("data") as Bitmap
             CaminhoFoto = data.data
             Foto?.setImageBitmap(FotoSelecionada)
 
@@ -92,110 +89,110 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         }
     }
 
-    private fun Eventos() {
+    private fun eventos() {
         Criar?.setOnClickListener {
-            Verificar()
+            verificar()
         }
 
         EscolherData?.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val DataNascimento = DatePickerDialog(Contexto)
                 DataNascimento.show()
-                DataNascimento.setOnDateSetListener { view, year, month, dayOfMonth ->
+                DataNascimento.setOnDateSetListener { _, year, month, dayOfMonth ->
                     Data = Date(year, month, dayOfMonth)
                     val DataFormatada = DateFormat.getDateInstance().format(Data)
                     DataTexto?.setText(DataFormatada)
                 }
             } else {
-                TODO("Fazer o date picker para versoes menores que N")
+                Toast.makeText(Contexto, "Ainda nao implementado usar o label", Toast.LENGTH_LONG).show()
             }
         }
 
         Foto?.setOnClickListener {
-            PegarFoto()
+            pegarFoto()
         }
 
     }
 
-    private fun Alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {
+    private fun alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {
         Alertas.CriarTela(ReferenciaTela, Mensagem, Titulo, Duracao).show()
     }
 
-    private fun PegarFoto() {
+    private fun pegarFoto() {
         val Caixa = AlertDialog.Builder(Contexto)
         Caixa.setTitle(R.string.Escolha)
-        Caixa.setItems(arrayOf("Camera", "Galeria", "Arquivos"), DialogInterface.OnClickListener { dialog, which ->
+        Caixa.setItems(arrayOf("Camera", "Galeria", "Arquivos")) { _, which ->
             val Iniciar = Intent()
-            if (which == 0) {
-                Iniciar.action = MediaStore.ACTION_IMAGE_CAPTURE
-                startActivityForResult(Iniciar, MODO_CAMERA)
-            } else if (which == 1) {
-                Iniciar.type = "image/*"
-                Iniciar.action = Intent.ACTION_PICK
-                startActivityForResult(Iniciar, MODO_GALERIA)
-            } else if (which == 2) {
-                Iniciar.type = "image/*"
-                Iniciar.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(Iniciar, MODO_ARQUIVOS)
+            when (which) {
+                0 -> {
+                    Iniciar.action = MediaStore.ACTION_IMAGE_CAPTURE
+                    startActivityForResult(Iniciar, MODO_CAMERA)
+                }
+                1 -> {
+                    Iniciar.type = "image/*"
+                    Iniciar.action = Intent.ACTION_PICK
+                    startActivityForResult(Iniciar, MODO_GALERIA)
+                }
+                2 -> {
+                    Iniciar.type = "image/*"
+                    Iniciar.action = Intent.ACTION_GET_CONTENT
+                    startActivityForResult(Iniciar, MODO_ARQUIVOS)
+                }
             }
-        })
+        }
         Caixa.show()
     }
 
-    private fun Verificar() {
+    private fun verificar() {
         if(Nome?.text?.isNotEmpty()!! ){
             if (Email?.text?.contains("@")!!){
                 if (Senha?.text?.toString()?.length!! > 6){
-                    Alerta(R.string.Atencao, R.string.Aguarde)
+                    alerta(R.string.Atencao, R.string.Aguarde)
                     if(CaminhoFoto != null){
                         CloudStorageFirebase.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                     } else {
-                        CriarUsuario()
+                        criarUsuario()
                     }
                 } else {
-                    Alerta(R.string.ErroSenha, R.string.Atencao)
+                    alerta(R.string.ErroSenha, R.string.Atencao)
                 }
             } else {
-                Alerta(R.string.ErroEmail, R.string.Atencao)
+                alerta(R.string.ErroEmail, R.string.Atencao)
             }
         } else {
-            Alerta(R.string.ErroNome, R.string.Atencao)
+            alerta(R.string.ErroNome, R.string.Atencao)
         }
     }
 
-    private fun CriarUsuario(Valor:String = "") {
-        FirebaseAutenticacao.CriarUsuario(
+    private fun criarUsuario() {
+        FirebaseAutenticacao.criarUsuario(
             Perfil(
-                Titulo = Nome?.text.toString(),
-                Email = Email?.text.toString(),
-                Senha = Senha?.text.toString(),
-                Imagem = Valor,
-                Nascimento = DataTexto?.text.toString()
+                titulo = Nome?.text.toString(),
+                email = Email?.text.toString(),
+                senha = Senha?.text.toString(),
+                nascimento = DataTexto?.text.toString()
             ), this
         )
     }
 
-    override fun UsuarioCriado(User: FirebaseUser?, Pessoa: Perfil) {
-        //Salvar SharedPreferences
+    override fun usuarioCriado(User: FirebaseUser?, Pessoa: Perfil) {
         ReferenciaTela.LoginConcluido(User, Pessoa)
     }
 
-    override fun ErroCriarUsuario(erro: TiposErrosCriar) {
-        if(erro == TiposErrosCriar.SENHA_FRACA){
-            Alerta(R.string.ExceptionSenhaFraca, R.string.Atencao, 5000)
-        } else if (erro == TiposErrosCriar.CRENDENCIAL_INVALIDA){
-            Alerta(R.string.ExceptionEmailIncorrecto, R.string.Atencao, 5000)
-        } else if (erro == TiposErrosCriar.CONTA_EXISTENTE){
-            Alerta(R.string.ExceptionContaExistente, R.string.Atencao, 5000)
+    override fun erroCriarUsuario(erro: TiposErrosCriar) {
+        when (erro) {
+            TiposErrosCriar.SENHA_FRACA -> alerta(R.string.ExceptionSenhaFraca, R.string.Atencao, 5000)
+            TiposErrosCriar.CRENDENCIAL_INVALIDA -> alerta(R.string.ExceptionEmailIncorrecto, R.string.Atencao, 5000)
+            TiposErrosCriar.CONTA_EXISTENTE -> alerta(R.string.ExceptionContaExistente, R.string.Atencao, 5000)
         }
     }
 
-    override fun EnviadaSucesso(Foto:Uri?) {
-        CriarUsuario(Foto.toString())
+    override fun EnviadaSucesso() {
+        criarUsuario()
     }
 
     override fun FalhaEnviar(Erro: String) {
-        Alerta(R.string.ErroCriar, R.string.Atencao, 5000)
+        alerta(R.string.ErroCriar, R.string.Atencao, 5000)
     }
 
     override fun EnviarProgresso(Progresso: Double) {

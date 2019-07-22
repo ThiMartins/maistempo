@@ -7,23 +7,31 @@
         android:layout_height="match_parent">
 
     <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@mipmap/ic_launcher_round"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/FotoPerfil"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="16dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/borda_imagem"
             android:contentDescription="@string/FotoPerfil"/>
+    <ProgressBar
+            android:id="@+id/CaregandoImagem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="42dp"/>
     <TextView
             tools:text="@string/FotoPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/NomePerfil"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             app:layout_constraintStart_toEndOf="@+id/FotoPerfil"/>
 
     <TextView
@@ -48,7 +56,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0873"
             android:layout_marginTop="8dp"
-            android:text="1 KM"
+            android:text="@string/UmKM"
             android:textSize="16sp"/>
 
     <SeekBar
@@ -62,7 +70,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:max="500"/>
 
     <TextView
             android:id="@+id/DistanciaMaxima"
@@ -73,7 +82,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
             android:layout_marginTop="8dp"
-            android:text="5 KM"
+            android:text="@string/CincoKM"
             android:textSize="16sp"/>
 
     <TextView

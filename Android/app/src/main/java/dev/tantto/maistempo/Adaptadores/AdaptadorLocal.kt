@@ -2,6 +2,7 @@ package dev.tantto.maistempo.Adaptadores
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,15 +42,20 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
 
         fun SetandoItens() {
             Titulo = Item.findViewById<TextView>(R.id.TituloLocal)
-            Status = Item.findViewById<TextView>(R.id.StatusLocal)
+            Status = Item.findViewById<TextView>(R.id.StatusRanking)
             Imagem = Item.findViewById<ImageView>(R.id.ImagemLocal)
             Card = Item.findViewById<CardView>(R.id.CardItem)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Imagem?.clipToOutline = true
+            }
+
         }
 
         fun AdicionandoValores(Elementos:Lojas){
             Titulo?.text = Elementos.titulo
             Status?.text = Elementos.status[0]
-            Imagem?.setImageResource(R.drawable.maistempocircle)
+            Imagem?.setImageResource(R.drawable.maistemposquare)
         }
 
         fun Click(position: Lojas){

@@ -19,7 +19,8 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:contentDescription="@string/DescricaoImagemLocal"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:background="@drawable/borda_imagem" />
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -37,7 +38,7 @@
                     android:textStyle="bold"
                     tools:text="Extra"/>
             <TextView
-                    android:id="@+id/StatusLocal"
+                    android:id="@+id/StatusRanking"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"

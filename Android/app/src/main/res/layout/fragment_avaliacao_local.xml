@@ -79,38 +79,40 @@
             android:background="@android:color/darker_gray"/>
 
     <TextView
+            android:id="@+id/TextoAvaliarRaking"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ViewSeparar"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="25dp"
+            android:layout_margin="16dp"
             android:text="@string/ToqueAvaliar"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/RatingLocal"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            app:layout_constraintHorizontal_bias="1.0"/>
 
     <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ViewSeparar"
-            android:layout_margin="16dp" style="@style/Widget.AppCompat.RatingBar.Indicator"
-            android:id="@+id/RatingLocal"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TextoAvaliarRaking"
+            android:layout_margin="16dp"
+            android:id="@+id/RatingLocal"
+            style="@style/Widget.AppCompat.RatingBar"/>
 
     <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/RatingLocal"
             app:layout_constraintEnd_toEndOf="parent"
             android:autofillHints="no"
-            android:hint="@string/DigiteAvaliacao"/>
+            android:hint="@string/DigiteAvaliacao" tools:targetApi="o"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

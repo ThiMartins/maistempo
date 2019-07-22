@@ -1,13 +1,16 @@
 package dev.tantto.maistempo.Telas
 
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
+import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Fragmentos.FragmentAvaliacao
 import dev.tantto.maistempo.Fragmentos.FragmentResumo
 import dev.tantto.maistempo.Modelos.Lojas
@@ -22,40 +25,53 @@ class TelaResumo : AppCompatActivity() {
     private var TabIndicator:TabLayout? = null
     private var FilaResumo:FragmentResumo? = null
     private var AvaliacaoResumo:FragmentAvaliacao? = null
+    private var Foto:ImageView? = null
+    private var LojaInfo:Lojas? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resumo_local)
         ConfigurandoView()
-
-        if(intent.hasExtra("TELAPRINCIPAL")){
-            val Item = intent.getSerializableExtra("TELAPRINCIPAL") as Lojas
-            Endereco?.text = "Endereco: " + Item.Local
-            Telefone?.text = "Telefone: 15 991321814"
-            Status?.text = "Status: " + Item.status
-            title = Item.titulo
-        }
+        RecuperarLoja()
 
         Pagina = findViewById<ViewPager>(R.id.PaginaResumo)
         TabIndicator = findViewById<TabLayout>(R.id.TabAvalicao)
 
+        CongigurandoPaginas()
 
+    }
 
+    private fun RecuperarLoja() {
+        if (intent.hasExtra(Chaves.CHAVE_TELAPRINCIPAL.valor)) {
+            LojaInfo = intent.getSerializableExtra(Chaves.CHAVE_TELAPRINCIPAL.valor) as Lojas
+            Endereco?.text = String.format(getString(R.string.Endereco) + LojaInfo?.local)
+            Telefone?.text = String.format(getString(R.string.Telefone) + LojaInfo?.telefone)
+            Status?.text = String.format(getString(R.string.Status) + LojaInfo?.status)
+            title = LojaInfo?.titulo
+            Foto?.setImageResource(R.drawable.maistempocircle)
+        }
+    }
+
+    private fun CongigurandoPaginas() {
         TabIndicator?.setupWithViewPager(Pagina)
         FilaResumo = FragmentResumo(this)
+        FilaResumo?.PassandoLja(LojaInfo!!)
         AvaliacaoResumo = FragmentAvaliacao(this)
         val ListaFragmentos = listOf(FilaResumo!!, AvaliacaoResumo!!)
         Pagina?.adapter = ViewPagerAdaptador(supportFragmentManager, ListaFragmentos)
 
         TabIndicator?.getTabAt(0)?.setText(R.string.Fila)
         TabIndicator?.getTabAt(1)?.setText(R.string.Availiacao)
-
     }
 
     private fun ConfigurandoView() {
         Endereco = findViewById<TextView>(R.id.EnderecoResumo)
         Telefone = findViewById<TextView>(R.id.TelefoneResumo)
         Status = findViewById<TextView>(R.id.StatusResumo)
+        Foto = findViewById<ImageView>(R.id.FotoResumo)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Foto?.clipToOutline = true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

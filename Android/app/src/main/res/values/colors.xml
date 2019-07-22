@@ -3,4 +3,16 @@
     <color name="colorPrimary">#BE373A</color>
     <color name="colorPrimaryDark">#9B2A30</color>
     <color name="colorAccent">#3F51B5</color>
+
+    <color name="VerdeClaro">#99FF99</color>
+    <color name="Verde">#00CC00</color>
+    <color name="VerdeEscuro">#006600</color>
+    <color name="AmareloClaro">#FFFF99</color>
+    <color name="Amarelo">#FFFF00</color>
+    <color name="AmreloEscuro">#FFCC00</color>
+    <color name="VermelhoClaro">#FF6666</color>
+    <color name="Vermelho">#FF0000</color>
+    <color name="VermelhoEscuro">#990000</color>
+    <color name="VermelhoMuitoEscuro">#330000</color>
+
 </resources>

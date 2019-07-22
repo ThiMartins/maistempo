@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import dev.tantto.maistempo.Google.FirebaseAutenticacao
 import dev.tantto.maistempo.R
 
 class TelaTermos : AppCompatActivity() {
@@ -37,10 +38,13 @@ class TelaTermos : AppCompatActivity() {
                 Alerta.setMessage(R.string.MensagemTermos)
                 //SetOnClik // o _ é para se nao precisa dar variaveis
                 Alerta.setPositiveButton(R.string.Concordo) { _, _ ->
-                    startActivity(Intent(this, TelaLogin::class.java))
-                    this.finishAffinity()
+                    finish()
                 }
-                Alerta.setNegativeButton(R.string.Discordo, null)
+                Alerta.setNegativeButton(R.string.Discordo) { _, _ ->
+                    FirebaseAutenticacao.deslogarUser()
+                    startActivity(Intent(this, TelaLogin::class.java))
+                    finishAffinity()
+                }
                 Alerta.show()
             }
         }
