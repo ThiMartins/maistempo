@@ -17,6 +17,24 @@ class Alertas {
             return  Alerta
         }
 
+        fun CriarTela(Tela: Activity, Mensagem:String, Titulo:String, Duracao:Long = 10000) : Alerter{
+            val Alerta = Alerter.create(Tela)
+            Alerta.setText(Mensagem)
+            Alerta.setTitle(Titulo)
+            Alerta.setBackgroundColor(R.color.colorPrimary)
+            Alerta.setDuration(Duracao)
+            return  Alerta
+        }
+
+        fun CriarTela(Tela: Activity, Mensagem:String, Titulo:Int, Duracao:Long = 10000) : Alerter{
+            val Alerta = Alerter.create(Tela)
+            Alerta.setText(Mensagem)
+            Alerta.setTitle(Titulo)
+            Alerta.setBackgroundColor(R.color.colorPrimary)
+            Alerta.setDuration(Duracao)
+            return  Alerta
+        }
+
     }
 
 }

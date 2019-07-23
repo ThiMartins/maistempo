@@ -3,6 +3,7 @@ package dev.tantto.maistempo.Adaptadores
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,7 @@ class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setandoValor()
-        holder.colocarValor(Lista[position].titulo, Lista[position].pontosTotais, position + 1)
+        holder.colocarValor(Lista[position].titulo, Lista[position].pontosTotais.toString(), position + 1)
         holder.colocarImagem(Lista[position].email)
     }
 

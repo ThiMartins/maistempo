@@ -21,7 +21,6 @@ class TelaPrincipal : AppCompatActivity(){
     private var Perfil:FragmentPerfil? = null
     private var Tabs:TabLayout? = null
     private var Pagina:ViewPager? = null
-    private var Pessoa:Perfil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +35,10 @@ class TelaPrincipal : AppCompatActivity(){
     }
 
     private fun SetantoFragmentos() {
-        TodosLocais = FragmentLocal(this, ListaLocais.RecuperarTudo())
-        FavoritosLocais = FragmentLocal(this, ListaLocais.RecuperarTudo().asReversed())
+        TodosLocais = FragmentLocal()
+        TodosLocais?.setandoValores(this, ListaLocais.RecuperarTudo())
+        FavoritosLocais = FragmentLocal()
+        FavoritosLocais?.setandoValores(this, ListaLocais.RecuperarTudo().asReversed())
         Perfil = FragmentPerfil(this, ListaPerfil().RecuperarTudo())
     }
 

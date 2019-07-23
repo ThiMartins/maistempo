@@ -54,9 +54,9 @@ class TelaResumo : AppCompatActivity() {
 
     private fun CongigurandoPaginas() {
         TabIndicator?.setupWithViewPager(Pagina)
-        FilaResumo = FragmentResumo(this)
-        FilaResumo?.PassandoLja(LojaInfo!!)
-        AvaliacaoResumo = FragmentAvaliacao(this)
+        FilaResumo = FragmentResumo()
+        FilaResumo?.PassandoLja(LojaInfo!!, this, this)
+        AvaliacaoResumo = FragmentAvaliacao()
         val ListaFragmentos = listOf(FilaResumo!!, AvaliacaoResumo!!)
         Pagina?.adapter = ViewPagerAdaptador(supportFragmentManager, ListaFragmentos)
 

@@ -75,6 +75,7 @@
     <string name="ErroSenha">Por favor coloque uma senha maior</string>
     <string name="DataTexto">Data</string>
     <string name="ErroCriar">Não foi possivel criar a conta</string>
+    <string name="CriandoConta">Criando conta</string>
     <string name="ExceptionSenhaFraca">Senha muito fraca</string>
     <string name="ExceptionContaExistente">Conta já existente</string>
     <string name="ExceptionEmailIncorrecto">Email fora do padrão</string>
@@ -98,4 +99,37 @@
     <string name="Status">Status:</string>
     <string name="UmKM">1 KM</string>
     <string name="CincoKM">5 KM</string>
+    <string-array name="Horarios">
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+        <item>22:00</item>
+        <item>23:00</item>
+        <item>00:00</item>
+        <item>01:00</item>
+        <item>02:00</item>
+        <item>03:00</item>
+        <item>04:00</item>
+        <item>05:00</item>
+        <item>06:00</item>
+        <item>07:00</item>
+    </string-array>
+    <string name="HorarioHint">Escolha o horario</string>
+    <string name="SuaNota">Sua nota</string>
+    <string name="ParaHorario">para o horario de</string>
+    <string name="Deletar">Deletar</string>
+    <string name="ErroPermissaoFoto">Sem permissão não é possivel colocar a foto de perfil</string>
+    <string name="ErroPermissao">Permissão negada</string>
+    <string name="Permissao">Permissão aceita</string>
 </resources>

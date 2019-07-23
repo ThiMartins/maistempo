@@ -23,16 +23,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="42dp"/>
-    <TextView
-            tools:text="@string/FotoPerfil"
-            android:layout_width="wrap_content"
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/NomePerfil"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="56dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            app:layout_constraintStart_toEndOf="@+id/FotoPerfil"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="32dp"
+            app:layout_constraintStart_toEndOf="@+id/FotoPerfil">
+
+        <EditText
+                android:id="@+id/NomePerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="@string/FotoPerfil"
+                android:inputType="textPersonName"
+                android:hint="@string/Username" android:importantForAutofill="no" tools:targetApi="o"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
             android:layout_width="wrap_content"

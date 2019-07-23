@@ -19,7 +19,7 @@ import dev.tantto.maistempo.Telas.TelaLogin
 
 class FragmentLogin: Fragment(), AutenticacaoLogin{
 
-    private lateinit var ReferecenciaTela:TelaLogin
+    private var Referecencia:TelaLogin? = null
 
     private var UserName:EditText? = null
     private var Senha:EditText? = null
@@ -42,10 +42,12 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        /*if(savedInstanceState?.containsKey(Chaves.CHAVE_USERNAME.valor)!! && savedInstanceState.containsKey(Chaves.CHAVE_SENHA.valor)){
-            UserName?.setText(savedInstanceState.getString(Chaves.CHAVE_USERNAME.valor))
-            senha?.setText(savedInstanceState.getString(Chaves.CHAVE_SENHA.valor))
-        }*/
+        if (savedInstanceState != null){
+            if(savedInstanceState.containsKey(Chaves.CHAVE_USERNAME.valor) && savedInstanceState.containsKey(Chaves.CHAVE_SENHA.valor)){
+                UserName?.setText(savedInstanceState.getString(Chaves.CHAVE_USERNAME.valor))
+                Senha?.setText(savedInstanceState.getString(Chaves.CHAVE_SENHA.valor))
+            }
+        }
     }
 
     private fun recuperarView(View: View) {
@@ -61,16 +63,16 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
     }
 
     fun setandoReferencia(ref:TelaLogin) : FragmentLogin{
-        ReferecenciaTela = ref
+        Referecencia = ref
         return this
     }
 
     private fun eventos() {
         BotaoApresentacao?.setOnClickListener {
-            ReferecenciaTela.MudarTela(0)
+            Referecencia?.MudarTela(0)
         }
         BotaoNovo?.setOnClickListener {
-            ReferecenciaTela.MudarTela(2)
+            Referecencia?.MudarTela(2)
         }
         Conectar?.setOnClickListener {
             verificar()
@@ -79,19 +81,20 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     private fun verificar(){
         if(UserName?.text?.isNotEmpty()!! && Senha?.text?.isNotEmpty()!!){
+            Alertas.CriarTela(Referecencia!!, R.string.CriandoConta, R.string.Aguarde, 5000).show()
             FirebaseAutenticacao.logarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
         }
     }
 
     override fun usuarioLogado(User: FirebaseUser?) {
-        ReferecenciaTela.LoginConcluido(User)
+        Referecencia?.LoginConcluido(User)
     }
 
     override fun erroLogar(Erro: TiposErrosLogar) {
         if(Erro == TiposErrosLogar.SENHA_INCORRETA){
-            Alertas.CriarTela(ReferecenciaTela, R.string.SenhaIncorreta, R.string.Atencao, 5000).show()
+            Alertas.CriarTela(Referecencia!!, R.string.SenhaIncorreta, R.string.Atencao, 5000).show()
         } else if(Erro == TiposErrosLogar.CONTA_NAO_EXISTENTE){
-            Alertas.CriarTela(ReferecenciaTela, R.string.ContaNaoExistente, R.string.Atencao, 5000).show()
+            Alertas.CriarTela(Referecencia!!, R.string.ContaNaoExistente, R.string.Atencao, 5000).show()
         }
     }
 }
