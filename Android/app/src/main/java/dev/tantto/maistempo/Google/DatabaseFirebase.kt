@@ -2,12 +2,21 @@ package dev.tantto.maistempo.Google
 
 import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import java.math.BigDecimal
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DataSnapshot
+
+enum class TipoPontos(val valor:String){
+    PONTOS_FILA("pontosFila"),
+    PONTOS_AVALIACAO("pontosLocais"),
+    PONTOS_TOTAIS("pontosTotais")
+}
 
 class DatabaseFirebaseSalvar {
 
@@ -16,11 +25,19 @@ class DatabaseFirebaseSalvar {
         val BancoFirestore = FirebaseFirestore.getInstance()
         val BancoDatabase = FirebaseDatabase.getInstance()
 
-        fun SalvarDados(Dados:Perfil){
-            BancoFirestore.collection("usuarios").document(Dados.email).set(Dados)
+        fun salvarDados(Dados:Perfil){
+            BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Dados.email).set(Dados)
         }
 
-        fun AdicionarDadosLocal(){
+        fun adicionarPontos(Email: String, Pontos:Int, Tipo:TipoPontos){
+            val Documento = BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).get()
+            Documento.addOnSuccessListener {
+                val valorRecuperado = it.get(Tipo.valor).toString().toLong()
+                val fila = it.get(TipoPontos.PONTOS_FILA.valor).toString().toLong()
+                val avaliacao = it.get(TipoPontos.PONTOS_AVALIACAO.valor).toString().toLong()
+                BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Tipo.valor, Pontos + valorRecuperado)
+                BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(TipoPontos.PONTOS_TOTAIS.valor, fila + avaliacao + 1)
+            }
 
         }
     }
@@ -34,13 +51,13 @@ class DatabaseFirebaseRecuperar {
         val BancoFirestore = FirebaseFirestore.getInstance()
 
         @Suppress("unchecked_cast")
-        fun RecuperarLocal(Cidade:String, Interface:DatabaseLocaisInterface){
+        fun recuperarLojasLocais(Cidade:String, Interface:DatabaseLocaisInterface){
             BancoFirestore.collection(Chaves.CHAVE_LOJA.valor).whereEqualTo(Chaves.CHAVE_CIDADE.valor, Cidade).addSnapshotListener { querySnapshot, _ ->
                 if(querySnapshot?.documents?.isNotEmpty()!!){
                     val ListaFinal = mutableListOf<Lojas>()
                     for(Item in querySnapshot){
                         ListaFinal.add(Lojas(
-                            titulo =  Item["titulo"] as String,
+                            titulo =  Item["titulo"].toString(),
                             status = Item["status"] as List<String>,
                             imagem = Item["imagem"] as String,
                             latitude = Item["latitude"] as Double,
@@ -53,47 +70,44 @@ class DatabaseFirebaseRecuperar {
                             avaliacoes = BigDecimal(Item["avaliacoes"].toString())
                         ))
                     }
-                    Interface.DadosRecebidos(ListaFinal)
+                    Interface.dadosRecebidos(ListaFinal)
                 }
             }
         }
 
-        fun RecuperaDadosPessoa(Email:String, Interface:DatabasePessoaInterface){
+        fun recuperaDadosPessoa(Email:String, Interface:DatabasePessoaInterface){
             BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
                 if(documentSnapshot?.exists()!!){
                     Log.i("Debug", documentSnapshot.toString())
                     val Item = Perfil(
                         titulo = documentSnapshot["titulo"] as String,
                         email = documentSnapshot["email"] as String,
-                        raio = documentSnapshot["raio"].toString(),
-                        pontosCadastro = documentSnapshot["pontosCadastro"].toString(),
-                        pontosFila = documentSnapshot["pontosFila"].toString(),
-                        pontosLocais = documentSnapshot["pontosLocais"].toString(),
-                        pontosTotais = documentSnapshot["pontosTotais"].toString(),
+                        raio = documentSnapshot["raio"].toString().toLong(),
+                        pontosCadastro = documentSnapshot["pontosCadastro"].toString().toLong(),
+                        pontosFila = documentSnapshot["pontosFila"].toString().toLong(),
+                        pontosLocais = documentSnapshot["pontosLocais"].toString().toLong(),
+                        pontosTotais = documentSnapshot["pontosTotais"].toString().toLong(),
                         nascimento = documentSnapshot["nascimento"] as String,
                         tipo = documentSnapshot["tipo"] as String
                     )
-                    Interface.PessoaRecebida(Item)
+                    Interface.pessoaRecebida(Item)
                 }
             }
         }
 
-        fun RecuperarTopRanking(Interface:DatabaseRakingInterface){
-            Log.i("Debug", "Passou")
-            BancoFirestore.collection("usuarios").orderBy("pontosTotais", Query.Direction.DESCENDING).limit(5).get().addOnCompleteListener {
-                Log.i("Debug", "Passou")
+        fun recuperarTopRanking(Interface:DatabaseRakingInterface){
+            BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).orderBy(TipoPontos.PONTOS_TOTAIS.valor, Query.Direction.DESCENDING).limit(5).get().addOnCompleteListener {
                 if(it.isSuccessful){
                     val ListaFinal = mutableListOf<Perfil>()
                     for(Item in it.result?.documents!!){
                         ListaFinal.add(Perfil(
                             titulo =  Item["titulo"].toString(),
-                            pontosTotais = Item["pontosTotais"].toString(),
+                            pontosTotais = Item["pontosTotais"].toString().toLong(),
                             email = Item["email"].toString()
                         ))
                     }
-                    Interface.TopRanking(ListaFinal)
+                    Interface.topRanking(ListaFinal)
                 }
-                Log.i("Debug", it.result?.documents?.get(0)?.toString())
             }
         }
     }
@@ -101,18 +115,18 @@ class DatabaseFirebaseRecuperar {
 
 interface DatabaseLocaisInterface{
 
-    fun DadosRecebidos(Lista:MutableList<Lojas>)
+    fun dadosRecebidos(Lista:MutableList<Lojas>)
 
 }
 
 interface DatabasePessoaInterface{
 
-    fun PessoaRecebida(Pessoa:Perfil)
+    fun pessoaRecebida(Pessoa:Perfil)
 
 }
 
 interface DatabaseRakingInterface{
 
-    fun TopRanking(Lista:List<Perfil>)
+    fun topRanking(Lista:List<Perfil>)
 
 }

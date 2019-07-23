@@ -20,7 +20,7 @@ class TelaRanking : AppCompatActivity(), DatabaseRakingInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ranking)
 
-        DatabaseFirebaseRecuperar.RecuperarTopRanking(this)
+        DatabaseFirebaseRecuperar.recuperarTopRanking(this)
         Log.i("Debug", "Passou")
 
         Lista = findViewById<RecyclerView>(R.id.ListaRanking)
@@ -31,7 +31,7 @@ class TelaRanking : AppCompatActivity(), DatabaseRakingInterface {
         Lista?.adapter = Adapter
     }
 
-    override fun TopRanking(Lista: List<Perfil>) {
+    override fun topRanking(Lista: List<Perfil>) {
         Adapter?.adicionandoValor(Lista)
         Log.i("Debug", Lista[0].toString())
     }

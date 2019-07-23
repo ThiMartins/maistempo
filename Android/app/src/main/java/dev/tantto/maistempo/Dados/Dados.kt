@@ -10,6 +10,7 @@ class Dados(private val Contexto:Context) {
         private val EMAIL = "EMAIL"
         private val SENHA = "SENHA"
         private val CIDADE = "CIDADE"
+        private val PERMISSAO = "PERMISSAO"
     }
 
     fun SalvarLogin(Email:String, Senha:String, Cidade:String){

@@ -3,6 +3,7 @@ package dev.tantto.maistempo.Telas
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
@@ -66,11 +67,4 @@ class TelaLogin : AppCompatActivity() {
         }
         startActivity(Iniciar)
     }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        Login?.setandoReferencia(this)
-        Novo?.setandoReferencia(this, this)
-    }
-
 }

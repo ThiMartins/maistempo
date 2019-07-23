@@ -1,9 +1,11 @@
 package dev.tantto.maistempo.Fragmentos
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -14,9 +16,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.Classes.Permissao
+import dev.tantto.maistempo.Classes.TipoDePermissao
 import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
@@ -29,6 +34,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private lateinit var Contexto:Context
     private lateinit var ReferenciaTela:TelaLogin
 
+    private val RequisicaoPermissao = 2
     private val MODO_CAMERA = 0
     private val MODO_GALERIA = 1
     private val MODO_ARQUIVOS = 2
@@ -109,9 +115,27 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         }
 
         Foto?.setOnClickListener {
-            pegarFoto()
+            if(Permissao.veficarPermissao(ReferenciaTela) != TipoDePermissao.PERMITIDO){
+                ActivityCompat.requestPermissions(ReferenciaTela, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissao)
+            } else {
+                pegarFoto()
+            }
+
         }
 
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            RequisicaoPermissao -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    pegarFoto()
+                } else{
+                    Alertas.CriarTela(ReferenciaTela, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
+                }
+            }
+        }
     }
 
     private fun alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {

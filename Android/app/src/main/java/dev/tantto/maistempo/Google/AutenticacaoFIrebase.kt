@@ -43,7 +43,7 @@ class FirebaseAutenticacao{
         fun criarUsuario(Pessoa:Perfil, Interface:AutenticacaoCriar){
             Autenticacao.createUserWithEmailAndPassword(Pessoa.email, Pessoa.senha).addOnCompleteListener {
                 if(it.isSuccessful){
-                    DatabaseFirebaseSalvar.SalvarDados(Pessoa)
+                    DatabaseFirebaseSalvar.salvarDados(Pessoa)
                     val User = it.result
                     Interface.usuarioCriado(User?.user, Pessoa)
                 } else {
