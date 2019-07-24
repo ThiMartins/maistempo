@@ -13,13 +13,19 @@ enum class TipoDePermissao(val Valor:Int){
     REPETIR_PEDIDO(2)
 }
 
+enum class Permissoes(val valor:String){
+    CAMERA(Manifest.permission.CAMERA),
+    ARMAZENAMENTO_READ(Manifest.permission.READ_EXTERNAL_STORAGE),
+    ARMAZENAMENTO_WRITE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+}
+
 class Permissao {
 
     companion object {
 
-        fun veficarPermissao(Contexto:Activity) : TipoDePermissao{
-            return if(ContextCompat.checkSelfPermission(Contexto, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                if(ActivityCompat.shouldShowRequestPermissionRationale(Contexto, Manifest.permission.CAMERA)){
+        fun veficarPermissao(Contexto:Activity, Tipo:Permissoes) : TipoDePermissao{
+            return if(ContextCompat.checkSelfPermission(Contexto, Tipo.valor) != PackageManager.PERMISSION_GRANTED){
+                if(ActivityCompat.shouldShowRequestPermissionRationale(Contexto, Tipo.valor)){
                     TipoDePermissao.REPETIR_PEDIDO
                 } else {
                     TipoDePermissao.SEM_PERMISSAO

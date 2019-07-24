@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">+Tempo</string>
 
+    <string name="googleMapsKey">AIzaSyDD64ChVEYMLcV7lwnkaXhhcx_u_5Uu1Go</string>
+
     <string name="Login">LOGIN</string>
     <string name="Username">Username</string>
     <string name="Senha">Senha</string>
@@ -132,4 +134,10 @@
     <string name="ErroPermissaoFoto">Sem permissão não é possivel colocar a foto de perfil</string>
     <string name="ErroPermissao">Permissão negada</string>
     <string name="Permissao">Permissão aceita</string>
+    <string name="Enviando">Enviando</string>
+    <string name="RatingAlerta">Enviando sua nota de:</string>
+    <string name="Mapas">Mapa</string>
+    <string name="Conectando">Conectando a conta</string>
+    <string name="AguardeConectando">Aguarde</string>
+    <string name="CamposVazios">Campo vazio</string>
 </resources>

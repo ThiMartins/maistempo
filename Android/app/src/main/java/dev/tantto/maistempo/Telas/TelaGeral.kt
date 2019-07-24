@@ -41,6 +41,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_geral)
         configurandoView()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
     }
 

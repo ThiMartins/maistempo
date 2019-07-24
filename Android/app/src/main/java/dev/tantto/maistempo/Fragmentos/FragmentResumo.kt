@@ -36,7 +36,7 @@ class FragmentResumo : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val V = inflater.inflate(R.layout.fragment_fila, container, false)
         ConfigurandoView(V)
-        ConfigurandoAdapter()
+        configurandoAdapter()
         return V
     }
 
@@ -61,6 +61,7 @@ class FragmentResumo : Fragment() {
                     "${getString(R.string.SuaNota)}: ${ProgressoFila?.progress.toString()} ${getString(R.string.ParaHorario)} ${Horarios?.selectedItem.toString()}",
                     R.string.Atencao, 5000).show()
                 Enviar?.isEnabled = false
+
                 DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_FILA)
             }
         }
@@ -68,7 +69,8 @@ class FragmentResumo : Fragment() {
         NumeroAvaliacoes?.text = String.format(LojaInfo?.avaliacoes.toString() + " "+ getString(R.string.Avalicoes))
     }
 
-    private fun ConfigurandoAdapter() {
+    private fun configurandoAdapter() {
+        val ListaFila  = mutableListOf<Int>()
         Lista?.adapter = AdaptadorFila(Contexto, LojaInfo!!)
         val Manager = LinearLayoutManager(Contexto)
         Manager.orientation = LinearLayoutManager.HORIZONTAL

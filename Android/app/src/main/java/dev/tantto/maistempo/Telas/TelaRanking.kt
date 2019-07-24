@@ -1,7 +1,6 @@
 package dev.tantto.maistempo.Telas
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,9 +18,9 @@ class TelaRanking : AppCompatActivity(), DatabaseRakingInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ranking)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         DatabaseFirebaseRecuperar.recuperarTopRanking(this)
-        Log.i("Debug", "Passou")
 
         Lista = findViewById<RecyclerView>(R.id.ListaRanking)
         Adapter = AdaptadorRanking(this)
@@ -33,7 +32,6 @@ class TelaRanking : AppCompatActivity(), DatabaseRakingInterface {
 
     override fun topRanking(Lista: List<Perfil>) {
         Adapter?.adicionandoValor(Lista)
-        Log.i("Debug", Lista[0].toString())
     }
 
 }

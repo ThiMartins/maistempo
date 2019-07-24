@@ -31,13 +31,15 @@ class TelaResumo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resumo_local)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         ConfigurandoView()
         RecuperarLoja()
 
         Pagina = findViewById<ViewPager>(R.id.PaginaResumo)
         TabIndicator = findViewById<TabLayout>(R.id.TabAvalicao)
 
-        CongigurandoPaginas()
+        configurandoPagina()
 
     }
 
@@ -52,11 +54,12 @@ class TelaResumo : AppCompatActivity() {
         }
     }
 
-    private fun CongigurandoPaginas() {
+    private fun configurandoPagina() {
         TabIndicator?.setupWithViewPager(Pagina)
         FilaResumo = FragmentResumo()
         FilaResumo?.PassandoLja(LojaInfo!!, this, this)
         AvaliacaoResumo = FragmentAvaliacao()
+        AvaliacaoResumo?.setandoReferencias(LojaInfo!!, this)
         val ListaFragmentos = listOf(FilaResumo!!, AvaliacaoResumo!!)
         Pagina?.adapter = ViewPagerAdaptador(supportFragmentManager, ListaFragmentos)
 

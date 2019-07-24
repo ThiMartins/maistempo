@@ -14,7 +14,6 @@
         <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@mipmap/ic_launcher_round"
                 android:id="@+id/ImagemInicial"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="131dp"

@@ -8,7 +8,7 @@ class ListaPerfil {
     private var lista:MutableList<Geral> = mutableListOf(
         Geral("Geral", R.drawable.setting_dark, Tipo.GERAL),
         Geral("Ranking", R.drawable.star_black, Tipo.RANKING),
-        Geral("Termos de Utilixação", R.drawable.termos_dark, Tipo.TERMOS),
+        Geral("Termos de Utilização", R.drawable.termos_dark, Tipo.TERMOS),
         Geral("Sair", R.drawable.sair_dark, Tipo.SAIR)
     )
 

@@ -19,6 +19,7 @@ class TelaTermos : AppCompatActivity() {
         setContentView(R.layout.activity_termo_de_uso)
         Checado = findViewById(R.id.TermoCheked)
         title = getString(R.string.TermosDeUso)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

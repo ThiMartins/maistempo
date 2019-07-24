@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Classes.Permissao
+import dev.tantto.maistempo.Classes.Permissoes
 import dev.tantto.maistempo.Classes.TipoDePermissao
 import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Perfil
@@ -81,7 +82,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
             val FotoSelecionada = data.extras?.get("data") as Bitmap
-            CaminhoFoto = data.data
+            //CaminhoFoto =
             Foto?.setImageBitmap(FotoSelecionada)
 
         } else if(requestCode == MODO_GALERIA && resultCode == Activity.RESULT_OK && data != null){
@@ -105,7 +106,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 val DataNascimento = DatePickerDialog(Contexto)
                 DataNascimento.show()
                 DataNascimento.setOnDateSetListener { _, year, month, dayOfMonth ->
-                    Data = Date(year, month, dayOfMonth)
+                    Data = Date(year - 1900, month, dayOfMonth)
                     val DataFormatada = DateFormat.getDateInstance().format(Data)
                     DataTexto?.setText(DataFormatada)
                 }
@@ -115,7 +116,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         }
 
         Foto?.setOnClickListener {
-            if(Permissao.veficarPermissao(ReferenciaTela) != TipoDePermissao.PERMITIDO){
+            if(Permissao.veficarPermissao(ReferenciaTela, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO){
                 ActivityCompat.requestPermissions(ReferenciaTela, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissao)
             } else {
                 pegarFoto()

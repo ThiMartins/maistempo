@@ -26,15 +26,13 @@ class FirebaseAutenticacao{
                 if(it.isSuccessful){
                     Interface.usuarioLogado(it.result?.user!!)
                 } else {
-                    Log.i("Erro", it.exception.toString())
                     try {
                         throw it.exception!!
-                    } catch (Erro:Throwable){
-                        Erro.printStackTrace()
-                    } catch (Erro:FirebaseAuthInvalidUserException){
-                        Interface.erroLogar(TiposErrosLogar.SENHA_INCORRETA)
-                    } catch (Erro:FirebaseAuthInvalidCredentialsException){
-                        Interface.erroLogar(TiposErrosLogar.CONTA_NAO_EXISTENTE)
+                    } catch (Erro:FirebaseAuthException){
+                        when(Erro.errorCode){
+                            "ERROR_USER_NOT_FOUND" -> Interface.erroLogar(TiposErrosLogar.CONTA_NAO_EXISTENTE)
+                            "ERROR_WRONG_PASSWORD" -> Interface.erroLogar(TiposErrosLogar.SENHA_INCORRETA)
+                        }
                     }
                 }
             }
