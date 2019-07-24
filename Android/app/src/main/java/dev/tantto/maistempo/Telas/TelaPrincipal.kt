@@ -1,8 +1,10 @@
 package dev.tantto.maistempo.Telas
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -11,7 +13,6 @@ import dev.tantto.maistempo.Fragmentos.FragmentLocal
 import dev.tantto.maistempo.Fragmentos.FragmentPerfil
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.ListaPerfil
-import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
 class TelaPrincipal : AppCompatActivity(){
@@ -55,7 +56,7 @@ class TelaPrincipal : AppCompatActivity(){
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_pesquisa, menu)
+        menuInflater.inflate(R.menu.menu_tela_principal, menu)
 
         val PesquisaItem = menu?.findItem(R.id.PesquisaLocal)
         val Pesquisa = PesquisaItem?.actionView as SearchView
@@ -75,6 +76,17 @@ class TelaPrincipal : AppCompatActivity(){
         })
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val Id = item?.itemId
+
+        if(Id == R.id.AbrirMapa){
+            startActivity(Intent(this, TelaMapa::class.java))
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 }

@@ -11,6 +11,9 @@ import dev.tantto.maistempo.Modelos.Perfil
 import java.math.BigDecimal
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.functions.FirebaseFunctions
+import java.math.BigInteger
 
 enum class TipoPontos(val valor:String){
     PONTOS_FILA("pontosFila"),
@@ -40,6 +43,12 @@ class DatabaseFirebaseSalvar {
             }
 
         }
+        fun adicionarNotaFila(Nome:String, Valor:Int){
+            val Documento = BancoFirestore.collection(Chaves.CHAVE_LOJA.valor).document(Nome).get()
+            Documento.addOnSuccessListener {
+
+            }
+        }
     }
 
 }
@@ -56,18 +65,21 @@ class DatabaseFirebaseRecuperar {
                 if(querySnapshot?.documents?.isNotEmpty()!!){
                     val ListaFinal = mutableListOf<Lojas>()
                     for(Item in querySnapshot){
+                        Log.i("Teste", Item.toString())
                         ListaFinal.add(Lojas(
                             titulo =  Item["titulo"].toString(),
                             status = Item["status"] as List<String>,
-                            imagem = Item["imagem"] as String,
+                            imagem = Item["imagem"].toString(),
                             latitude = Item["latitude"] as Double,
                             longitude = Item["longitude"] as Double,
-                            local = Item["local"] as String,
+                            local = Item["local"].toString(),
                             fila = Item["fila"] as List<Int>,
-                            cidade = Item["cidade"] as String,
-                            telefone = Item["telefone"] as String,
+                            cidade = Item["cidade"].toString(),
+                            telefone = Item["telefone"].toString(),
                             horarios = Item["horarios"] as List<String>,
                             avaliacoes = BigDecimal(Item["avaliacoes"].toString())
+                            //avaliacoesRating = BigDecimal(Item["avaliacoesRating"].toString()),
+                            //mediaRating = Item["mediaRating"] as Float
                         ))
                     }
                     Interface.dadosRecebidos(ListaFinal)

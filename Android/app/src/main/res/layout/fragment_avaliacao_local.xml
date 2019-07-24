@@ -49,6 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/VerTodasAvaliacoes"
             android:layout_margin="16dp"
             android:contentDescription="@string/RostoFeliz"/>
+
     <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
@@ -57,7 +58,8 @@
             app:layout_constraintStart_toEndOf="@id/Triste"
             app:layout_constraintEnd_toStartOf="@id/Feliz"
             app:layout_constraintTop_toBottomOf="@id/VerTodasAvaliacoes"
-            android:layout_marginTop="32dp"/>
+            android:layout_marginTop="32dp"
+            android:max="100"/>
 
     <TextView
             android:id="@+id/NumeroAvaliacoesTexto"
@@ -96,23 +98,26 @@
     <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/TextoAvaliarRaking"
             android:layout_margin="16dp"
             android:id="@+id/RatingLocal"
             style="@style/Widget.AppCompat.RatingBar"/>
-
-    <TextView
+    <Button
+            android:text="@string/Enviar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/RatingLocal"
+            android:id="@+id/EnviarRating"
+            android:background="@drawable/borda_botao"
             app:layout_constraintEnd_toEndOf="parent"
-            android:autofillHints="no"
-            android:hint="@string/DigiteAvaliacao" tools:targetApi="o"/>
+            app:layout_constraintStart_toEndOf="@id/RatingLocal"
+            app:layout_constraintTop_toBottomOf="@id/TextoAvaliarRaking"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:textAllCaps="false"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,5 +14,7 @@ data class Lojas(
     var cidade:String,
     var telefone:String,
     var horarios:List<String>,
-    var avaliacoes:BigDecimal
+    var avaliacoes:BigDecimal,
+    var avaliacoesRating:BigDecimal = BigDecimal.TEN,
+    var mediaRating:Float = 4.5F
 ) : Serializable

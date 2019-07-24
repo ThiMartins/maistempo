@@ -81,8 +81,10 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     private fun verificar(){
         if(UserName?.text?.isNotEmpty()!! && Senha?.text?.isNotEmpty()!!){
-            Alertas.CriarTela(Referecencia!!, R.string.CriandoConta, R.string.Aguarde, 5000).show()
+            Alertas.CriarTela(Referecencia!!, R.string.AguardeConectando, R.string.Conectando, 5000).show()
             FirebaseAutenticacao.logarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
+        } else {
+            Alertas.CriarTela(Referecencia!!, R.string.CamposVazios, R.string.Atencao, 5000).show()
         }
     }
 
@@ -91,10 +93,10 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
     }
 
     override fun erroLogar(Erro: TiposErrosLogar) {
-        if(Erro == TiposErrosLogar.SENHA_INCORRETA){
-            Alertas.CriarTela(Referecencia!!, R.string.SenhaIncorreta, R.string.Atencao, 5000).show()
-        } else if(Erro == TiposErrosLogar.CONTA_NAO_EXISTENTE){
+        if(Erro == TiposErrosLogar.CONTA_NAO_EXISTENTE){
             Alertas.CriarTela(Referecencia!!, R.string.ContaNaoExistente, R.string.Atencao, 5000).show()
+        } else if(Erro == TiposErrosLogar.SENHA_INCORRETA){
+            Alertas.CriarTela(Referecencia!!, R.string.SenhaIncorreta, R.string.Atencao, 5000).show()
         }
     }
 }
