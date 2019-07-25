@@ -33,7 +33,7 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, LojasRecuperada
         super.onResume()
 
         FirebaseFunctions.getInstance().getHttpsCallable("mudarValor").call()
-        DatabaseFirebaseSalvar.BancoFirestore.collection("usuarios").document("email@teste.com").update("pontosLocais", 7).addOnSuccessListener {
+        DatabaseFirebaseSalvar().BancoFirestore.collection("usuarios").document("email@teste.com").update("pontosLocais", 7).addOnSuccessListener {
             Toast.makeText(this, "Enviado", Toast.LENGTH_SHORT).show()
         }
 
@@ -49,9 +49,9 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, LojasRecuperada
         when(requestCode){
             RequisicaoPermissao -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Alertas.CriarTela(this, R.string.Permissao, R.string.Atencao, 5000)
+                    Alertas.criarAlerter(this, R.string.Permissao, R.string.Atencao, 5000)
                 } else{
-                    Alertas.CriarTela(this, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
+                    Alertas.criarAlerter(this, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
                 }
                 carregandoLogin()
             }

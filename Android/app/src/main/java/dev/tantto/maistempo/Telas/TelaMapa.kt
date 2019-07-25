@@ -3,7 +3,6 @@ package dev.tantto.maistempo.Telas
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,12 +20,11 @@ import dev.tantto.maistempo.R
 
 class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
 
-    private val RequisicaoPermissaoFINE = 2
-    private val RequisicaoPermissaoLOCATION = 3
+    private val RequisicaoPermissao= 23
 
     private var MapaGoogle:GoogleMap? = null
 
-    private var ListaMaps = mutableListOf<Local>(
+    private var ListaMaps = mutableListOf(
         Local(-23.507595, -47.483918, "Teste"),
         Local(-23.506569, -47.488340, "Teste 2")
     )
@@ -39,34 +37,47 @@ class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-
     override fun onMapReady(p0: GoogleMap?) {
         MapaGoogle = p0
-        p0?.isBuildingsEnabled = true
-        p0?.isTrafficEnabled = true
-        p0?.isIndoorEnabled = true
+        MapaGoogle?.isBuildingsEnabled = true
+        MapaGoogle?.isTrafficEnabled = true
+        MapaGoogle?.isIndoorEnabled = true
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                p0?.isMyLocationEnabled = true
-            }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), RequisicaoPermissaoLOCATION)
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), RequisicaoPermissaoFINE)
-            }
-        }
+        verificarAutorizacao()
+
         if(intent.hasExtra(Chaves.CHAVE_MARKES.valor)){
-
+            setarLocais()
         }
 
-        adicionarMaker(p0)
+        adicionarMaker()
     }
 
+    private fun verificarAutorizacao() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                MapaGoogle?.isMyLocationEnabled = true
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    RequisicaoPermissao
+                )
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    RequisicaoPermissao
+                )
+            }
+        }
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode){
-            RequisicaoPermissaoFINE -> {
+            RequisicaoPermissao -> {
                 @SuppressLint("MissingPermission")
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     MapaGoogle?.isMyLocationEnabled = true
@@ -75,11 +86,15 @@ class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun adicionarMaker(mapa:GoogleMap?){
+    private fun setarLocais(){
+        //val localizaca0 = intent.getDoubleArrayExtra()
+    }
+
+    private fun adicionarMaker(){
         val Builder = LatLngBounds.builder()
         for(Item in ListaMaps){
             val Coordenadas = LatLng(Item.Longitude, Item.Latitude)
-            mapa?.addMarker(MarkerOptions().position(Coordenadas).title(Item.Nome))
+            MapaGoogle?.addMarker(MarkerOptions().position(Coordenadas).title(Item.Nome))
             Builder.include(Coordenadas)
         }
 
@@ -87,7 +102,7 @@ class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
         val width = resources.displayMetrics.widthPixels
         val height = resources.displayMetrics.heightPixels
         val padding = (width * 0.10).toInt()
-        mapa?.animateCamera(CameraUpdateFactory.newLatLngBounds(Bounds, width, height, padding))
+        MapaGoogle?.animateCamera(CameraUpdateFactory.newLatLngBounds(Bounds, width, height, padding))
     }
 
 }

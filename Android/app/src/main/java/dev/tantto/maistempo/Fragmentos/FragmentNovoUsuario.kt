@@ -19,10 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
-import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Classes.Permissao
-import dev.tantto.maistempo.Classes.Permissoes
-import dev.tantto.maistempo.Classes.TipoDePermissao
+import dev.tantto.maistempo.Classes.*
 import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
@@ -49,6 +46,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private var Data:Date = Date()
     private var CaminhoFoto:Uri? = null
     private var EscolherData:Button? = null
+    private var FotoCamera:Bitmap? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val Fragmento = inflater.inflate(R.layout.fragment_novo_usuario, container, false)
@@ -82,9 +80,8 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
             val FotoSelecionada = data.extras?.get("data") as Bitmap
-            //CaminhoFoto =
+            FotoCamera = FotoSelecionada
             Foto?.setImageBitmap(FotoSelecionada)
-
         } else if(requestCode == MODO_GALERIA && resultCode == Activity.RESULT_OK && data != null){
             CaminhoFoto = data.data
             Foto?.setImageURI(CaminhoFoto)
@@ -133,14 +130,14 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     pegarFoto()
                 } else{
-                    Alertas.CriarTela(ReferenciaTela, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
+                    Alertas.criarAlerter(ReferenciaTela, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
                 }
             }
         }
     }
 
     private fun alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {
-        Alertas.CriarTela(ReferenciaTela, Mensagem, Titulo, Duracao).show()
+        Alertas.criarAlerter(ReferenciaTela, Mensagem, Titulo, Duracao).show()
     }
 
     private fun pegarFoto() {
@@ -173,10 +170,13 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
             if (Email?.text?.contains("@")!!){
                 if (Senha?.text?.toString()?.length!! > 6){
                     alerta(R.string.Atencao, R.string.Aguarde)
-                    if(CaminhoFoto != null){
-                        CloudStorageFirebase.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
-                    } else {
-                        criarUsuario()
+                    when {
+                        CaminhoFoto != null -> CloudStorageFirebase.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                        FotoCamera != null -> {
+                            CaminhoFoto = bitmapUtils.getImageUri(FotoCamera!!, Email?.text.toString(), ReferenciaTela)
+                            CloudStorageFirebase.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                        }
+                        else -> criarUsuario()
                     }
                 } else {
                     alerta(R.string.ErroSenha, R.string.Atencao)

@@ -56,7 +56,7 @@ class FragmentResumo : Fragment() {
         Enviar?.setOnClickListener {
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email
             if(!email.isNullOrEmpty()){
-                Alertas.CriarTela(
+                Alertas.criarAlerter(
                     Referencia,
                     "${getString(R.string.SuaNota)}: ${ProgressoFila?.progress.toString()} ${getString(R.string.ParaHorario)} ${Horarios?.selectedItem.toString()}",
                     R.string.Atencao, 5000).show()

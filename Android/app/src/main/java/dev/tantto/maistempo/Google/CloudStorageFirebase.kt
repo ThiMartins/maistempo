@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import java.io.File
 
 enum class TipoDonwload(var Valor:String){
@@ -35,6 +36,10 @@ class CloudStorageFirebase {
             }
         }
 
+        fun mudarImagem(Caminho: Uri, Email: String) : UploadTask{
+            return Store.reference.child("images/$Email").putFile(Caminho)
+        }
+
     }
 
     fun DonwloadCloud(Email: String, Tipo:TipoDonwload, Interface:DownloadFotoCloud){
@@ -50,6 +55,7 @@ class CloudStorageFirebase {
             }
         }
     }
+
 }
 
 interface EnviarFotoCloud{

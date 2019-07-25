@@ -7,8 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -17,17 +15,19 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.Classes.bitmapUtils
 import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoCloud{
+class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoCloud, DatabaseMudanca{
 
     private val MODO_CAMERA = 0
     private val MODO_GALERIA = 1
     private val MODO_ARQUIVOS = 2
 
-    private var CaminhoFoto: Uri? = null
+    private var CaminhoFoto: Uri? = Uri.EMPTY
 
     private var Foto:ImageView? = null
     private var Nome:EditText? = null
@@ -36,6 +36,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
     private var PontosAvaliacaoFila:TextView? = null
     private var PontosLocais:TextView? = null
     private var PontosTotal:TextView? = null
+    private var Pessoa:Perfil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +49,10 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
     private fun setandoValores(Pessoa:Perfil){
         Nome?.setText(Pessoa.titulo)
         RaioPesquisa?.progress = Pessoa.raio.toInt()
-        PontosCadastro?.text = Pessoa.pontosCadastro.toString()
-        PontosAvaliacaoFila?.text = Pessoa.pontosFila.toString()
-        PontosLocais?.text = Pessoa.pontosLocais.toString()
-        PontosTotal?.text = Pessoa.pontosTotais.toString()
+        PontosCadastro?.text = String.format(Pessoa.pontosCadastro.toString() + getString(R.string.Pontos))
+        PontosAvaliacaoFila?.text = String.format(Pessoa.pontosFila.toString() + getString(R.string.Pontos))
+        PontosLocais?.text = String.format(Pessoa.pontosLocais.toString() + getString(R.string.Pontos))
+        PontosTotal?.text = String.format(Pessoa.pontosTotais.toString() + getString(R.string.Pontos))
     }
 
     private fun configurandoView() {
@@ -76,7 +77,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
     private fun exibirCaixa() {
         val Caixa = AlertDialog.Builder(this)
         Caixa.setTitle(R.string.Escolha)
-        Caixa.setItems(arrayOf("Camera", "Galeria", "Arquivos")) { _, which ->
+        Caixa.setItems(arrayOf(getString(R.string.Camera), getString(R.string.Galeria), getString(R.string.Arquivos))) { _, which ->
             val Iniciar = Intent()
             when (which) {
                 0 -> {
@@ -105,7 +106,51 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val Id = item?.itemId
+
+        when(Id){
+            R.id.DeletarConta -> deletarConta()
+            R.id.SalvarAlteracoes -> salvarAlteracoes()
+        }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun deletarConta(){
+        val Aletar = Alertas.CriarAlertDialog(this, R.string.ApagarConta, R.string.Atencao)
+        Aletar.setNegativeButton(R.string.Nao) { _, _ ->
+
+        }
+        Aletar.setPositiveButton(R.string.Sim) { _, _ ->
+            if(Pessoa != null){
+                DatabaseFirebaseSalvar.deletarConta(Pessoa?.email!!)
+                startActivity(Intent(this, TelaLogin::class.java))
+                this.finishAffinity()
+            }
+        }.create().show()
+    }
+
+    private fun salvarAlteracoes(){
+        if(Pessoa?.titulo != Nome?.text?.toString() && Nome?.text?.toString()?.isNotEmpty()!! && CaminhoFoto == Uri.EMPTY){
+            Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando, 5000).show()
+            DatabaseFirebaseSalvar.mudarNomeComImagem(Pessoa?.email!!, Nome?.text?.toString()!!, Uri.EMPTY , this)
+        } else if(Pessoa?.titulo != Nome?.text?.toString() && Nome?.text?.toString()?.isNotEmpty()!! && CaminhoFoto != Uri.EMPTY){
+            Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando).show()
+            DatabaseFirebaseSalvar.mudarNomeComImagem(Pessoa?.email!!, Nome?.text?.toString()!!, CaminhoFoto!! , this)
+        } else if(Pessoa?.titulo == Nome?.text?.toString() && CaminhoFoto != Uri.EMPTY){
+            Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando).show()
+            DatabaseFirebaseSalvar.mudarNomeComImagem(Pessoa?.email!!, "", CaminhoFoto!! , this)
+        }
+
+        if(Pessoa?.raio?.toInt() != RaioPesquisa?.progress){
+            DatabaseFirebaseSalvar.mudarRaio(Pessoa?.email!!, RaioPesquisa?.progress!!)
+        }
+    }
+
+    override fun Resposta(Resposta: Respostas) {
+        if(Resposta == Respostas.SUCESSO){
+            this.finish()
+        } else if(Resposta == Respostas.ERRO){
+            Alertas.criarAlerter(this, R.string.ErroMudancas, R.string.Erro, 5000).show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,19 +158,16 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
             val FotoSelecionada = data.extras?.get("data") as Bitmap
-            CaminhoFoto = data.data
+            CaminhoFoto = bitmapUtils.getImageUri(FotoSelecionada, Pessoa?.email!!, this)
             Foto?.setImageBitmap(FotoSelecionada)
-            //Salvar foto
 
         } else if(requestCode == MODO_GALERIA && resultCode == Activity.RESULT_OK && data != null){
             CaminhoFoto = data.data
             Foto?.setImageURI(CaminhoFoto)
-            //Salvar foto
 
         } else if(requestCode == MODO_ARQUIVOS && resultCode == Activity.RESULT_OK && data != null){
             CaminhoFoto = data.data
             Foto?.setImageURI(CaminhoFoto)
-            //Salvar foto
         }
     }
 
@@ -136,6 +178,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
 
     override fun pessoaRecebida(Pessoa: Perfil) {
         setandoValores(Pessoa)
+        this.Pessoa = Pessoa
         CloudStorageFirebase().DonwloadCloud(Pessoa.email, TipoDonwload.PERFIl, this)
     }
 }

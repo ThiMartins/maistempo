@@ -1,6 +1,5 @@
 package dev.tantto.maistempo.Fragmentos
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,7 +59,7 @@ class FragmentAvaliacao : Fragment() {
         Enviar?.setOnClickListener {
             val nota = RatingVoto?.rating!! * 20
             //enviar nota
-            Alertas.CriarTela(Referencia, R.string.RatingAlerta, R.string.Enviando, 5000).show()
+            Alertas.criarAlerter(Referencia, R.string.RatingAlerta, R.string.Enviando, 5000).show()
             RatingVoto?.isEnabled = false
         }
     }

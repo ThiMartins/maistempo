@@ -25,7 +25,7 @@
     <string name="Favoritar">Favoritar</string>
     <string name="Fila">Fila do caixa</string>
     <string name="Availiacao">Avaliação Local</string>
-    <string name="FilaMomento">Como está a fila do caixa no momento ?</string>
+    <string name="FilaMomento">Como está a fila do caixa no instante ?</string>
     <string name="PicoFila">Pico da Fila</string>
     <string name="ComoSeSentem">Como as pessoas se sentem</string>
     <string name="VerTodos">Ver Todos</string>
@@ -67,7 +67,7 @@
     <string name="DataNascimento">Clique para colocar a data de nascimento</string>
     <string name="VisualizarTermos">Clique aqui para visualizar os termos</string>
     <string name="Atencao">Atenção</string>
-    <string name="Aguarde">Aguarde um momento criando conta</string>
+    <string name="Aguarde">Aguarde um instante criando conta</string>
     <string name="Camera">Camera</string>
     <string name="Galeria">Galeria</string>
     <string name="Arquivos">Arquivos</string>
@@ -140,4 +140,14 @@
     <string name="Conectando">Conectando a conta</string>
     <string name="AguardeConectando">Aguarde</string>
     <string name="CamposVazios">Campo vazio</string>
+    <string name="Pontos">pts</string>
+    <string name="Salvar">Salvar</string>
+    <string name="ApagarConta">Deseja apagar a conta ?</string>
+    <string name="Sim">Sim</string>
+    <string name="Nao">Não</string>
+    <string name="Erro">Erro</string>
+    <string name="ErroMudancas">Não foi possivel aplicar as mudanças</string>
+    <string name="SalvandoAlteracoes">Salvando alterações</string>
+    <string name="Aguardando">Aguarde</string>
+    <string name="Carregando">Carregando</string>
 </resources>
