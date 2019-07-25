@@ -7,11 +7,12 @@
             android:icon="@drawable/delete_white"
             app:showAsAction="ifRoom"
             android:id="@+id/DeletarConta" />
+    
 
     <item
-            android:title="@string/Feedback"
-            android:icon="@drawable/feedback_white"
+            android:title="@string/Salvar"
+            android:icon="@drawable/done_all_white"
             app:showAsAction="ifRoom"
-            android:id="@+id/FeedBack" />
+            android:id="@+id/SalvarAlteracoes" />
 
 </menu>

@@ -1,5 +1,6 @@
 package dev.tantto.maistempo.Google
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
@@ -21,33 +22,82 @@ enum class TipoPontos(val valor:String){
     PONTOS_TOTAIS("pontosTotais")
 }
 
+enum class Respostas(val valor: String){
+    SUCESSO("sucesso"),
+    ERRO("erro")
+}
+
 class DatabaseFirebaseSalvar {
+
+    val BancoFirestore = FirebaseFirestore.getInstance()
 
     companion object {
 
-        val BancoFirestore = FirebaseFirestore.getInstance()
-        val BancoDatabase = FirebaseDatabase.getInstance()
-
         fun salvarDados(Dados:Perfil){
-            BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Dados.email).set(Dados)
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Dados.email).set(Dados)
         }
 
         fun adicionarPontos(Email: String, Pontos:Int, Tipo:TipoPontos){
-            val Documento = BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).get()
+            val Documento = FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).get()
             Documento.addOnSuccessListener {
                 val valorRecuperado = it.get(Tipo.valor).toString().toLong()
                 val fila = it.get(TipoPontos.PONTOS_FILA.valor).toString().toLong()
                 val avaliacao = it.get(TipoPontos.PONTOS_AVALIACAO.valor).toString().toLong()
-                BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Tipo.valor, Pontos + valorRecuperado)
-                BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(TipoPontos.PONTOS_TOTAIS.valor, fila + avaliacao + 1)
+                FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Tipo.valor, Pontos + valorRecuperado)
+                FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(TipoPontos.PONTOS_TOTAIS.valor, fila + avaliacao + 1)
             }
 
         }
+
         fun adicionarNotaFila(Nome:String, Valor:Int){
-            val Documento = BancoFirestore.collection(Chaves.CHAVE_LOJA.valor).document(Nome).get()
+            val Documento = FirebaseFirestore.getInstance().collection(Chaves.CHAVE_LOJA.valor).document(Nome).get()
             Documento.addOnSuccessListener {
 
             }
+        }
+
+        fun mudarRaio(Email: String, Valor: Int){
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_RAIO.valor, Valor)
+        }
+
+        fun mudarNomeComImagem(Email: String, Nome: String = "", Caminho:Uri = Uri.EMPTY, Resposta: DatabaseMudanca){
+            if(Nome.isNotEmpty() && Caminho == Uri.EMPTY){
+                FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_TITULO.valor, Nome).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        Resposta.Resposta(Respostas.SUCESSO)
+                    } else {
+                        Resposta.Resposta(Respostas.ERRO)
+                    }
+                }
+            } else if(Nome.isEmpty() && Caminho != Uri.EMPTY){
+                CloudStorageFirebase.mudarImagem(Caminho, Email).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        Resposta.Resposta(Respostas.SUCESSO)
+                    } else {
+                        Resposta.Resposta(Respostas.ERRO)
+                    }
+                }
+            } else {
+                FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_TITULO.valor, Nome).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        Resposta.Resposta(Respostas.SUCESSO)
+                        CloudStorageFirebase.mudarImagem(Caminho, Email).addOnCompleteListener {
+                            if(it.isSuccessful){
+                                Resposta.Resposta(Respostas.SUCESSO)
+                            } else {
+                                Resposta.Resposta(Respostas.ERRO)
+                            }
+                        }
+                    } else {
+                        Resposta.Resposta(Respostas.ERRO)
+                    }
+                }
+            }
+        }
+
+        fun deletarConta(Email: String){
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).delete()
+            FirebaseDatabase.getInstance().reference.child(Email).removeValue()
         }
     }
 
@@ -140,5 +190,11 @@ interface DatabasePessoaInterface{
 interface DatabaseRakingInterface{
 
     fun topRanking(Lista:List<Perfil>)
+
+}
+
+interface DatabaseMudanca{
+
+    fun Resposta(Resposta:Respostas)
 
 }

@@ -5,9 +5,9 @@ admin.initializeApp();
 
 exports.mudarValor = functions.firestore.document('usuarios/{usuarioId}').onWrite((change, context) => {
 
-    const nome = change.before.data().titulo;
-    return change.ref.update({
-        pontosLocais: 452
-    });
+    //const nome = change.before.data()['titulo'];
+    //return change.ref.update({
+    //    pontosLocais: 452
+    //});
 
 });
