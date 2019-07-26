@@ -26,7 +26,8 @@
                 android:scaleType="centerCrop"
                 android:background="@drawable/borda_imagem"
                 android:contentDescription="@string/FotoPerfilRanking"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:src="@drawable/person_dark_gray"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

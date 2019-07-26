@@ -143,7 +143,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private fun pegarFoto() {
         val Caixa = AlertDialog.Builder(Contexto)
         Caixa.setTitle(R.string.Escolha)
-        Caixa.setItems(arrayOf("Camera", "Galeria", "Arquivos")) { _, which ->
+        Caixa.setItems(arrayOf(getString(R.string.Camera), getString(R.string.Galeria), getString(R.string.Arquivos))) { _, which ->
             val Iniciar = Intent()
             when (which) {
                 0 -> {
@@ -167,14 +167,14 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
     private fun verificar() {
         if(Nome?.text?.isNotEmpty()!! ){
-            if (Email?.text?.contains("@")!!){
-                if (Senha?.text?.toString()?.length!! > 6){
+            if (Email?.text?.toString()?.contains("@")!! && Email?.text.toString().contains(".com")){
+                if (Senha?.text?.toString()?.length!! >= 6){
                     alerta(R.string.Atencao, R.string.Aguarde)
                     when {
-                        CaminhoFoto != null -> CloudStorageFirebase.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                        CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                         FotoCamera != null -> {
                             CaminhoFoto = bitmapUtils.getImageUri(FotoCamera!!, Email?.text.toString(), ReferenciaTela)
-                            CloudStorageFirebase.SalvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                            CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                         }
                         else -> criarUsuario()
                     }
@@ -201,7 +201,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     }
 
     override fun usuarioCriado(User: FirebaseUser?, Pessoa: Perfil) {
-        ReferenciaTela.LoginConcluido(User, Pessoa)
+        ReferenciaTela.loginConcluido(User, Pessoa)
     }
 
     override fun erroCriarUsuario(erro: TiposErrosCriar) {
@@ -212,15 +212,15 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         }
     }
 
-    override fun EnviadaSucesso() {
+    override fun enviadaSucesso() {
         criarUsuario()
     }
 
-    override fun FalhaEnviar(Erro: String) {
+    override fun falhaEnviar(Erro: String) {
         alerta(R.string.ErroCriar, R.string.Atencao, 5000)
     }
 
-    override fun EnviarProgresso(Progresso: Double) {
+    override fun enviarProgresso(Progresso: Double) {
         //Mostrar o andamento do envio da imagem
     }
 }

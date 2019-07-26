@@ -5,10 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.firebase.functions.FirebaseFunctions
 import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Classes.Permissao
 import dev.tantto.maistempo.Classes.Permissoes
@@ -17,25 +14,20 @@ import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Servicos.LojasRecuperadas
 
-class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, LojasRecuperadas {
+class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface {
 
     private val RequisicaoPermissao = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_splash)
-        //Pegar localizacao
     }
 
     override fun onResume() {
         super.onResume()
 
-        FirebaseFunctions.getInstance().getHttpsCallable("mudarValor").call()
-        DatabaseFirebaseSalvar().BancoFirestore.collection("usuarios").document("email@teste.com").update("pontosLocais", 7).addOnSuccessListener {
-            Toast.makeText(this, "Enviado", Toast.LENGTH_SHORT).show()
-        }
+        //Pedir as outras permissoes
 
         if(Permissao.veficarPermissao(this, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO){
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissao)
@@ -58,6 +50,14 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, LojasRecuperada
         }
     }
 
+    override fun dadosRecebidos(Lista: MutableList<Lojas>) {
+        ListaLocais.refazer(Lista)
+        if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty()){
+            iniciarActivity(Intent(this, TelaPrincipal::class.java))
+        }
+        finishAffinity()
+    }
+
     private fun carregandoLogin() {
         val User = FirebaseAutenticacao.Autenticacao.currentUser?.email
         if (User.isNullOrEmpty()) {
@@ -67,19 +67,6 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, LojasRecuperada
         } else {
             DatabaseFirebaseRecuperar.recuperarLojasLocais("Sorocaba", this)
         }
-    }
-
-    override fun DadosRecebidosImagens(Lista: MutableList<Lojas>) {
-
-    }
-
-    override fun dadosRecebidos(Lista: MutableList<Lojas>) {
-        ListaLocais.Refazer(Lista)
-        if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty()){
-            iniciarActivity(Intent(this, TelaPrincipal::class.java))
-            Log.i("Teste", "Passou")
-        }
-        finishAffinity()
     }
 
     private fun iniciarActivity(Iniciar:Intent){

@@ -10,8 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.Servicos.baixarImagem
 import dev.tantto.maistempo.Telas.TelaResumo
 
 class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>) : RecyclerView.Adapter<AdaptadorLocal.Holder>() {
@@ -28,9 +30,9 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.SetandoItens()
-        holder.AdicionandoValores(Lista[position])
-        holder.Click(Lista.get(position))
+        holder.setandoItens()
+        holder.adicionandoValores(Lista[position])
+        holder.click(Lista[position])
     }
 
     class Holder(private val Item:View, private val Contexto: Context) : RecyclerView.ViewHolder(Item) {
@@ -38,13 +40,13 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
         private var Titulo:TextView? = null
         private var Status:TextView? = null
         private var Imagem:ImageView? = null
-        private var Card:CardView? = null
+        private var CardLocal:CardView? = null
 
-        fun SetandoItens() {
+        fun setandoItens() {
             Titulo = Item.findViewById<TextView>(R.id.TituloLocal)
             Status = Item.findViewById<TextView>(R.id.StatusRanking)
             Imagem = Item.findViewById<ImageView>(R.id.ImagemLocal)
-            Card = Item.findViewById<CardView>(R.id.CardItem)
+            CardLocal = Item.findViewById<CardView>(R.id.CardItemLocal)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Imagem?.clipToOutline = true
@@ -52,31 +54,31 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
 
         }
 
-        fun AdicionandoValores(Elementos:Lojas){
+        fun adicionandoValores(Elementos:Lojas){
             Titulo?.text = Elementos.titulo
             Status?.text = Elementos.status[0]
-            Imagem?.setImageResource(R.drawable.maistemposquare)
+            val donwload = baixarImagem()
+            donwload.execute(Elementos.imagem)
+            Imagem?.setImageBitmap(donwload.get())
         }
 
-        fun Click(position: Lojas){
-            Card?.setOnClickListener {
+        fun click(position: Lojas){
+            CardLocal?.setOnClickListener {
                 val Iniciar = Intent(Contexto, TelaResumo::class.java)
-                Iniciar.putExtra("TELAPRINCIPAL", position)
+                Iniciar.putExtra(Chaves.CHAVE_TELAPRINCIPAL.valor, position)
                 Contexto.startActivity(Iniciar)
             }
         }
 
     }
 
-    fun Filtro(Filtragem:String){
-        if(Filtragem.isNotEmpty()){
-            Lista = Lista.filter {
-                it.titulo.contains(Filtragem)
+    fun filtro(Filtragem:String){
+        Lista =
+            if(Filtragem.isNotEmpty()){
+                Lista.filter { it.titulo.contains(Filtragem) }
+            } else{
+                Backup!!
             }
-
-        } else{
-            Lista = Backup!!
-        }
         notifyDataSetChanged()
     }
 

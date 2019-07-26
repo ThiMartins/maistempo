@@ -3,10 +3,9 @@ package dev.tantto.maistempo.Servicos
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import dev.tantto.maistempo.Classes.bitmapUtils
-import dev.tantto.maistempo.Modelos.Lojas
 import java.io.IOException
 
-class baixarImagemAsyncTask : AsyncTask<String, Int, Bitmap>() {
+class baixarImagem : AsyncTask<String, Int, Bitmap>() {
 
     override fun doInBackground(vararg params: String?): Bitmap? {
         var imagem:Bitmap? = null
@@ -19,11 +18,4 @@ class baixarImagemAsyncTask : AsyncTask<String, Int, Bitmap>() {
         }
         return imagem
     }
-}
-
-
-interface LojasRecuperadas{
-
-    fun DadosRecebidosImagens(Lista: MutableList<Lojas>)
-
 }

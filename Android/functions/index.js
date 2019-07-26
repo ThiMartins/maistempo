@@ -2,12 +2,10 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
+exports.pegarPontos = functions.firestore.document('usuarios/{uid}').onWrite((change, context) => {
 
-exports.mudarValor = functions.firestore.document('usuarios/{usuarioId}').onWrite((change, context) => {
+    const data = change.after.data();
+    const previousData = change.before.data();
 
-    //const nome = change.before.data()['titulo'];
-    //return change.ref.update({
-    //    pontosLocais: 452
-    //});
-
-});
+    return change.after.ref.set({ pontosCadastro: 50 + previousData['pontosCadastro']}, {merge: true});
+})

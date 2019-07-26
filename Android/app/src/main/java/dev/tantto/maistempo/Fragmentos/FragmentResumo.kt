@@ -5,74 +5,74 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Adaptadores.AdaptadorFila
-import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
-import dev.tantto.maistempo.Google.FirebaseAutenticacao
-import dev.tantto.maistempo.Google.TipoPontos
+import dev.tantto.maistempo.Classes.AdicionarFila
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
 
 class FragmentResumo : Fragment() {
 
-    private lateinit var Contexto:Context
     private lateinit var Referencia:TelaResumo
 
     private var Lista:RecyclerView? = null
-    private var ProgressoFila:ProgressBar? = null
     private var NumeroAvaliacoes:TextView? = null
+    private var EnviarFilaMomento:TextView? = null
     private var LojaInfo:Lojas? = null
-    private var Enviar:Button? = null
-    private var Horarios:Spinner? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val V = inflater.inflate(R.layout.fragment_fila, container, false)
-        ConfigurandoView(V)
-        configurandoAdapter()
-        return V
+        return inflater.inflate(R.layout.fragment_fila, container, false)
     }
 
-    fun PassandoLja(Ref:Lojas, Contexto:Context, RefTela:TelaResumo){
+
+    override fun onResume() {
+        super.onResume()
+        configurandoView()
+        configurandoAdapter()
+    }
+
+    fun passandoLja(Ref:Lojas, Contexto:Context, RefTela:TelaResumo){
         LojaInfo = Ref
-        this.Contexto = Contexto
         Referencia = RefTela
     }
 
-    private fun ConfigurandoView(V: View) {
-        Lista = V.findViewById<RecyclerView>(R.id.ListaFila)
-        ProgressoFila = V.findViewById<ProgressBar>(R.id.ValorMomentoFila)
-        NumeroAvaliacoes = V.findViewById<TextView>(R.id.NumeroAvaliacoes)
-        Enviar = V.findViewById<Button>(R.id.EnviarFila)
-        Horarios = V.findViewById<Spinner>(R.id.HorarioFilaAvaliacao)
+    private fun configurandoView() {
+        Lista = this.view?.findViewById<RecyclerView>(R.id.ListaFila)
+        NumeroAvaliacoes = this.view?.findViewById<TextView>(R.id.NumeroAvaliacoes)
+        EnviarFilaMomento = this.view?.findViewById<TextView>(R.id.FilaTexto)
 
-        Enviar?.setOnClickListener {
+        EnviarFilaMomento?.setOnClickListener {
+            val Alerta = AdicionarFila().criarTela(this.context!!)
+            Alerta.showTela()
+            Alerta.botaoCancelar()?.setOnClickListener {
+                Alerta.fecharTela()
+            }
+        }
+
+        /*EnviarNota?.setOnClickListener {
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email
             if(!email.isNullOrEmpty()){
-                Alertas.criarAlerter(
+                /*Alertas.criarAlerter(
                     Referencia,
                     "${getString(R.string.SuaNota)}: ${ProgressoFila?.progress.toString()} ${getString(R.string.ParaHorario)} ${Horarios?.selectedItem.toString()}",
                     R.string.Atencao, 5000).show()
-                Enviar?.isEnabled = false
+                EnviarNota?.isEnabled = false*/
 
                 DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_FILA)
             }
-        }
+        }*/
+
 
         NumeroAvaliacoes?.text = String.format(LojaInfo?.avaliacoes.toString() + " "+ getString(R.string.Avalicoes))
     }
 
     private fun configurandoAdapter() {
-        val ListaFila  = mutableListOf<Int>()
-        Lista?.adapter = AdaptadorFila(Contexto, LojaInfo!!)
-        val Manager = LinearLayoutManager(Contexto)
+        Lista?.adapter = AdaptadorFila(this.context!!, LojaInfo!!)
+        val Manager = LinearLayoutManager(this.context!!)
         Manager.orientation = LinearLayoutManager.HORIZONTAL
         Lista?.layoutManager = Manager
     }

@@ -13,8 +13,11 @@ import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
 import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Fragmentos.FragmentAvaliacao
 import dev.tantto.maistempo.Fragmentos.FragmentResumo
+import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
+import dev.tantto.maistempo.Google.FirebaseAutenticacao
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.Servicos.baixarImagem
 
 class TelaResumo : AppCompatActivity() {
 
@@ -27,37 +30,40 @@ class TelaResumo : AppCompatActivity() {
     private var AvaliacaoResumo:FragmentAvaliacao? = null
     private var Foto:ImageView? = null
     private var LojaInfo:Lojas? = null
+    private var Favotitar:Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resumo_local)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        ConfigurandoView()
-        RecuperarLoja()
+        configurandoView()
+        recuperarLoja()
 
         Pagina = findViewById<ViewPager>(R.id.PaginaResumo)
         TabIndicator = findViewById<TabLayout>(R.id.TabAvalicao)
-
+        supportActionBar?.elevation = 0.0F
         configurandoPagina()
 
     }
 
-    private fun RecuperarLoja() {
+    private fun recuperarLoja() {
         if (intent.hasExtra(Chaves.CHAVE_TELAPRINCIPAL.valor)) {
             LojaInfo = intent.getSerializableExtra(Chaves.CHAVE_TELAPRINCIPAL.valor) as Lojas
-            Endereco?.text = String.format(getString(R.string.Endereco) + LojaInfo?.local)
-            Telefone?.text = String.format(getString(R.string.Telefone) + LojaInfo?.telefone)
-            Status?.text = String.format(getString(R.string.Status) + LojaInfo?.status)
+            Endereco?.text = String.format(getString(R.string.Endereco)+ " " + LojaInfo?.local)
+            Telefone?.text = String.format(getString(R.string.Telefone) + " " + LojaInfo?.telefone)
+            Status?.text = String.format(getString(R.string.Status) + " " + LojaInfo?.status?.get(0))
             title = LojaInfo?.titulo
-            Foto?.setImageResource(R.drawable.maistempocircle)
+            val donwload = baixarImagem()
+            donwload.execute(LojaInfo?.imagem)
+            Foto?.setImageBitmap(donwload.get())
         }
     }
 
     private fun configurandoPagina() {
         TabIndicator?.setupWithViewPager(Pagina)
         FilaResumo = FragmentResumo()
-        FilaResumo?.PassandoLja(LojaInfo!!, this, this)
+        FilaResumo?.passandoLja(LojaInfo!!, this, this)
         AvaliacaoResumo = FragmentAvaliacao()
         AvaliacaoResumo?.setandoReferencias(LojaInfo!!, this)
         val ListaFragmentos = listOf(FilaResumo!!, AvaliacaoResumo!!)
@@ -67,7 +73,7 @@ class TelaResumo : AppCompatActivity() {
         TabIndicator?.getTabAt(1)?.setText(R.string.Availiacao)
     }
 
-    private fun ConfigurandoView() {
+    private fun configurandoView() {
         Endereco = findViewById<TextView>(R.id.EnderecoResumo)
         Telefone = findViewById<TextView>(R.id.TelefoneResumo)
         Status = findViewById<TextView>(R.id.StatusResumo)
@@ -86,7 +92,14 @@ class TelaResumo : AppCompatActivity() {
         val Id = item?.itemId
 
         if(Id == R.id.Favoritar){
-            item.setIcon(R.drawable.star_full_white)
+            if(Favotitar){
+                item.setIcon(R.drawable.star_clear)
+            }
+            else {
+                item.setIcon(R.drawable.star_full_white)
+                DatabaseFirebaseSalvar.adicionarFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), "lojas/teste")
+            }
+
         }
 
         return super.onOptionsItemSelected(item)

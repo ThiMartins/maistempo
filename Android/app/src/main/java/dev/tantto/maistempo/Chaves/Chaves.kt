@@ -10,6 +10,7 @@ enum class Chaves(val valor:String) {
     CHAVE_TITULO("titulo"),
     CHAVE_SENHA("senha"),
     CHAVE_TELAPRINCIPAL("TELAPRINCIPAL"),
-    CHAVE_RAIO("raio")
+    CHAVE_RAIO("raio"),
+    CHAVE_FAVORITOS("lojasFavoritas")
 
 }

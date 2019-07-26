@@ -12,11 +12,11 @@ class ListaPerfil {
         Geral("Sair", R.drawable.sair_dark, Tipo.SAIR)
     )
 
-    fun RecuperarTudo() : MutableList<Geral>{
+    fun recuperarTudo() : MutableList<Geral>{
         return lista
     }
 
-    fun Recuperar(Index:Int) : Geral {
+    fun recuperar(Index:Int) : Geral {
         return lista[Index]
     }
 

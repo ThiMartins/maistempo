@@ -3,7 +3,6 @@ package dev.tantto.maistempo.Adaptadores
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,24 +17,24 @@ import dev.tantto.maistempo.R
 
 class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<AdaptadorRanking.ViewHolder>() {
 
-    var Lista:List<Perfil> = mutableListOf()
+    var lista:List<Perfil> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(Contexto).inflate(R.layout.celula_ranking, parent, false))
     }
 
     override fun getItemCount(): Int {
-        return Lista.size
+        return lista.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setandoValor()
-        holder.colocarValor(Lista[position].titulo, Lista[position].pontosTotais.toString(), position + 1)
-        holder.colocarImagem(Lista[position].email)
+        holder.colocarValor(lista[position].titulo, lista[position].pontosTotais.toString(), position + 1)
+        holder.colocarImagem(lista[position].email)
     }
 
     fun adicionandoValor(Novos:List<Perfil>){
-        Lista = Novos
+        lista = Novos
         notifyDataSetChanged()
     }
 
@@ -59,16 +58,16 @@ class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<Adap
         }
 
         fun colocarValor(NomeR:String, PontosR:String, PosicaoR:Int){
-            Nome?.setText(NomeR)
-            Pontos?.setText(PontosR)
-            Posicao?.setText(PosicaoR.toString() + "#")
+            Nome?.text = NomeR
+            Pontos?.text = PontosR
+            Posicao?.text = String.format("$PosicaoR#")
         }
 
         fun colocarImagem(Email:String){
-            CloudStorageFirebase().DonwloadCloud(Email, TipoDonwload.PERFIl, this)
+            CloudStorageFirebase().donwloadCloud(Email, TipoDonwload.PERFIl, this)
         }
 
-        override fun ImagemBaixada(Imagem: Bitmap) {
+        override fun imagemBaixada(Imagem: Bitmap) {
             Foto?.setImageBitmap(Imagem)
         }
 

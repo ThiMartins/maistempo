@@ -13,7 +13,7 @@ import dev.tantto.maistempo.Telas.TelaPrincipal
 
 class Notificacao {
 
-    fun NotificacaoCriar(Contexto:Context, Id:String, Codigo:Int, Titulo:String, Corpo:String, Sumario:String){
+    fun notificacaoCriar(Contexto:Context, Id:String, Codigo:Int, Titulo:String, Corpo:String, Sumario:String){
         val Alerta = NotificationCompat.Builder(Contexto, Id)
         val Intencao = Intent(Contexto, TelaPrincipal::class.java)
         val IntencaoNotificacao = PendingIntent.getActivities(Contexto, Codigo, arrayOf(Intencao), 0)

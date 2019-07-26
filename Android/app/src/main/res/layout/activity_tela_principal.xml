@@ -14,25 +14,20 @@
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tabBackground="@drawable/tab_background">
 
         <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:icon="@drawable/restaurant_black"
-                tools:text="@string/Locais"/>
+                android:layout_height="wrap_content"/>
 
         <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/star_black"
-                android:text="@string/Favoritos"/>
+                android:layout_height="wrap_content"/>
 
         <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:icon="@drawable/setting_dark"
-                tools:text="@string/Configuracoes"/>
+                android:layout_height="wrap_content"/>
 
     </com.google.android.material.tabs.TabLayout>
 
