@@ -1,6 +1,5 @@
 package dev.tantto.maistempo.Google
 
-import android.util.Log
 import com.google.firebase.auth.*
 import dev.tantto.maistempo.Modelos.Perfil
 

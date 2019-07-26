@@ -69,10 +69,10 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     private fun eventos() {
         BotaoApresentacao?.setOnClickListener {
-            Referecencia?.MudarTela(0)
+            Referecencia?.mudarTela(0)
         }
         BotaoNovo?.setOnClickListener {
-            Referecencia?.MudarTela(2)
+            Referecencia?.mudarTela(2)
         }
         Conectar?.setOnClickListener {
             verificar()
@@ -89,7 +89,7 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
     }
 
     override fun usuarioLogado(User: FirebaseUser?) {
-        Referecencia?.LoginConcluido(User)
+        Referecencia?.loginConcluido(User)
     }
 
     override fun erroLogar(Erro: TiposErrosLogar) {

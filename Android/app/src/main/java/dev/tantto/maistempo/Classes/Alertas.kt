@@ -28,7 +28,7 @@ class Alertas {
             return  Alerta
         }
 
-        fun CriarAlertDialog(Contexto:Context, Mensagem: Int, Titulo: Int) : AlertDialog.Builder {
+        fun criarAlertDialog(Contexto:Context, Mensagem: Int, Titulo: Int) : AlertDialog.Builder {
             val Alerta = AlertDialog.Builder(Contexto)
             Alerta.setTitle(Titulo)
             Alerta.setMessage(Mensagem)

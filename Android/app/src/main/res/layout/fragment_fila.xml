@@ -13,60 +13,32 @@
 
         <TextView
                 android:id="@+id/FilaTexto"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/FilaMomento"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="16dp"/>
-
-        <Spinner
-                android:id="@+id/HorarioFilaAvaliacao"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/FilaTexto"
-                android:entries="@array/Horarios"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:prompt="@string/HorarioHint"
-                android:spinnerMode="dialog"/>
-
-        <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/ValorMomentoFila"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/HorarioFilaAvaliacao"
-                app:layout_constraintEnd_toStartOf="@id/EnviarFila"
-                android:layout_marginLeft="4dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:max="10"
-                android:progress="5"/>
-
-        <Button
-                android:id="@+id/EnviarFila"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/HorarioFilaAvaliacao"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/botao_arrendado_cinza"/>
+                android:layout_margin="16dp"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="center"/>
+
 
         <TextView
                 android:id="@+id/PicoFilaTexto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/PicoFila"
-                app:layout_constraintTop_toBottomOf="@id/EnviarFila"
+                app:layout_constraintTop_toBottomOf="@id/FilaTexto"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ListaFila"
@@ -76,7 +48,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/NumeroAvaliacoes"
-                android:layout_margin="8dp"/>
+                android:layout_margin="8dp"
+                app:layout_constraintVertical_bias="1.0"
+                android:background="@drawable/bordas_recycler"
+                android:padding="4dp"/>
 
         <TextView
                 android:id="@+id/NumeroAvaliacoes"
@@ -87,7 +62,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
-                tools:text="80 Avaliações"/>
+                android:textColor="@color/colorAccent"
+                tools:text="80 Avaliações"
+                android:textSize="16sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

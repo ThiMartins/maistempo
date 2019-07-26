@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#9B2A30</color>
     <color name="colorAccent">#3F51B5</color>
 
+    <color name="colorPrimaryLight">#C84144</color>
+
     <color name="VerdeClaro">#99FF99</color>
     <color name="Verde">#00CC00</color>
     <color name="VerdeEscuro">#006600</color>

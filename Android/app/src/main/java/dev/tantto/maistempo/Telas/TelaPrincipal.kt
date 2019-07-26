@@ -11,15 +11,13 @@ import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
 import dev.tantto.maistempo.Fragmentos.FragmentLocal
 import dev.tantto.maistempo.Fragmentos.FragmentPerfil
-import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.ListaPerfil
 import dev.tantto.maistempo.R
 
 class TelaPrincipal : AppCompatActivity(){
 
-    private var TodosLocais:FragmentLocal? = null
-    private var FavoritosLocais:FragmentLocal? = null
-    private var Perfil:FragmentPerfil? = null
+    private var TodosLocais:FragmentLocal = FragmentLocal()
+    private var FavoritosLocais:FragmentLocal = FragmentLocal()
+    private var Perfil:FragmentPerfil = FragmentPerfil()
     private var Tabs:TabLayout? = null
     private var Pagina:ViewPager? = null
 
@@ -30,29 +28,22 @@ class TelaPrincipal : AppCompatActivity(){
         Tabs = findViewById<TabLayout>(R.id.TabPrincipal)
         Pagina = findViewById<ViewPager>(R.id.PagerPrincipal)
 
-        SetantoFragmentos()
-        ConfigurandoPager()
-        SetandoTabItens()
+        configurandoPager()
+        setandoTabItens()
+
     }
 
-    private fun SetantoFragmentos() {
-        TodosLocais = FragmentLocal()
-        TodosLocais?.setandoValores(this, ListaLocais.RecuperarTudo())
-        FavoritosLocais = FragmentLocal()
-        FavoritosLocais?.setandoValores(this, ListaLocais.RecuperarTudo().asReversed())
-        Perfil = FragmentPerfil(this, ListaPerfil().RecuperarTudo())
-    }
-
-    private fun ConfigurandoPager() {
+    private fun configurandoPager() {
         Tabs?.setupWithViewPager(Pagina)
-        val ListaFragmentos = listOf(TodosLocais!!, FavoritosLocais!!, Perfil!!)
+        val ListaFragmentos = listOf(TodosLocais, FavoritosLocais, Perfil)
         Pagina?.adapter = ViewPagerAdaptador(supportFragmentManager, ListaFragmentos)
     }
 
-    private fun SetandoTabItens() {
+    private fun setandoTabItens() {
         Tabs?.getTabAt(0)?.setIcon(R.drawable.restaurant_black)?.setText(R.string.Locais)
         Tabs?.getTabAt(1)?.setIcon(R.drawable.star_black)?.setText(R.string.Favoritos)
         Tabs?.getTabAt(2)?.setIcon(R.drawable.setting_dark)?.setText(R.string.Configuracoes)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -63,9 +54,9 @@ class TelaPrincipal : AppCompatActivity(){
         Pesquisa.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(Tabs?.selectedTabPosition == 0){
-                    TodosLocais?.Filtro(newText!!)
+                    TodosLocais.filtro(newText!!)
                 } else if(Tabs?.selectedTabPosition == 1){
-                    FavoritosLocais?.Filtro(newText!!)
+                    FavoritosLocais.filtro(newText!!)
                 }
                 return true
             }
@@ -77,7 +68,6 @@ class TelaPrincipal : AppCompatActivity(){
 
         return super.onCreateOptionsMenu(menu)
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val Id = item?.itemId

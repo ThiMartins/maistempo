@@ -25,7 +25,7 @@
     <string name="Favoritar">Favoritar</string>
     <string name="Fila">Fila do caixa</string>
     <string name="Availiacao">Avaliação Local</string>
-    <string name="FilaMomento">Como está a fila do caixa no instante ?</string>
+    <string name="FilaMomento">Toque aqui para avaliar a fila</string>
     <string name="PicoFila">Pico da Fila</string>
     <string name="ComoSeSentem">Como as pessoas se sentem</string>
     <string name="VerTodos">Ver Todos</string>
@@ -95,13 +95,14 @@
         <item>Galeria</item>
         <item>Arquivos</item>
     </string-array>
-    <string name="Avalicoes"> Availações</string>
+    <string name="Avalicoes">Avaliações</string>
     <string name="Endereco">Endereço:</string>
     <string name="Telefone">Telefone:</string>
     <string name="Status">Status:</string>
     <string name="UmKM">1 KM</string>
     <string name="CincoKM">5 KM</string>
     <string-array name="Horarios">
+        <item>Escolha o horário</item>
         <item>08:00</item>
         <item>09:00</item>
         <item>10:00</item>
@@ -150,4 +151,8 @@
     <string name="SalvandoAlteracoes">Salvando alterações</string>
     <string name="Aguardando">Aguarde</string>
     <string name="Carregando">Carregando</string>
+    <string name="Digite">Digite aqui</string>
+    <string name="Rapida">Rápida</string>
+    <string name="Normal">Normal</string>
+    <string name="Preferencial">Preferêncial</string>
 </resources>

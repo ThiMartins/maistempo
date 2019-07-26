@@ -3,7 +3,6 @@ package dev.tantto.maistempo.Telas
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
@@ -28,22 +27,22 @@ class TelaLogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_login)
 
-        ConfiguracaoView()
-        ReferenciandoFragments()
-        SetandoTela()
+        configuracaoView()
+        referenciandoFragments()
+        setandoTela()
 
     }
 
-    fun MudarTela(Valor:Int) {
+    fun mudarTela(Valor:Int) {
         Pagina?.currentItem = Valor
     }
 
-    private fun ConfiguracaoView() {
+    private fun configuracaoView() {
         Pagina = findViewById<ViewPager>(R.id.VisualizarLogin)
         TabIndicador = findViewById<TabLayout>(R.id.TabLayout)
     }
 
-    private fun SetandoTela() {
+    private fun setandoTela() {
         val Mananger = supportFragmentManager
         val Lista = listOf(Apresentacao!!, Login!!, Novo!!)
 
@@ -52,19 +51,20 @@ class TelaLogin : AppCompatActivity() {
         Pagina?.currentItem = 1
     }
 
-    private fun ReferenciandoFragments() {
+    private fun referenciandoFragments() {
         Login = FragmentLogin().setandoReferencia(this)
         Apresentacao = FragmentApresentacao()
         Novo = FragmentNovoUsuario().setandoReferencia(this, this)
     }
 
-    fun LoginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
-        Dados(this).SalvarLogin(User?.email!!, "YukiMakoto", "Sorocaba")
+    fun loginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
+        Dados(this).salvarLogin(User?.email!!, "YukiMakoto", "Sorocaba")
         val Iniciar = Intent(this, TelaPrincipal::class.java)
         Iniciar.putExtra(Telas.GET_USER, User)
         if(Pessoa != null){
             Iniciar.putExtra(Telas.GET_PESSOA, Pessoa)
         }
         startActivity(Iniciar)
+        finishAffinity()
     }
 }

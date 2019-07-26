@@ -2,19 +2,12 @@ package dev.tantto.maistempo.Google
 
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import java.math.BigDecimal
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.functions.FirebaseFunctions
-import java.math.BigInteger
 
 enum class TipoPontos(val valor:String){
     PONTOS_FILA("pontosFila"),
@@ -22,14 +15,12 @@ enum class TipoPontos(val valor:String){
     PONTOS_TOTAIS("pontosTotais")
 }
 
-enum class Respostas(val valor: String){
+enum class Respostas(valor: String){
     SUCESSO("sucesso"),
     ERRO("erro")
 }
 
 class DatabaseFirebaseSalvar {
-
-    val BancoFirestore = FirebaseFirestore.getInstance()
 
     companion object {
 
@@ -56,6 +47,29 @@ class DatabaseFirebaseSalvar {
             }
         }
 
+        @Suppress("UNCHECKED_CAST")
+        fun adicionarFavorito(Email: String, LojaRecebida:String){
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).get().addOnCompleteListener {
+                if(it.isSuccessful){
+                    val Recuperado = it.result?.get(Chaves.CHAVE_FAVORITOS.valor)
+                    if(Recuperado != null){
+                        val lojas = Recuperado as MutableList<String>
+                        lojas.add(LojaRecebida)
+                        FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_FAVORITOS.valor, lojas)
+
+                    } else {
+                        val lista = mutableListOf(LojaRecebida)
+                        FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_FAVORITOS.valor, lista)
+                    }
+                }
+            }
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        fun removerFavorito(Email: String, LojaRecebida:String){
+
+        }
+
         fun mudarRaio(Email: String, Valor: Int){
             FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_RAIO.valor, Valor)
         }
@@ -64,32 +78,32 @@ class DatabaseFirebaseSalvar {
             if(Nome.isNotEmpty() && Caminho == Uri.EMPTY){
                 FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_TITULO.valor, Nome).addOnCompleteListener {
                     if(it.isSuccessful){
-                        Resposta.Resposta(Respostas.SUCESSO)
+                        Resposta.resposta(Respostas.SUCESSO)
                     } else {
-                        Resposta.Resposta(Respostas.ERRO)
+                        Resposta.resposta(Respostas.ERRO)
                     }
                 }
             } else if(Nome.isEmpty() && Caminho != Uri.EMPTY){
                 CloudStorageFirebase.mudarImagem(Caminho, Email).addOnCompleteListener {
                     if(it.isSuccessful){
-                        Resposta.Resposta(Respostas.SUCESSO)
+                        Resposta.resposta(Respostas.SUCESSO)
                     } else {
-                        Resposta.Resposta(Respostas.ERRO)
+                        Resposta.resposta(Respostas.ERRO)
                     }
                 }
             } else {
-                FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_TITULO.valor, Nome).addOnCompleteListener {
+                FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_TITULO.valor, Nome).addOnCompleteListener { it ->
                     if(it.isSuccessful){
-                        Resposta.Resposta(Respostas.SUCESSO)
+                        Resposta.resposta(Respostas.SUCESSO)
                         CloudStorageFirebase.mudarImagem(Caminho, Email).addOnCompleteListener {
                             if(it.isSuccessful){
-                                Resposta.Resposta(Respostas.SUCESSO)
+                                Resposta.resposta(Respostas.SUCESSO)
                             } else {
-                                Resposta.Resposta(Respostas.ERRO)
+                                Resposta.resposta(Respostas.ERRO)
                             }
                         }
                     } else {
-                        Resposta.Resposta(Respostas.ERRO)
+                        Resposta.resposta(Respostas.ERRO)
                     }
                 }
             }
@@ -97,7 +111,7 @@ class DatabaseFirebaseSalvar {
 
         fun deletarConta(Email: String){
             FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).delete()
-            FirebaseDatabase.getInstance().reference.child(Email).removeValue()
+            CloudStorageFirebase.deletarImagem(Email)
         }
     }
 
@@ -107,11 +121,9 @@ class DatabaseFirebaseRecuperar {
 
     companion object {
 
-        val BancoFirestore = FirebaseFirestore.getInstance()
-
         @Suppress("unchecked_cast")
         fun recuperarLojasLocais(Cidade:String, Interface:DatabaseLocaisInterface){
-            BancoFirestore.collection(Chaves.CHAVE_LOJA.valor).whereEqualTo(Chaves.CHAVE_CIDADE.valor, Cidade).addSnapshotListener { querySnapshot, _ ->
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_LOJA.valor).whereEqualTo(Chaves.CHAVE_CIDADE.valor, Cidade).addSnapshotListener { querySnapshot, _ ->
                 if(querySnapshot?.documents?.isNotEmpty()!!){
                     val ListaFinal = mutableListOf<Lojas>()
                     for(Item in querySnapshot){
@@ -138,19 +150,19 @@ class DatabaseFirebaseRecuperar {
         }
 
         fun recuperaDadosPessoa(Email:String, Interface:DatabasePessoaInterface){
-            BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
                 if(documentSnapshot?.exists()!!){
                     Log.i("Debug", documentSnapshot.toString())
                     val Item = Perfil(
-                        titulo = documentSnapshot["titulo"] as String,
-                        email = documentSnapshot["email"] as String,
+                        titulo = documentSnapshot["titulo"].toString(),
+                        email = documentSnapshot["email"].toString(),
                         raio = documentSnapshot["raio"].toString().toLong(),
                         pontosCadastro = documentSnapshot["pontosCadastro"].toString().toLong(),
                         pontosFila = documentSnapshot["pontosFila"].toString().toLong(),
                         pontosLocais = documentSnapshot["pontosLocais"].toString().toLong(),
                         pontosTotais = documentSnapshot["pontosTotais"].toString().toLong(),
-                        nascimento = documentSnapshot["nascimento"] as String,
-                        tipo = documentSnapshot["tipo"] as String
+                        nascimento = documentSnapshot["nascimento"].toString(),
+                        tipo = documentSnapshot["tipo"].toString()
                     )
                     Interface.pessoaRecebida(Item)
                 }
@@ -158,7 +170,7 @@ class DatabaseFirebaseRecuperar {
         }
 
         fun recuperarTopRanking(Interface:DatabaseRakingInterface){
-            BancoFirestore.collection(Chaves.CHAVE_USUARIO.valor).orderBy(TipoPontos.PONTOS_TOTAIS.valor, Query.Direction.DESCENDING).limit(5).get().addOnCompleteListener {
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).orderBy(TipoPontos.PONTOS_TOTAIS.valor, Query.Direction.DESCENDING).limit(5).get().addOnCompleteListener {
                 if(it.isSuccessful){
                     val ListaFinal = mutableListOf<Perfil>()
                     for(Item in it.result?.documents!!){
@@ -195,6 +207,6 @@ interface DatabaseRakingInterface{
 
 interface DatabaseMudanca{
 
-    fun Resposta(Resposta:Respostas)
+    fun resposta(Resposta:Respostas)
 
 }

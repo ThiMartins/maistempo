@@ -6,15 +6,14 @@ import android.content.SharedPreferences
 class Dados(private val Contexto:Context) {
 
     companion object {
-        private val NOME_TABELA = "ValoresTempo"
-        private val EMAIL = "EMAIL"
-        private val SENHA = "SENHA"
-        private val CIDADE = "CIDADE"
-        private val PERMISSAO = "PERMISSAO"
+        private const val NOME_TABELA = "ValoresTempo"
+        private const val EMAIL = "EMAIL"
+        private const val SENHA = "SENHA"
+        private const val CIDADE = "CIDADE"
     }
 
-    fun SalvarLogin(Email:String, Senha:String, Cidade:String){
-        val Preferencia = RecuperarPreferencias()
+    fun salvarLogin(Email:String, Senha:String, Cidade:String){
+        val Preferencia = recuperarPreferencias()
         val Editor = Preferencia?.edit()
         Editor?.putString(EMAIL, Email)
         Editor?.putString(SENHA, Senha)
@@ -22,13 +21,8 @@ class Dados(private val Contexto:Context) {
         Editor?.apply()
     }
 
-    private fun RecuperarPreferencias(): SharedPreferences? {
+    private fun recuperarPreferencias(): SharedPreferences? {
         return Contexto.getSharedPreferences(NOME_TABELA, 0)
-    }
-
-    fun Local() : String{
-        val Preferencia = RecuperarPreferencias()
-        return Preferencia?.getString(CIDADE, "")!!
     }
 
 }

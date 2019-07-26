@@ -5,7 +5,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
 
     <ImageView
             android:id="@+id/FotoResumo"
@@ -26,6 +27,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="22dp"
+        android:textColor="@android:color/white"
         tools:text="Endereco:"/>
 
     <TextView
@@ -35,6 +37,7 @@
         app:layout_constraintStart_toEndOf="@id/FotoResumo"
         app:layout_constraintTop_toBottomOf="@id/EnderecoResumo"
         android:layout_margin="8dp"
+        android:textColor="@android:color/white"
         tools:text="Telefone:"/>
 
     <TextView
@@ -44,13 +47,14 @@
         app:layout_constraintStart_toEndOf="@id/FotoResumo"
         app:layout_constraintTop_toBottomOf="@id/TelefoneResumo"
         android:layout_margin="8dp"
+        android:textColor="@android:color/white"
         tools:text="Aberto - Fecha as 22:00"/>
 
     <View
         android:id="@+id/View"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/FotoResumo"
         android:layout_marginTop="16dp"
@@ -63,7 +67,6 @@
         android:id="@+id/TabAvalicao"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/View" >
@@ -85,6 +88,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TabAvalicao"/>
+        app:layout_constraintTop_toBottomOf="@id/TabAvalicao"
+        android:background="@android:color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

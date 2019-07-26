@@ -19,11 +19,39 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:id="@+id/ProgressoFila"
+                android:id="@+id/ProgressoFila1"
                 android:progressDrawable="@drawable/progressbar_vertical"
-                android:progress="50"
+                tools:progress="100"
+                android:progress="0"
                 android:max="100"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/HorarioFila"/>
+
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:id="@+id/ProgressoFila2"
+                android:progressDrawable="@drawable/progressbar_vertical"
+                tools:progress="50"
+                android:progress="0"
+                android:max="100"
+                app:layout_constraintStart_toEndOf="@id/ProgressoFila1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/HorarioFila"/>
+
+
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:id="@+id/ProgressoFila3"
+                android:progressDrawable="@drawable/progressbar_vertical"
+                tools:progress="75"
+                android:progress="0"
+                android:max="100"
+                app:layout_constraintStart_toEndOf="@id/ProgressoFila2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/HorarioFila"/>
@@ -37,6 +65,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:gravity="center"
                 tools:text="08:00"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

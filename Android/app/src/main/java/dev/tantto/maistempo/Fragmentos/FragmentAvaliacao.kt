@@ -1,9 +1,12 @@
 package dev.tantto.maistempo.Fragmentos
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.RatingBar
@@ -27,10 +30,13 @@ class FragmentAvaliacao : Fragment() {
     private lateinit var Referencia:TelaResumo
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val V = inflater.inflate(R.layout.fragment_avaliacao_local, container, false)
-        configurandoView(V)
+        return inflater.inflate(R.layout.fragment_avaliacao_local, container, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        configurandoView()
         setandoValores()
-        return V
     }
 
     fun setandoReferencias(Item:Lojas, Ref:TelaResumo){
@@ -43,18 +49,11 @@ class FragmentAvaliacao : Fragment() {
         outState.putSerializable(CHAVE_LOJA, Loja)
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        //if(!savedInstanceState?.isEmpty!!){
-        //    Loja = savedInstanceState.getSerializable(CHAVE_LOJA) as Lojas
-        //}
-    }
-
-    private fun configurandoView(V: View) {
-        Progresso = V.findViewById<ProgressBar>(R.id.ProgressoVotosAvaliacao)
-        NumeroAvailicao = V.findViewById<TextView>(R.id.NumeroAvaliacoesTexto)
-        RatingVoto = V.findViewById<RatingBar>(R.id.RatingLocal)
-        Enviar = V.findViewById<Button>(R.id.EnviarRating)
+    private fun configurandoView() {
+        Progresso = this.view?.findViewById<ProgressBar>(R.id.ProgressoVotosAvaliacao)
+        NumeroAvailicao = this.view?.findViewById<TextView>(R.id.NumeroAvaliacoesTexto)
+        RatingVoto = this.view?.findViewById<RatingBar>(R.id.RatingLocal)
+        Enviar = this.view?.findViewById<Button>(R.id.EnviarRating)
 
         Enviar?.setOnClickListener {
             val nota = RatingVoto?.rating!! * 20
@@ -66,7 +65,7 @@ class FragmentAvaliacao : Fragment() {
 
     private fun setandoValores(){
         Progresso?.progress = Loja?.mediaRating?.toInt()!! * 20
-        NumeroAvailicao?.text = String.format(Loja?.avaliacoesRating.toString())
+        NumeroAvailicao?.text = String.format(Loja?.avaliacoesRating.toString()  + " " + getString(R.string.Avalicoes))
     }
 
 }

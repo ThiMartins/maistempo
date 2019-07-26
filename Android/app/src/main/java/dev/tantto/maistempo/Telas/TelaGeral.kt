@@ -105,9 +105,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val Id = item?.itemId
-
-        when(Id){
+        when(item?.itemId){
             R.id.DeletarConta -> deletarConta()
             R.id.SalvarAlteracoes -> salvarAlteracoes()
         }
@@ -115,15 +113,16 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
     }
 
     private fun deletarConta(){
-        val Aletar = Alertas.CriarAlertDialog(this, R.string.ApagarConta, R.string.Atencao)
+        val Aletar = Alertas.criarAlertDialog(this, R.string.ApagarConta, R.string.Atencao)
         Aletar.setNegativeButton(R.string.Nao) { _, _ ->
 
         }
         Aletar.setPositiveButton(R.string.Sim) { _, _ ->
             if(Pessoa != null){
+                FirebaseAutenticacao.deslogarUser()
                 DatabaseFirebaseSalvar.deletarConta(Pessoa?.email!!)
                 startActivity(Intent(this, TelaLogin::class.java))
-                this.finishAffinity()
+                finishAffinity()
             }
         }.create().show()
     }
@@ -145,7 +144,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
         }
     }
 
-    override fun Resposta(Resposta: Respostas) {
+    override fun resposta(Resposta: Respostas) {
         if(Resposta == Respostas.SUCESSO){
             this.finish()
         } else if(Resposta == Respostas.ERRO){
@@ -171,7 +170,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
         }
     }
 
-    override fun ImagemBaixada(Imagem: Bitmap) {
+    override fun imagemBaixada(Imagem: Bitmap) {
         Foto?.setImageBitmap(Imagem)
         findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
     }
@@ -179,6 +178,6 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
     override fun pessoaRecebida(Pessoa: Perfil) {
         setandoValores(Pessoa)
         this.Pessoa = Pessoa
-        CloudStorageFirebase().DonwloadCloud(Pessoa.email, TipoDonwload.PERFIl, this)
+        CloudStorageFirebase().donwloadCloud(Pessoa.email, TipoDonwload.PERFIl, this)
     }
 }

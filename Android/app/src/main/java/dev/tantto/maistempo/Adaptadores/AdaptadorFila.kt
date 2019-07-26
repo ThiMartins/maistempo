@@ -1,11 +1,13 @@
 package dev.tantto.maistempo.Adaptadores
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.PorterDuff
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -23,14 +25,35 @@ class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : Rec
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.SetandoItens(Lista.fila.get(position), Lista.horarios.get(position))
+        holder.setandoItens(Lista.fila[position], Lista.horarios[position])
     }
 
     class ViewHolder(private val Item: View, private val Contexto: Context) : RecyclerView.ViewHolder(Item){
 
-        fun SetandoItens(Progresso:Int, Horario:String){
-            val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila)
-            ProgressoBarra.progress = Progresso
+        fun setandoItens(Progresso:Int, Horario:String){
+            val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila1)
+            setandoCor(Progresso, ProgressoBarra)
+            Item.findViewById<TextView>(R.id.HorarioFila).text = Horario
+            colocandoAnimacao(ProgressoBarra, Progresso)
+            setandoCor(50, Item.findViewById(R.id.ProgressoFila2))
+            setandoCor(27, Item.findViewById(R.id.ProgressoFila3))
+            colocandoAnimacao(Item.findViewById(R.id.ProgressoFila2), 50)
+            colocandoAnimacao(Item.findViewById(R.id.ProgressoFila3), 27)
+        }
+
+        private fun colocandoAnimacao(ProgressoBarra: ProgressBar?, Progresso: Int) {
+            val Animacao = ObjectAnimator.ofInt(ProgressoBarra, "progress", Progresso)
+            when {
+                Progresso >= 50 -> Animacao.duration = 1000
+                Progresso >= 25 -> Animacao.duration = 500
+                Progresso < 25 -> Animacao.duration = 250
+            }
+            Animacao.interpolator = LinearInterpolator()
+            Animacao.start()
+
+        }
+
+        private fun setandoCor(Progresso: Int, ProgressoBarra: ProgressBar) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 when {
                     Progresso <= 10 -> ProgressoBarra.progressDrawable.setColorFilter(Contexto.getColor(R.color.VerdeClaro), PorterDuff.Mode.SRC_IN)
@@ -45,7 +68,6 @@ class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : Rec
                     else -> ProgressoBarra.progressDrawable.setColorFilter(Contexto.getColor(R.color.VermelhoEscuro), PorterDuff.Mode.SRC_IN)
                 }
             }
-            Item.findViewById<TextView>(R.id.HorarioFila).text = Horario
         }
 
     }

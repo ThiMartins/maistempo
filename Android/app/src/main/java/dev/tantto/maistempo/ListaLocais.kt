@@ -7,24 +7,12 @@ class ListaLocais {
     companion object {
         private var Lista = mutableListOf<Lojas>()
 
-        fun Refazer(Tabela:MutableList<Lojas>){
+        fun refazer(Tabela:MutableList<Lojas>){
             Lista = Tabela
         }
 
-        fun Adicionar(Loja:Lojas){
-            Lista.add(Loja)
-        }
-
-        fun Recuperar(Index:Int) : Lojas{
-            return Lista[Index]
-        }
-
-        fun RecuperarTudo() : List<Lojas>{
+        fun recuperarTudo() : List<Lojas>{
             return Lista
-        }
-
-        fun Tamanho() : Int{
-            return Lista.size
         }
     }
 
