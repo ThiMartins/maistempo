@@ -129,8 +129,8 @@
         <item>07:00</item>
     </string-array>
     <string name="HorarioHint">Escolha o horario</string>
-    <string name="SuaNota">Sua nota</string>
-    <string name="ParaHorario">para o horario de</string>
+    <string name="IntervaloFila">Intervalo de</string>
+    <string name="ParaFila">para a fila do tipo:</string>
     <string name="Deletar">Deletar</string>
     <string name="ErroPermissaoFoto">Sem permissão não é possivel colocar a foto de perfil</string>
     <string name="ErroPermissao">Permissão negada</string>
@@ -155,4 +155,12 @@
     <string name="Rapida">Rápida</string>
     <string name="Normal">Normal</string>
     <string name="Preferencial">Preferêncial</string>
+    <string name="MenorQue10">Menor de 10 minutos</string>
+    <string name="Entre10e20">Entre 10 a 20 minutos</string>
+    <string name="Entre20e30">Entre 10 a 20 minutos</string>
+    <string name="Entre30e40">Entre 10 a 20 minutos</string>
+    <string name="Entre40e50">Entre 10 a 20 minutos</string>
+    <string name="Entre50e60">Entre 10 a 20 minutos</string>
+    <string name="Maiorque60">Entre 10 a 20 minutos</string>
+    <string name="MudarRaio">Mudar raio de pesquisa</string>
 </resources>

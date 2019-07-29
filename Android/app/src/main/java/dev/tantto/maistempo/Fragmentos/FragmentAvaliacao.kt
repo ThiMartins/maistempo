@@ -1,25 +1,26 @@
 package dev.tantto.maistempo.Fragmentos
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
+import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
+import dev.tantto.maistempo.Google.DatabaseNotaRaking
+import dev.tantto.maistempo.Google.FirebaseAutenticacao
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
 
-class FragmentAvaliacao : Fragment() {
-
-    private val CHAVE_LOJA = "LOJA"
+class FragmentAvaliacao : Fragment(), DatabaseNotaRaking {
 
     private var Progresso:ProgressBar? = null
     private var NumeroAvailicao:TextView? = null
@@ -37,6 +38,7 @@ class FragmentAvaliacao : Fragment() {
         super.onResume()
         configurandoView()
         setandoValores()
+        DatabaseFirebaseRecuperar.recuperarNotaRanking(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
     }
 
     fun setandoReferencias(Item:Lojas, Ref:TelaResumo){
@@ -46,7 +48,14 @@ class FragmentAvaliacao : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(CHAVE_LOJA, Loja)
+        outState.putSerializable(Chaves.CHAVE_LOJA.valor, Loja)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if(savedInstanceState != null && savedInstanceState.containsKey(Chaves.CHAVE_LOJA.valor)){
+            Loja = savedInstanceState.getSerializable(Chaves.CHAVE_LOJA.valor) as Lojas
+        }
     }
 
     private fun configurandoView() {
@@ -57,15 +66,23 @@ class FragmentAvaliacao : Fragment() {
 
         Enviar?.setOnClickListener {
             val nota = RatingVoto?.rating!! * 20
-            //enviar nota
-            Alertas.criarAlerter(Referencia, R.string.RatingAlerta, R.string.Enviando, 5000).show()
+            Progresso?.progress = nota.toInt()
+            Alertas.criarAlerter(Referencia, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
             RatingVoto?.isEnabled = false
+            DatabaseFirebaseSalvar.salvarNotaRaking(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), Loja?.id!!, RatingVoto?.rating!!)
         }
     }
 
     private fun setandoValores(){
         Progresso?.progress = Loja?.mediaRating?.toInt()!! * 20
-        NumeroAvailicao?.text = String.format(Loja?.avaliacoesRating.toString()  + " " + getString(R.string.Avalicoes))
+        NumeroAvailicao?.text = String.format(Loja?.quantidadeAvaliacoesRating.toString()  + " " + getString(R.string.Avalicoes))
+    }
+
+    override fun Nota(Nota: String?) {
+        if(!Nota.isNullOrEmpty()){
+            //RatingVoto?.rating = Nota.toFloat()
+            Log.i("Teste", Nota)
+        }
     }
 
 }

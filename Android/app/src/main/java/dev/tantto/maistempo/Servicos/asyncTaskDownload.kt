@@ -2,6 +2,7 @@ package dev.tantto.maistempo.Servicos
 
 import android.graphics.Bitmap
 import android.os.AsyncTask
+import android.util.Log
 import dev.tantto.maistempo.Classes.bitmapUtils
 import java.io.IOException
 
