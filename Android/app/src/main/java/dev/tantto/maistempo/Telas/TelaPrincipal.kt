@@ -5,21 +5,30 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SeekBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
 import dev.tantto.maistempo.Fragmentos.FragmentLocal
 import dev.tantto.maistempo.Fragmentos.FragmentPerfil
+import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
+import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
+import dev.tantto.maistempo.Google.DatabasePessoaInterface
+import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaPrincipal : AppCompatActivity(){
+class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface{
 
     private var TodosLocais:FragmentLocal = FragmentLocal()
     private var FavoritosLocais:FragmentLocal = FragmentLocal()
     private var Perfil:FragmentPerfil = FragmentPerfil()
     private var Tabs:TabLayout? = null
     private var Pagina:ViewPager? = null
+    private var Pessoa:Perfil? = null
+    private var ProgressoRaio:SeekBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +40,12 @@ class TelaPrincipal : AppCompatActivity(){
         configurandoPager()
         setandoTabItens()
 
+        DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
     }
 
     private fun configurandoPager() {
         Tabs?.setupWithViewPager(Pagina)
+        FavoritosLocais.filtroFavoritos()
         val ListaFragmentos = listOf(TodosLocais, FavoritosLocais, Perfil)
         Pagina?.adapter = ViewPagerAdaptador(supportFragmentManager, ListaFragmentos)
     }
@@ -72,11 +83,32 @@ class TelaPrincipal : AppCompatActivity(){
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val Id = item?.itemId
 
-        if(Id == R.id.AbrirMapa){
-            startActivity(Intent(this, TelaMapa::class.java))
+        when(Id){
+            R.id.AbrirMapa -> startActivity(Intent(this, TelaMapa::class.java))
+            R.id.MudarRaio -> mudarRaio()
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun mudarRaio(){
+        val Alerta = AlertDialog.Builder(this)
+        Alerta
+            .setView(R.layout.mudar_raio)
+            .setTitle(R.string.MudarRaio)
+            .setPositiveButton(R.string.Enviar){ _, _ ->
+                if(ProgressoRaio?.progress != Pessoa?.raio?.toInt()){
+                    DatabaseFirebaseSalvar.mudarRaio(Pessoa?.email!!, ProgressoRaio?.progress!!)
+                }
+            }.setNegativeButton(R.string.Cancelar, null)
+        val AlertaFechado = Alerta.create()
+        AlertaFechado.show()
+        ProgressoRaio = AlertaFechado.findViewById<SeekBar>(R.id.ValorMudarRaio)
+        ProgressoRaio?.progress = Pessoa?.raio?.toInt()!!
+    }
+
+    override fun pessoaRecebida(Pessoa: Perfil) {
+        this.Pessoa = Pessoa
     }
 
 }

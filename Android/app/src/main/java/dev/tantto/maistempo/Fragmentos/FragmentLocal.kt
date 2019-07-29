@@ -13,6 +13,7 @@ import dev.tantto.maistempo.R
 class FragmentLocal: Fragment() {
 
     private var Adaptador:AdaptadorLocal? = null
+    var Modo:Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val V = inflater.inflate(R.layout.fragment_local_perfil, container, false)
@@ -24,6 +25,10 @@ class FragmentLocal: Fragment() {
 
     fun filtro(Valor:String){
         Adaptador?.filtro(Valor)
+    }
+
+    fun filtroFavoritos(){
+        Adaptador?.filtroFavoritos()
     }
 
 }

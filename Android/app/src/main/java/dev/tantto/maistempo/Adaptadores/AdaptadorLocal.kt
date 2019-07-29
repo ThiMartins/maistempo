@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.ListaFavoritos
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Servicos.baixarImagem
@@ -57,19 +58,20 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
         fun adicionandoValores(Elementos:Lojas){
             Titulo?.text = Elementos.titulo
             Status?.text = Elementos.status[0]
-            val donwload = baixarImagem()
-            donwload.execute(Elementos.imagem)
-            Imagem?.setImageBitmap(donwload.get())
+
+            val DownloadImagem = baixarImagem()
+            DownloadImagem.execute(Elementos.imagem)
+            Imagem?.setImageBitmap(DownloadImagem.get())
+
         }
 
         fun click(position: Lojas){
             CardLocal?.setOnClickListener {
                 val Iniciar = Intent(Contexto, TelaResumo::class.java)
-                Iniciar.putExtra(Chaves.CHAVE_TELAPRINCIPAL.valor, position)
+                Iniciar.putExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor, position)
                 Contexto.startActivity(Iniciar)
             }
         }
-
     }
 
     fun filtro(Filtragem:String){
@@ -80,6 +82,12 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:List<Lojas>
                 Backup!!
             }
         notifyDataSetChanged()
+    }
+
+    fun filtroFavoritos(){
+        Lista = Lista.filterIndexed { index, lojas ->
+            lojas.id == ListaFavoritos.Lista[index]
+        }
     }
 
 }

@@ -16,29 +16,39 @@ import dev.tantto.maistempo.R
 
 class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : RecyclerView.Adapter<AdaptadorFila.ViewHolder>() {
 
+    private var Modo:Int = 0
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(Contexto).inflate(R.layout.celula_fila, parent, false), Contexto)
     }
 
     override fun getItemCount(): Int {
-        return Lista.fila.size
+        return Lista.filaNormal.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.setandoItens(Lista.fila[position], Lista.horarios[position])
+        when(Modo){
+            0 -> holder.setandoItens(Lista.filaNormal[position], Lista.horarios[position])
+            1 -> holder.setandoItens(Lista.filaRapida[position], Lista.horarios[position])
+            2 -> holder.setandoItens(Lista.filaPreferencial[position], Lista.horarios[position])
+        }
+    }
+
+    fun mudarValores(ModoRecebido:Int){
+        Modo = ModoRecebido
+        notifyDataSetChanged()
     }
 
     class ViewHolder(private val Item: View, private val Contexto: Context) : RecyclerView.ViewHolder(Item){
 
         fun setandoItens(Progresso:Int, Horario:String){
-            val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila1)
-            setandoCor(Progresso, ProgressoBarra)
             Item.findViewById<TextView>(R.id.HorarioFila).text = Horario
+            val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila1)
+            ProgressoBarra.progress = 0
+
+            setandoCor(Progresso, ProgressoBarra)
             colocandoAnimacao(ProgressoBarra, Progresso)
-            setandoCor(50, Item.findViewById(R.id.ProgressoFila2))
-            setandoCor(27, Item.findViewById(R.id.ProgressoFila3))
-            colocandoAnimacao(Item.findViewById(R.id.ProgressoFila2), 50)
-            colocandoAnimacao(Item.findViewById(R.id.ProgressoFila3), 27)
+
         }
 
         private fun colocandoAnimacao(ProgressoBarra: ProgressBar?, Progresso: Int) {

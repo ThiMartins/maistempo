@@ -7,7 +7,6 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
-import dev.tantto.maistempo.Dados.Dados
 import dev.tantto.maistempo.Fragmentos.FragmentApresentacao
 import dev.tantto.maistempo.Fragmentos.FragmentLogin
 import dev.tantto.maistempo.Fragmentos.FragmentNovoUsuario
@@ -58,7 +57,6 @@ class TelaLogin : AppCompatActivity() {
     }
 
     fun loginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
-        Dados(this).salvarLogin(User?.email!!, "YukiMakoto", "Sorocaba")
         val Iniciar = Intent(this, TelaPrincipal::class.java)
         Iniciar.putExtra(Telas.GET_USER, User)
         if(Pessoa != null){

@@ -15,6 +15,7 @@ import dev.tantto.maistempo.Fragmentos.FragmentAvaliacao
 import dev.tantto.maistempo.Fragmentos.FragmentResumo
 import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
 import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.ListaFavoritos
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Servicos.baixarImagem
@@ -30,7 +31,6 @@ class TelaResumo : AppCompatActivity() {
     private var AvaliacaoResumo:FragmentAvaliacao? = null
     private var Foto:ImageView? = null
     private var LojaInfo:Lojas? = null
-    private var Favotitar:Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,22 +48,24 @@ class TelaResumo : AppCompatActivity() {
     }
 
     private fun recuperarLoja() {
-        if (intent.hasExtra(Chaves.CHAVE_TELAPRINCIPAL.valor)) {
-            LojaInfo = intent.getSerializableExtra(Chaves.CHAVE_TELAPRINCIPAL.valor) as Lojas
+        if (intent.hasExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor)) {
+            LojaInfo = intent.getSerializableExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor) as Lojas
             Endereco?.text = String.format(getString(R.string.Endereco)+ " " + LojaInfo?.local)
             Telefone?.text = String.format(getString(R.string.Telefone) + " " + LojaInfo?.telefone)
             Status?.text = String.format(getString(R.string.Status) + " " + LojaInfo?.status?.get(0))
             title = LojaInfo?.titulo
-            val donwload = baixarImagem()
-            donwload.execute(LojaInfo?.imagem)
-            Foto?.setImageBitmap(donwload.get())
+
+            val Donwload = baixarImagem()
+            Donwload.execute(LojaInfo?.imagem)
+            Foto?.setImageBitmap(Donwload.get())
+
         }
     }
 
     private fun configurandoPagina() {
         TabIndicator?.setupWithViewPager(Pagina)
         FilaResumo = FragmentResumo()
-        FilaResumo?.passandoLja(LojaInfo!!, this, this)
+        FilaResumo?.passandoLja(LojaInfo!!, this)
         AvaliacaoResumo = FragmentAvaliacao()
         AvaliacaoResumo?.setandoReferencias(LojaInfo!!, this)
         val ListaFragmentos = listOf(FilaResumo!!, AvaliacaoResumo!!)
@@ -92,12 +94,14 @@ class TelaResumo : AppCompatActivity() {
         val Id = item?.itemId
 
         if(Id == R.id.Favoritar){
-            if(Favotitar){
+            if(ListaFavoritos.Lista.contains(LojaInfo?.id)){
                 item.setIcon(R.drawable.star_clear)
-            }
-            else {
+                DatabaseFirebaseSalvar.removerFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
+                ListaFavoritos.Lista.remove(LojaInfo?.id!!)
+            } else {
                 item.setIcon(R.drawable.star_full_white)
-                DatabaseFirebaseSalvar.adicionarFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), "lojas/teste")
+                DatabaseFirebaseSalvar.adicionarFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
+                ListaFavoritos.Lista.add(LojaInfo?.id!!)
             }
 
         }
