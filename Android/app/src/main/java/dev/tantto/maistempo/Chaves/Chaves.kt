@@ -14,6 +14,7 @@ enum class Chaves(val valor:String) {
     CHAVE_FAVORITOS("lojasFavoritas"),
     CHAVE_NOTAS_USUARIOS("notasUsuarios"),
     CHAVE_NOTAS_RANKING("notasRanking"),
-    CHAVE_NOTAS_LOJAS("notasLojas")
+    CHAVE_NOTAS_FILA_NORMAL("filaNormal"),
+    CHAVE_POSICAO_LISTA("listaBitmap")
 
 }

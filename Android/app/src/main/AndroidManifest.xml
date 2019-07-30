@@ -22,7 +22,9 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/googleMapsKey" />
 
-        <activity android:name=".Telas.TelaSplash">
+        <activity
+                android:name=".Telas.TelaSplash"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW" />
@@ -36,7 +38,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Telas.TelaLogin"/>
+        <activity android:name=".Telas.TelaLogin"
+                  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".Telas.TelaPrincipal" />
         <activity android:name=".Telas.TelaResumo"
                   android:launchMode="singleInstance"

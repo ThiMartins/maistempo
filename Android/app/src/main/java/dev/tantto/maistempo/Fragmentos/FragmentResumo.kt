@@ -1,12 +1,14 @@
 package dev.tantto.maistempo.Fragmentos
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,10 +18,12 @@ import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
 import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.Google.TipoFila
 import dev.tantto.maistempo.Google.TipoPontos
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
+import java.util.*
 
 class FragmentResumo : Fragment() {
 
@@ -88,29 +92,44 @@ class FragmentResumo : Fragment() {
         EnviarFilaMomento?.setOnClickListener {
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email
             if (!email.isNullOrEmpty()) {
-                Alertas.criarAlerter(
-                    Referencia,
-                    "${getString(R.string.IntervaloFila)}: " +
-                            "${
-                                when(ProgressoFila?.progress){
-                                    0 -> getString(R.string.MenorQue10)
-                                    1 -> getString(R.string.Entre10e20)
-                                    2 -> getString(R.string.Entre20e30)
-                                    3 -> getString(R.string.Entre30e40)
-                                    4 -> getString(R.string.Entre40e50)
-                                    5 -> getString(R.string.Entre50e60)
-                                    else -> getString(R.string.Maiorque60)
-                                }
-                            } " +
-                            "${getString(R.string.ParaFila)} " +
-                            Tabs?.getTabAt(Tabs?.selectedTabPosition!!)?.text.toString(),
-                    R.string.Atencao, 5000).show()
-                EnviarFilaMomento?.isEnabled = false
+                mostrarAlerta()
+                //EnviarFilaMomento?.isEnabled = false
                 DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_FILA)
+
+                val Horas = Calendar.getInstance().get(Calendar.HOUR)
+                val Tipo = when {
+                    Tabs?.selectedTabPosition == 0 -> TipoFila.FilaNormal
+                    Tabs?.selectedTabPosition == 1 -> TipoFila.FilaRapida
+                    Tabs?.selectedTabPosition == 2 -> TipoFila.FilaPrererencial
+                    else -> null
+                }
+
+                DatabaseFirebaseSalvar.adicionarNotaFila(LojaInfo?.id!!, ProgressoFila?.progress!!, Horas.toString(), Tipo!!)
             }
         }
 
         NumeroAvaliacoes?.text = String.format(LojaInfo?.quantidadeAvaliacoesFila.toString() + " "+ getString(R.string.Avalicoes))
+    }
+
+    private fun mostrarAlerta() {
+        Alertas.criarAlerter(
+            Referencia,
+            "${getString(R.string.IntervaloFila)}: " +
+                    "${
+                    when (ProgressoFila?.progress) {
+                        0 -> getString(R.string.MenorQue10)
+                        1 -> getString(R.string.Entre10e20)
+                        2 -> getString(R.string.Entre20e30)
+                        3 -> getString(R.string.Entre30e40)
+                        4 -> getString(R.string.Entre40e50)
+                        5 -> getString(R.string.Entre50e60)
+                        else -> getString(R.string.Maiorque60)
+                    }
+                    } " +
+                    "${getString(R.string.ParaFila)} " +
+                    Tabs?.getTabAt(Tabs?.selectedTabPosition!!)?.text.toString(),
+            R.string.Atencao, 5000
+        ).show()
     }
 
     private fun configurandoAdapter() {

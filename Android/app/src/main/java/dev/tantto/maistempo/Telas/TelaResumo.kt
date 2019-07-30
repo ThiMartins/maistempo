@@ -13,14 +13,16 @@ import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
 import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Fragmentos.FragmentAvaliacao
 import dev.tantto.maistempo.Fragmentos.FragmentResumo
+import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
 import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
+import dev.tantto.maistempo.Google.FavoritosRecuperados
 import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaFavoritos
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Servicos.baixarImagem
 
-class TelaResumo : AppCompatActivity() {
+class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
 
     private var Endereco:TextView? = null
     private var Telefone:TextView? = null
@@ -55,9 +57,8 @@ class TelaResumo : AppCompatActivity() {
             Status?.text = String.format(getString(R.string.Status) + " " + LojaInfo?.status?.get(0))
             title = LojaInfo?.titulo
 
-            val Donwload = baixarImagem()
-            Donwload.execute(LojaInfo?.imagem)
-            Foto?.setImageBitmap(Donwload.get())
+            val Posicao = intent.getIntExtra(Chaves.CHAVE_POSICAO_LISTA.valor, 0)
+            Foto?.setImageBitmap(ListaBitmap.recuperar(Posicao))
 
         }
     }
@@ -87,6 +88,9 @@ class TelaResumo : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_favoritar, menu)
+        if(ListaFavoritos.Lista.contains(LojaInfo?.id)){
+            menu?.findItem(R.id.Favoritar)?.setIcon(R.drawable.star_full_white)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -101,12 +105,17 @@ class TelaResumo : AppCompatActivity() {
             } else {
                 item.setIcon(R.drawable.star_full_white)
                 DatabaseFirebaseSalvar.adicionarFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
+                DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
                 ListaFavoritos.Lista.add(LojaInfo?.id!!)
             }
 
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun recuperado() {
+
     }
 
 }

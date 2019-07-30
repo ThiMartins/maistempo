@@ -62,6 +62,11 @@
         Termos de utilizacao
         \n 1 \n 2 \n 3 \n 4 \n 5 \n 6 \n 7
         \n 8 \n 9 \n 10 \n 11 \n 12 \n 13 \n 14
+        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
+        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
+        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
+        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
+        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
     </string>
     <string name="CriarUsuario">Crie a usa conta</string>
     <string name="DataNascimento">Clique para colocar a data de nascimento</string>
@@ -145,6 +150,7 @@
     <string name="Salvar">Salvar</string>
     <string name="ApagarConta">Deseja apagar a conta ?</string>
     <string name="Sim">Sim</string>
+    <string name="Ok">OK</string>
     <string name="Nao">Não</string>
     <string name="Erro">Erro</string>
     <string name="ErroMudancas">Não foi possivel aplicar as mudanças</string>
@@ -163,4 +169,8 @@
     <string name="Entre50e60">Entre 10 a 20 minutos</string>
     <string name="Maiorque60">Entre 10 a 20 minutos</string>
     <string name="MudarRaio">Mudar raio de pesquisa</string>
+    <string name="CidadeReferencia">Cidade referência</string>
+    <string name="TermosDeUtilizacao">Termos de utilização</string>
+    <string name="CidadeFaltando">Por favor, colocar a cidade de referência</string>
+    <string name="FaltaTermos">Para usar esse aplicativo é necessaário aceitar os termos de utilização</string>
 </resources>

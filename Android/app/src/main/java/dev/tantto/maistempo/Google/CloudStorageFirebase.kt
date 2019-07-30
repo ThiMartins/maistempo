@@ -8,7 +8,7 @@ import com.google.firebase.storage.UploadTask
 import java.io.File
 
 enum class TipoDonwload(var Valor:String){
-    //ICONE("iconesLojas"),
+    ICONE("iconesLojas"),
     PERFIl("images")
 }
 

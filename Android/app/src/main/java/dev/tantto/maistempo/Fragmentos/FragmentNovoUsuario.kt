@@ -3,7 +3,6 @@ package dev.tantto.maistempo.Fragmentos
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -29,7 +28,6 @@ import java.util.*
 
 class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
-    private lateinit var Contexto:Context
     private lateinit var ReferenciaTela:TelaLogin
 
     private val RequisicaoPermissao = 2
@@ -47,6 +45,9 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private var CaminhoFoto:Uri? = null
     private var EscolherData:Button? = null
     private var FotoCamera:Bitmap? = null
+    private var Cidade:EditText? = null
+    private var CheckTermos:CheckBox? = null
+    private var VerTermos:TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val Fragmento = inflater.inflate(R.layout.fragment_novo_usuario, container, false)
@@ -63,14 +64,16 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         DataTexto = Fragmento.findViewById<EditText>(R.id.DataNascimento)
         Criar = Fragmento.findViewById<Button>(R.id.CriarNovaConta)
         EscolherData = Fragmento.findViewById<Button>(R.id.AbrirDataPicker)
+        Cidade = Fragmento.findViewById<EditText>(R.id.CidadeReferencia)
+        CheckTermos = Fragmento.findViewById<CheckBox>(R.id.ConcordoTermos)
+        VerTermos = Fragmento.findViewById<TextView>(R.id.VerTermos)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Foto?.clipToOutline = true
         }
     }
 
-    fun setandoReferencia(Contexto:Context, ref:TelaLogin) : FragmentNovoUsuario{
-        this.Contexto = Contexto
+    fun setandoReferencia(ref:TelaLogin) : FragmentNovoUsuario{
         ReferenciaTela = ref
         return this
     }
@@ -93,14 +96,25 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun eventos() {
         Criar?.setOnClickListener {
             verificar()
         }
 
+        VerTermos?.setOnClickListener {
+            AlertDialog
+                .Builder(this.requireContext())
+                .setView(R.layout.termos_leitura)
+                .setTitle(R.string.TermosDeUso)
+                .setPositiveButton(R.string.Ok, null)
+                .create()
+                .show()
+        }
+
         EscolherData?.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val DataNascimento = DatePickerDialog(Contexto)
+                val DataNascimento = DatePickerDialog(this.requireContext())
                 DataNascimento.show()
                 DataNascimento.setOnDateSetListener { _, year, month, dayOfMonth ->
                     Data = Date(year - 1900, month, dayOfMonth)
@@ -108,8 +122,9 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                     DataTexto?.setText(DataFormatada)
                 }
             } else {
-                Toast.makeText(Contexto, "Ainda nao implementado usar o label", Toast.LENGTH_LONG).show()
+                TODO("DatePicker fot SDK < N")
             }
+
         }
 
         Foto?.setOnClickListener {
@@ -141,7 +156,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     }
 
     private fun pegarFoto() {
-        val Caixa = AlertDialog.Builder(Contexto)
+        val Caixa = AlertDialog.Builder(this.requireContext())
         Caixa.setTitle(R.string.Escolha)
         Caixa.setItems(arrayOf(getString(R.string.Camera), getString(R.string.Galeria), getString(R.string.Arquivos))) { _, which ->
             val Iniciar = Intent()
@@ -169,23 +184,36 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         if(Nome?.text?.isNotEmpty()!! ){
             if (Email?.text?.toString()?.contains("@")!! && Email?.text.toString().contains(".com")){
                 if (Senha?.text?.toString()?.length!! >= 6){
-                    alerta(R.string.Atencao, R.string.Aguarde)
-                    when {
-                        CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
-                        FotoCamera != null -> {
-                            CaminhoFoto = bitmapUtils.getImageUri(FotoCamera!!, Email?.text.toString(), ReferenciaTela)
-                            CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                    if(Cidade?.text.toString().isNotEmpty()){
+                        if(CheckTermos?.isChecked!!){
+                            alerta(R.string.Atencao, R.string.Aguarde)
+                            when {
+                                CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                                FotoCamera != null -> {
+                                    CaminhoFoto = bitmapUtils.getImageUri(FotoCamera!!, Email?.text.toString(), ReferenciaTela)
+                                    CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                                }
+                                else -> criarUsuario()
+                            }
+                        } else {
+                            alerta(R.string.FaltaTermos, R.string.Atencao)
+                            CheckTermos?.requestFocus()
                         }
-                        else -> criarUsuario()
+                    } else {
+                        alerta(R.string.CidadeFaltando, R.string.Atencao)
+                        Cidade?.requestFocus()
                     }
                 } else {
                     alerta(R.string.ErroSenha, R.string.Atencao)
+                    Senha?.requestFocus()
                 }
             } else {
                 alerta(R.string.ErroEmail, R.string.Atencao)
+                Email?.requestFocus()
             }
         } else {
             alerta(R.string.ErroNome, R.string.Atencao)
+            Nome?.requestFocus()
         }
     }
 
@@ -195,7 +223,8 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 titulo = Nome?.text.toString(),
                 email = Email?.text.toString(),
                 senha = Senha?.text.toString(),
-                nascimento = DataTexto?.text.toString()
+                nascimento = DataTexto?.text.toString(),
+                cidade = Cidade?.text.toString()
             ), this
         )
     }

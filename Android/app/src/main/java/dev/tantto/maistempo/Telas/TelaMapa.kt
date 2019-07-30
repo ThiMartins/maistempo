@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Local
 import dev.tantto.maistempo.R
 
@@ -24,10 +25,7 @@ class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
 
     private var MapaGoogle:GoogleMap? = null
 
-    private var ListaMaps = mutableListOf(
-        Local(-23.507595, -47.483918, "Teste"),
-        Local(-23.506569, -47.488340, "Teste 2")
-    )
+    private var ListaMaps = mutableListOf<Local>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +43,8 @@ class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
 
         verificarAutorizacao()
 
-        if(intent.hasExtra(Chaves.CHAVE_MARKES.valor)){
-            setarLocais()
-        }
+        setarLocais()
 
-        adicionarMaker()
     }
 
     private fun verificarAutorizacao() {
@@ -87,7 +82,10 @@ class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setarLocais(){
-        //val localizaca0 = intent.getDoubleArrayExtra()
+        for(Item in ListaLocais.recuperarTudo()){
+            ListaMaps.add(Local(Item.longitude, Item.latitude, Item.titulo))
+        }
+        adicionarMaker()
     }
 
     private fun adicionarMaker(){

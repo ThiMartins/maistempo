@@ -11,7 +11,7 @@ class ListaLocais {
             Lista = Tabela
         }
 
-        fun recuperarTudo() : List<Lojas>{
+        fun recuperarTudo() : MutableList<Lojas>{
             return Lista
         }
     }
