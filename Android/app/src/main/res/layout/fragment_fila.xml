@@ -37,7 +37,7 @@
                 style="@style/Widget.AppCompat.SeekBar.Discrete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:max="10"
+                android:max="7"
                 android:progress="3"
                 android:id="@+id/ProgressoFilaVoto"
                 app:layout_constraintStart_toStartOf="parent"

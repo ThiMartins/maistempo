@@ -1,12 +1,12 @@
 package dev.tantto.maistempo.Google
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.Source
 import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.ListaFavoritos
-import dev.tantto.maistempo.Modelos.NotasLojas
+import dev.tantto.maistempo.Modelos.NotasLojasRaking
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 
@@ -20,6 +20,12 @@ enum class TipoPontos(val valor:String){
 enum class Respostas(valor: String){
     SUCESSO("sucesso"),
     ERRO("erro")
+}
+
+enum class TipoFila(val valor: String){
+    FilaNormal("filaNormal"),
+    FilaRapida("filaRapida"),
+    FilaPrererencial("filaPreferencial")
 }
 
 class DatabaseFirebaseSalvar {
@@ -43,11 +49,9 @@ class DatabaseFirebaseSalvar {
 
         }
 
-        fun adicionarNotaFila(Nome:String, Valor:Int){
-            val Documento = FirebaseFirestore.getInstance().collection(Chaves.CHAVE_LOJA.valor).document(Nome).get()
-            Documento.addOnSuccessListener {
-
-            }
+        fun adicionarNotaFila(Id:String, Valor:Int, Horario:String, Tipo:TipoFila){
+            val nota = hashMapOf(Pair(Horario, listOf(Valor)))
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_NOTAS_USUARIOS.valor).document(Id).update(Tipo.valor, nota)
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -83,10 +87,10 @@ class DatabaseFirebaseSalvar {
 
         @Suppress("UNCHECKED_CAST")
         fun salvarNotaRaking(Email: String, Id:String, Valor:Float){
-            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_NOTAS_USUARIOS.valor).document(Id).get().addOnCompleteListener {
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_NOTAS_USUARIOS.valor).document(Id).get(Source.SERVER).addOnCompleteListener {
                 if(it.isSuccessful){
                     if(!it.result?.contains(Chaves.CHAVE_NOTAS_RANKING.valor)!!){
-                        val Iniciar = NotasLojas(hashMapOf(Pair(Email, Valor)))
+                        val Iniciar = NotasLojasRaking(hashMapOf(Pair(Email, Valor)))
                         FirebaseFirestore.getInstance().collection(Chaves.CHAVE_NOTAS_USUARIOS.valor).document(Id).set(Iniciar)
                     } else if(it.result?.exists()!!){
                         val Resultado = it.result?.get(Chaves.CHAVE_NOTAS_RANKING.valor) as HashMap<String, Float>
@@ -210,10 +214,21 @@ class DatabaseFirebaseRecuperar {
                         pontosLocais = documentSnapshot["pontosLocais"].toString().toLong(),
                         pontosTotais = documentSnapshot["pontosTotais"].toString().toLong(),
                         nascimento = documentSnapshot["nascimento"].toString(),
-                        favoritos = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                        lojasFavoritas = documentSnapshot["lojasFavoritas"] as MutableList<String>,
+                        cidade = documentSnapshot["cidade"].toString()
                     )
                     ListaFavoritos.Lista = documentSnapshot["lojasFavoritas"] as MutableList<String>
                     Interface.pessoaRecebida(Item)
+                }
+            }
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        fun recuperarFavoritos(Email:String, Interface:FavoritosRecuperados){
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
+                if(documentSnapshot?.exists()!!){
+                    ListaFavoritos.Lista = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                    Interface.recuperado()
                 }
             }
         }
@@ -238,6 +253,11 @@ class DatabaseFirebaseRecuperar {
             //Recuperar o especifico
         }
     }
+}
+
+interface FavoritosRecuperados{
+
+    fun recuperado()
 }
 
 interface DatabaseNotaRaking{
