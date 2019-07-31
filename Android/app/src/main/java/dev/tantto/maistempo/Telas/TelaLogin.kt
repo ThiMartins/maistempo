@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
@@ -18,7 +19,7 @@ import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud {
+class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud, DatabasePessoaInterface {
 
     private var Login:FragmentLogin? = null
     private var Apresentacao:FragmentApresentacao? = null
@@ -68,26 +69,38 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
         Iniciar?.putExtra(Telas.GET_USER, User)
         if(Pessoa != null){
             Iniciar?.putExtra(Telas.GET_PESSOA, Pessoa)
-            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
+            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this)
+        } else {
+            DatabaseFirebaseRecuperar.recuperaDadosPessoa(User?.email!!, this)
         }
+    }
+
+    override fun pessoaRecebida(Pessoa: Perfil) {
+        DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
     }
 
     override fun dadosRecebidos(Lista: MutableList<Lojas>) {
-        ListaLocais.refazer(Lista)
-        Tamanho = Lista.size
-        for (Item in Lista){
-            CloudStorageFirebase().donwloadCloud(Item.id, TipoDonwload.ICONE, this)
-        }
-
-    }
-
-    override fun imagemBaixada(Imagem: Bitmap) {
-        ListaBitmap.adicionar(Imagem)
-        if(ListaBitmap.tamanho() == Tamanho){
+        if(Lista.isNotEmpty()){
+            ListaLocais.refazer(Lista)
+            Tamanho = Lista.size
+            for (Item in Lista){
+                CloudStorageFirebase().donwloadCloud(Item.id, TipoDonwload.ICONE, this)
+            }
+        } else {
             if(Iniciar != null){
                 startActivity(Iniciar)
                 finishAffinity()
             }
         }
+    }
+
+    override fun imagemBaixada(Imagem: Bitmap?) {
+        //ListaBitmap.adicionar(Imagem)
+        //if(ListaBitmap.tamanho() == Tamanho){
+            if(Iniciar != null){
+                startActivity(Iniciar)
+                finishAffinity()
+            }
+        //}
     }
 }

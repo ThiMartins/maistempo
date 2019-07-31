@@ -46,14 +46,16 @@ class CloudStorageFirebase {
     }
 
     fun donwloadCloud(Email: String, Tipo:TipoDonwload, Interface:DownloadFotoCloud){
-        val Refencia = Store.getReference("${Tipo.Valor}/$Email")
+        /*val Refencia = Store.getReference("${Tipo.Valor}/$Email")
         val arquivo = File.createTempFile("perfil", "jpg")
         Refencia.getFile(arquivo).addOnCompleteListener {
             if(it.isSuccessful){
                 val image = BitmapFactory.decodeFile(arquivo.absolutePath)
                 Interface.imagemBaixada(image)
+                arquivo.delete()
             }
-        }
+        }*/
+        Interface.imagemBaixada(null)
     }
 
 }
@@ -68,6 +70,6 @@ interface EnviarFotoCloud{
 
 interface DownloadFotoCloud{
 
-    fun imagemBaixada(Imagem:Bitmap)
+    fun imagemBaixada(Imagem:Bitmap?)
 
 }

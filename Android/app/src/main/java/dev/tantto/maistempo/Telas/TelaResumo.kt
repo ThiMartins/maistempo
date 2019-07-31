@@ -17,8 +17,7 @@ import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
 import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
 import dev.tantto.maistempo.Google.FavoritosRecuperados
 import dev.tantto.maistempo.Google.FirebaseAutenticacao
-import dev.tantto.maistempo.ListaBitmap
-import dev.tantto.maistempo.ListaFavoritos
+import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 
@@ -58,7 +57,7 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
             title = LojaInfo?.titulo
 
             val Posicao = intent.getIntExtra(Chaves.CHAVE_POSICAO_LISTA.valor, 0)
-            Foto?.setImageBitmap(ListaBitmap.recuperar(Posicao))
+            //Foto?.setImageBitmap(ListaBitmap.recuperar(Posicao))
 
         }
     }
@@ -88,7 +87,7 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_favoritar, menu)
-        if(ListaFavoritos.Lista.contains(LojaInfo?.id)){
+        if(ListaLocais.contemFavoritos(LojaInfo?.id)){
             menu?.findItem(R.id.Favoritar)?.setIcon(R.drawable.star_full_white)
         }
         return super.onCreateOptionsMenu(menu)
@@ -98,15 +97,15 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
         val Id = item?.itemId
 
         if(Id == R.id.Favoritar){
-            if(ListaFavoritos.Lista.contains(LojaInfo?.id)){
+            if(ListaLocais.contemFavoritos(LojaInfo?.id)){
                 item.setIcon(R.drawable.star_clear)
                 DatabaseFirebaseSalvar.removerFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
-                ListaFavoritos.Lista.remove(LojaInfo?.id!!)
+                ListaLocais.removerFavoritos(LojaInfo?.id!!)
             } else {
                 item.setIcon(R.drawable.star_full_white)
                 DatabaseFirebaseSalvar.adicionarFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
                 DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
-                ListaFavoritos.Lista.add(LojaInfo?.id!!)
+                ListaLocais.adicionarFavorito(LojaInfo?.id!!)
             }
 
         }

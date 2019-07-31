@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Adaptadores.AdaptadorFavoritos
-import dev.tantto.maistempo.ListaFavoritos
 import dev.tantto.maistempo.R
 
 class FragmentFavoritos: Fragment() {
@@ -17,8 +16,9 @@ class FragmentFavoritos: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val V = inflater.inflate(R.layout.fragment_local_perfil, container, false)
         val Lista = V.findViewById<RecyclerView>(R.id.Lista)
-        Adaptador = AdaptadorFavoritos(this.context!!, ListaFavoritos.recuperarFavoritos())
+        Adaptador = AdaptadorFavoritos(this.context!!)
         Lista.adapter = Adaptador
+
         return V
     }
 

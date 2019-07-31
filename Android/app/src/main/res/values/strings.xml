@@ -173,4 +173,5 @@
     <string name="TermosDeUtilizacao">Termos de utilização</string>
     <string name="CidadeFaltando">Por favor, colocar a cidade de referência</string>
     <string name="FaltaTermos">Para usar esse aplicativo é necessaário aceitar os termos de utilização</string>
+    <string name="ErroCidade">Não existe estabelecimentos cadastrados em sua cidade</string>
 </resources>

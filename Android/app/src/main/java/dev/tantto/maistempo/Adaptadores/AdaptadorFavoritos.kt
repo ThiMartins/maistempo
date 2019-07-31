@@ -11,30 +11,25 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Chaves.Chaves
-import dev.tantto.maistempo.ListaBitmap
-import dev.tantto.maistempo.ListaFavoritos
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
 
-class AdaptadorFavoritos(private val Contexto: Context, private var Lista:MutableList<Lojas>) : RecyclerView.Adapter<AdaptadorFavoritos.Holder>() {
-
-    private var Backup:MutableList<Lojas>? = mutableListOf()
+class AdaptadorFavoritos(private val Contexto: Context) : RecyclerView.Adapter<AdaptadorFavoritos.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        Backup = Lista
         return Holder(LayoutInflater.from(Contexto).inflate(R.layout.celula_itens, parent, false), Contexto)
     }
 
     override fun getItemCount(): Int {
-        return Lista.size
+        return ListaLocais.tamanhoFavoritos()
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.setandoItens()
-        holder.adicionandoValores(Lista[position], position)
-        holder.click(Lista[position], position)
+        holder.adicionandoValores(ListaLocais.recuperarFavorito(position)!!, position)
+        holder.click(ListaLocais.recuperarFavorito(position)!!, position)
 
     }
 
@@ -60,7 +55,7 @@ class AdaptadorFavoritos(private val Contexto: Context, private var Lista:Mutabl
         fun adicionandoValores(Elementos: Lojas, position: Int){
             Titulo?.text = Elementos.titulo
             Status?.text = Elementos.status[0]
-            Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
+            //Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
         }
 
         fun click(positionLoja: Lojas, position: Int){
@@ -74,35 +69,11 @@ class AdaptadorFavoritos(private val Contexto: Context, private var Lista:Mutabl
     }
 
     fun filtro(Filtragem:String){
-        Lista =
-            (if(Filtragem.isNotEmpty()){
-                Lista.filter { it.titulo.contains(Filtragem) }
-            } else{
-                Backup!!
-            }) as MutableList<Lojas>
+        ListaLocais.filtroFavoritos(Filtragem)
         notifyDataSetChanged()
     }
 
     fun reloadData(){
-        if(ListaFavoritos.Lista.isNotEmpty()){
-            val novaLista = Lista.filterIndexed { index, lojas ->
-                ListaFavoritos.Lista[index] == lojas.id
-            } as MutableList<Lojas>
-            Backup = novaLista
-            Lista = novaLista
-
-        } else {
-            Lista.removeAll { true }
-            Backup?.removeAll { true }
-        }
-
-        if(Lista.isEmpty() && ListaFavoritos.Lista.isNotEmpty()){
-            val novaLista = ListaLocais.recuperarTudo().filterIndexed { index, lojas ->
-                ListaFavoritos.Lista[index] == lojas.id
-            } as MutableList<Lojas>
-            Backup = novaLista
-            Lista = novaLista
-        }
         notifyDataSetChanged()
     }
 }

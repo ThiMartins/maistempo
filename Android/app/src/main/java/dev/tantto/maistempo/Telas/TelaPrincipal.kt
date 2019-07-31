@@ -3,7 +3,6 @@ package dev.tantto.maistempo.Telas
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
@@ -12,11 +11,12 @@ import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
+import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Fragmentos.FragmentFavoritos
 import dev.tantto.maistempo.Fragmentos.FragmentLocal
 import dev.tantto.maistempo.Fragmentos.FragmentPerfil
 import dev.tantto.maistempo.Google.*
-import dev.tantto.maistempo.ListaFavoritos
+import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
@@ -47,18 +47,24 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
         Tabs?.setupWithViewPager(Pagina)
         val ListaFragmentos = listOf(TodosLocais, FavoritosLocais, Perfil)
         Pagina?.adapter = ViewPagerAdaptador(supportFragmentManager, ListaFragmentos)
+
     }
 
     override fun onRestart() {
         super.onRestart()
-        DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
-        if(FavoritosLocais.tamanhoLista() != ListaFavoritos.Lista.size){
-            FavoritosLocais.reloadLista()
+        //DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
+        //FavoritosLocais.reloadLista()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(ListaLocais.tamanho() == 0){
+            Alertas.criarAlerter(this, R.string.ErroCidade, R.string.Atencao).show()
         }
     }
 
     override fun recuperado() {
-        Log.i("Teste", FavoritosLocais.tamanhoLista().toString())
         FavoritosLocais.reloadLista()
     }
 

@@ -14,9 +14,11 @@ enum class TipoDePermissao(val Valor:Int){
 }
 
 enum class Permissoes(val valor:String){
-    CAMERA(Manifest.permission.CAMERA)
-    //ARMAZENAMENTO_READ(Manifest.permission.READ_EXTERNAL_STORAGE),
-    //ARMAZENAMENTO_WRITE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+    CAMERA(Manifest.permission.CAMERA),
+    ARMAZENAMENTO_READ(Manifest.permission.READ_EXTERNAL_STORAGE),
+    ARMAZENAMENTO_WRITE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+    LOCALIZACAO_FINE(Manifest.permission.ACCESS_FINE_LOCATION),
+    LOCALIZACAO_COARSE(Manifest.permission.ACCESS_COARSE_LOCATION)
 }
 
 class Permissao {
