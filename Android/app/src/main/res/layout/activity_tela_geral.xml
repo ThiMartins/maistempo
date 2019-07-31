@@ -10,6 +10,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/RaioTexto"
+                android:layout_marginBottom="16dp"
+                android:background="@color/colorPrimary"/>
+
         <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
@@ -100,122 +109,135 @@
                 android:text="@string/CincoKM"
                 android:textSize="16sp"/>
 
-        <TextView
-                android:id="@+id/SeusPontosTexto"
-                android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="24sp"
-                android:text="@string/SeusPontos"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/DistanciaMinima"
+                android:background="@drawable/bordas_recycler"
                 android:layout_marginTop="32dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="8dp">
 
-        <TextView
-                android:id="@+id/CadastroTexto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/SeusPontosTexto"
-                android:text="@string/Cadsatro"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"/>
 
-        <TextView
-                android:id="@+id/CadastroPontos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/SeusPontosTexto"
-                tools:text="5pts"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp"/>
+            <TextView
+                    android:id="@+id/SeusPontosTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:text="@string/SeusPontos"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView
-                android:id="@+id/AvaliacaoFilaTexto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/CadastroTexto"
-                android:text="@string/AvaliacaoFila"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"/>
+            <TextView
+                    android:id="@+id/CadastroTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/SeusPontosTexto"
+                    android:text="@string/Cadsatro"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"/>
 
-        <TextView
-                android:id="@+id/AvaliacaoFilaPontos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/CadastroPontos"
-                tools:text="5pts"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp"/>
+            <TextView
+                    android:id="@+id/CadastroPontos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/SeusPontosTexto"
+                    tools:text="5pts"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginEnd="24dp"/>
 
-        <TextView
-                android:id="@+id/AvaliacaoLocalTexto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/AvaliacaoFilaTexto"
-                android:text="@string/AvaliacaoLocal"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"/>
+            <TextView
+                    android:id="@+id/AvaliacaoFilaTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/CadastroTexto"
+                    android:text="@string/AvaliacaoFila"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"/>
 
-        <TextView
-                android:id="@+id/AvaliacaoLocalPontos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/AvaliacaoFilaPontos"
-                tools:text="5pts"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp"/>
+            <TextView
+                    android:id="@+id/AvaliacaoFilaPontos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/CadastroPontos"
+                    tools:text="5pts"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginEnd="24dp"/>
 
-        <TextView
-                android:id="@+id/TotalTexto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/AvaliacaoLocalTexto"
-                android:text="@string/Total"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"/>
+            <TextView
+                    android:id="@+id/AvaliacaoLocalTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/AvaliacaoFilaTexto"
+                    android:text="@string/AvaliacaoLocal"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"/>
 
-        <TextView
-                android:id="@+id/TotalPontos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/AvaliacaoLocalPontos"
-                tools:text="5pts"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp"/>
+            <TextView
+                    android:id="@+id/AvaliacaoLocalPontos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/AvaliacaoFilaPontos"
+                    tools:text="5pts"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginEnd="24dp"/>
+
+            <TextView
+                    android:id="@+id/TotalTexto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/AvaliacaoLocalTexto"
+                    android:text="@string/Total"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"/>
+
+            <TextView
+                    android:id="@+id/TotalPontos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/AvaliacaoLocalPontos"
+                    tools:text="5pts"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginEnd="24dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

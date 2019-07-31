@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.Source
 import dev.tantto.maistempo.Chaves.Chaves
-import dev.tantto.maistempo.ListaFavoritos
+import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.NotasLojasRaking
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
@@ -197,6 +197,8 @@ class DatabaseFirebaseRecuperar {
                         ))
                     }
                     Interface.dadosRecebidos(ListaFinal)
+                } else{
+                    Interface.dadosRecebidos(mutableListOf())
                 }
             }
         }
@@ -217,7 +219,8 @@ class DatabaseFirebaseRecuperar {
                         lojasFavoritas = documentSnapshot["lojasFavoritas"] as MutableList<String>,
                         cidade = documentSnapshot["cidade"].toString()
                     )
-                    ListaFavoritos.Lista = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                    val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                    ListaLocais.refazerFavoritos(ListaTemp)
                     Interface.pessoaRecebida(Item)
                 }
             }
@@ -227,7 +230,8 @@ class DatabaseFirebaseRecuperar {
         fun recuperarFavoritos(Email:String, Interface:FavoritosRecuperados){
             FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
                 if(documentSnapshot?.exists()!!){
-                    ListaFavoritos.Lista = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                    val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                    ListaLocais.refazerFavoritos(ListaTemp)
                     Interface.recuperado()
                 }
             }

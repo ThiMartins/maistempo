@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.google.firebase.functions.FirebaseFunctions
 import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Classes.Permissao
 import dev.tantto.maistempo.Classes.Permissoes
@@ -21,7 +22,11 @@ import dev.tantto.maistempo.R
 
 class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud, FavoritosRecuperados, DatabasePessoaInterface {
 
-    private val RequisicaoPermissao = 2
+    private val RequisicaoPermissaoCamera = 0
+    private val RequisicaoPermissaoLeitura = 1
+    private val RequisicaoPermissaoEscrita = 2
+    private val RequisicaoPermissaoFine = 3
+    private val RequisicaoPermissaoCoarse = 4
     private var Iniciado = false
     private var Tamanho = 0
 
@@ -29,6 +34,12 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_splash)
         supportActionBar?.elevation = 0F
+
+        /*val Valores = hashMapOf(Pair("id", "7KcJkXNU8Pn7n4UxYD6B"), Pair("valor", "123"))
+
+        FirebaseFunctions.getInstance().getHttpsCallable("adicionarFila").call(Valores).addOnCompleteListener {
+            Log.i("Teste", it.exception?.localizedMessage)
+        }*/
     }
 
     override fun onResume() {
@@ -36,25 +47,19 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
 
         //Pedir as outras permissoes
 
-        if(Permissao.veficarPermissao(this, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO){
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissao)
-        } else {
-            carregandoLogin()
+        when {
+            Permissao.veficarPermissao(this, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissaoCamera)
+            Permissao.veficarPermissao(this, Permissoes.ARMAZENAMENTO_READ) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), RequisicaoPermissaoLeitura)
+            Permissao.veficarPermissao(this, Permissoes.ARMAZENAMENTO_WRITE) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), RequisicaoPermissaoEscrita)
+            Permissao.veficarPermissao(this, Permissoes.LOCALIZACAO_COARSE) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), RequisicaoPermissaoCoarse)
+            Permissao.veficarPermissao(this, Permissoes.LOCALIZACAO_FINE) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), RequisicaoPermissaoFine)
+            else -> carregandoLogin()
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){
-            RequisicaoPermissao -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Alertas.criarAlerter(this, R.string.Permissao, R.string.Atencao, 5000)
-                } else{
-                    Alertas.criarAlerter(this, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
-                }
-                carregandoLogin()
-            }
-        }
+        //carregandoLogin()
     }
 
     override fun dadosRecebidos(Lista: MutableList<Lojas>) {
@@ -64,8 +69,13 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
             DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
         }
 
-        for (Item in Lista){
-            CloudStorageFirebase().donwloadCloud(Item.id, TipoDonwload.ICONE, this)
+        if(Lista.isNotEmpty()){
+            for (Item in Lista){
+                CloudStorageFirebase().donwloadCloud(Item.id, TipoDonwload.ICONE, this)
+            }
+        } else {
+            iniciarActivity(Intent(this, TelaPrincipal::class.java))
+            finishAffinity()
         }
     }
 
@@ -73,15 +83,16 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
 
     }
 
-    override fun imagemBaixada(Imagem: Bitmap) {
-        ListaBitmap.adicionar(Imagem)
-        if(ListaBitmap.tamanho() == Tamanho){
+    override fun imagemBaixada(Imagem: Bitmap?) {
+        //ListaBitmap.adicionar(Imagem)
+        //if(ListaBitmap.tamanho() == Tamanho){
             if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty() && !Iniciado){
                 iniciarActivity(Intent(this, TelaPrincipal::class.java))
                 finishAffinity()
             }
-        }
+        //}
     }
+
 
     private fun carregandoLogin() {
         val User = FirebaseAutenticacao.Autenticacao.currentUser?.email

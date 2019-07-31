@@ -2,9 +2,7 @@ package dev.tantto.maistempo.Adaptadores
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,29 +11,25 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Chaves.Chaves
-import dev.tantto.maistempo.ListaBitmap
-import dev.tantto.maistempo.ListaFavoritos
+import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
 
-class AdaptadorLocal(private val Contexto:Context, private var Lista:MutableList<Lojas>) : RecyclerView.Adapter<AdaptadorLocal.Holder>() {
-
-    private var Backup:List<Lojas>? = listOf()
+class AdaptadorLocal(private val Contexto:Context) : RecyclerView.Adapter<AdaptadorLocal.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        Backup = Lista
         return Holder(LayoutInflater.from(Contexto).inflate(R.layout.celula_itens, parent, false), Contexto)
     }
 
     override fun getItemCount(): Int {
-        return Lista.size
+        return ListaLocais.tamanho()
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.setandoItens()
-        holder.adicionandoValores(Lista[position], position)
-        holder.click(Lista[position], position)
+        holder.adicionandoValores(ListaLocais.recuperar(position), position)
+        holder.click(ListaLocais.recuperar(position), position)
 
     }
 
@@ -61,7 +55,7 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:MutableList
         fun adicionandoValores(Elementos:Lojas, position: Int){
             Titulo?.text = Elementos.titulo
             Status?.text = Elementos.status[0]
-            Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
+            //Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
         }
 
         fun click(positionLoja: Lojas, position: Int){
@@ -75,12 +69,7 @@ class AdaptadorLocal(private val Contexto:Context, private var Lista:MutableList
     }
 
     fun filtro(Filtragem:String){
-        Lista =
-            (if(Filtragem.isNotEmpty()){
-                Lista.filter { it.titulo.contains(Filtragem) }
-            } else{
-                Backup!!
-            }) as MutableList<Lojas>
+        ListaLocais.filto(Filtragem)
         notifyDataSetChanged()
     }
 }

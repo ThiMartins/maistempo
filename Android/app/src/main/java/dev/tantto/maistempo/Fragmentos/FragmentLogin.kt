@@ -81,7 +81,7 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     private fun verificar(){
         if(UserName?.text?.isNotEmpty()!! && Senha?.text?.isNotEmpty()!!){
-            Alertas.criarAlerter(Referecencia!!, R.string.AguardeConectando, R.string.Conectando, 5000).show()
+            Alertas.criarAlerter(Referecencia!!, R.string.AguardeConectando, R.string.Conectando).show()
             FirebaseAutenticacao.logarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
         } else {
             Alertas.criarAlerter(Referecencia!!, R.string.CamposVazios, R.string.Atencao, 5000).show()

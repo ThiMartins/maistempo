@@ -20,6 +20,7 @@ class TelaRanking : AppCompatActivity(), DatabaseRakingInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.elevation = 0F
         setContentView(R.layout.activity_ranking)
         DatabaseFirebaseRecuperar.recuperarTopRanking(this)
 

@@ -67,8 +67,8 @@ class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<Adap
             CloudStorageFirebase().donwloadCloud(Email, TipoDonwload.PERFIl, this)
         }
 
-        override fun imagemBaixada(Imagem: Bitmap) {
-            Foto?.setImageBitmap(Imagem)
+        override fun imagemBaixada(Imagem: Bitmap?) {
+            //Foto?.setImageBitmap(Imagem)
         }
 
     }

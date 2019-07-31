@@ -122,7 +122,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                     DataTexto?.setText(DataFormatada)
                 }
             } else {
-                TODO("DatePicker fot SDK < N")
+                Toast.makeText(this.requireContext(), "Refatorando layout", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -224,7 +224,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 email = Email?.text.toString(),
                 senha = Senha?.text.toString(),
                 nascimento = DataTexto?.text.toString(),
-                cidade = Cidade?.text.toString()
+                cidade = Cidade?.text.toString().toLowerCase()
             ), this
         )
     }

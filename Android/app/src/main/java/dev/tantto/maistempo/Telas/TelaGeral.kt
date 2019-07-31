@@ -43,6 +43,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
         setContentView(R.layout.activity_tela_geral)
         configurandoView()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.elevation = 0F
         DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
     }
 
@@ -170,9 +171,9 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
         }
     }
 
-    override fun imagemBaixada(Imagem: Bitmap) {
-        Foto?.setImageBitmap(Imagem)
-        findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
+    override fun imagemBaixada(Imagem: Bitmap?) {
+        //Foto?.setImageBitmap(Imagem)
+        //findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
     }
 
     override fun pessoaRecebida(Pessoa: Perfil) {
