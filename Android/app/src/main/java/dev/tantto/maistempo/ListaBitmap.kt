@@ -9,15 +9,15 @@ class ListaBitmap {
         private var Lista = mutableListOf<Bitmap>()
 
         fun adicionar(Image:Bitmap){
-            //Lista.add(Image)
+            Lista.add(Image)
         }
 
         fun recuperar(Index:Int) : Bitmap?{
-            return null//Lista[Index]
+            return Lista[Index]
         }
 
         fun tamanho() : Int{
-            return 1//Lista.size
+            return Lista.size
         }
 
     }

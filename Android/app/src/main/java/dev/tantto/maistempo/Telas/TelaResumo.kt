@@ -17,9 +17,11 @@ import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
 import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
 import dev.tantto.maistempo.Google.FavoritosRecuperados
 import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
+import java.util.*
 
 class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
 
@@ -53,11 +55,20 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
             LojaInfo = intent.getSerializableExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor) as Lojas
             Endereco?.text = String.format(getString(R.string.Endereco)+ " " + LojaInfo?.local)
             Telefone?.text = String.format(getString(R.string.Telefone) + " " + LojaInfo?.telefone)
-            Status?.text = String.format(getString(R.string.Status) + " " + LojaInfo?.status?.get(0))
+
             title = LojaInfo?.titulo
 
             val Posicao = intent.getIntExtra(Chaves.CHAVE_POSICAO_LISTA.valor, 0)
-            //Foto?.setImageBitmap(ListaBitmap.recuperar(Posicao))
+            Foto?.setImageBitmap(ListaBitmap.recuperar(Posicao))
+
+
+            val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+            if(Horas >= LojaInfo?.horarioInicio!! && Horas <= LojaInfo?.horariofinal!!){
+                Status?.text = getString(R.string.Aberto)
+            } else {
+                Status?.text = getString(R.string.Fechado)
+            }
 
         }
     }
@@ -113,7 +124,7 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun recuperado() {
+    override fun recuperadoFavoritos() {
 
     }
 

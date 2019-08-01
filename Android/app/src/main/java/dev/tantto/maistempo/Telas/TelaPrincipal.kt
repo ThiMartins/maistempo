@@ -53,8 +53,7 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
     override fun onRestart() {
         super.onRestart()
         //DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
-        //FavoritosLocais.reloadLista()
-
+        FavoritosLocais.reloadLista()
     }
 
     override fun onResume() {
@@ -64,7 +63,7 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
         }
     }
 
-    override fun recuperado() {
+    override fun recuperadoFavoritos() {
         FavoritosLocais.reloadLista()
     }
 

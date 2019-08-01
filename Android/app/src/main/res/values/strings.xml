@@ -174,4 +174,9 @@
     <string name="CidadeFaltando">Por favor, colocar a cidade de referência</string>
     <string name="FaltaTermos">Para usar esse aplicativo é necessaário aceitar os termos de utilização</string>
     <string name="ErroCidade">Não existe estabelecimentos cadastrados em sua cidade</string>
+    <string name="Aberto">Aberto</string>
+    <string name="Fechado">Fechado</string>
+    <string name="EnviadoComSucesso">Enviado com sucesso</string>
+    <string name="Sucesso">Sucesso</string>
+    <string name="ErroAoEnviarRanking">Desculpa, mas não foi possivel enviar sua nota</string>
 </resources>

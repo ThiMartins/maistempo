@@ -12,15 +12,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
-import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
-import dev.tantto.maistempo.Google.DatabaseNotaRaking
-import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.Google.*
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
 
-class FragmentAvaliacao : Fragment(), DatabaseNotaRaking {
+class FragmentAvaliacao : Fragment(), DatabaseNotaRaking, FunctionsRanking {
 
     private var Progresso:ProgressBar? = null
     private var NumeroAvailicao:TextView? = null
@@ -38,7 +35,7 @@ class FragmentAvaliacao : Fragment(), DatabaseNotaRaking {
         super.onResume()
         configurandoView()
         setandoValores()
-        DatabaseFirebaseRecuperar.recuperarNotaRanking(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
+        //DatabaseFirebaseRecuperar.recuperarNotaRanking(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
     }
 
     fun setandoReferencias(Item:Lojas, Ref:TelaResumo){
@@ -65,23 +62,33 @@ class FragmentAvaliacao : Fragment(), DatabaseNotaRaking {
         Enviar = this.view?.findViewById<Button>(R.id.EnviarRating)
 
         Enviar?.setOnClickListener {
-            val nota = RatingVoto?.rating!! * 20
-            Progresso?.progress = nota.toInt()
+            val nota = RatingVoto?.rating!!
+            //Progresso?.progress = nota.toInt()
             Alertas.criarAlerter(Referencia, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
             RatingVoto?.isEnabled = false
-            DatabaseFirebaseSalvar.salvarNotaRaking(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), Loja?.id!!, RatingVoto?.rating!!)
+
+            CloudFunctions.salvarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, nota.toDouble(), this)
+            DatabaseFirebaseSalvar
+
+        }
+    }
+
+    override fun resultado(Valor: Resultado) {
+        if(Valor == Resultado.SUCESSO){
+            Alertas.criarAlerter(Referencia, R.string.EnviadoComSucesso, R.string.Sucesso, 5000)
+        } else {
+            Alertas.criarAlerter(Referencia, R.string.ErroAoEnviarRanking, R.string.Erro, 5000)
         }
     }
 
     private fun setandoValores(){
-        Progresso?.progress = Loja?.mediaRating?.toInt()!! * 20
+        Progresso?.progress = Loja?.mediaRanking?.toInt()!! * 20
         NumeroAvailicao?.text = String.format(Loja?.quantidadeAvaliacoesRating.toString()  + " " + getString(R.string.Avalicoes))
     }
 
     override fun Nota(Nota: String?) {
         if(!Nota.isNullOrEmpty()){
             //RatingVoto?.rating = Nota.toFloat()
-            Log.i("Teste", Nota)
         }
     }
 

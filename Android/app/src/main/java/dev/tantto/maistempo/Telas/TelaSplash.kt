@@ -2,14 +2,10 @@ package dev.tantto.maistempo.Telas
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.ActivityCompat
-import com.google.firebase.functions.FirebaseFunctions
-import dev.tantto.maistempo.Classes.Alertas
 import dev.tantto.maistempo.Classes.Permissao
 import dev.tantto.maistempo.Classes.Permissoes
 import dev.tantto.maistempo.Classes.TipoDePermissao
@@ -20,7 +16,7 @@ import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud, FavoritosRecuperados, DatabasePessoaInterface {
+class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud, DatabasePessoaInterface {
 
     private val RequisicaoPermissaoCamera = 0
     private val RequisicaoPermissaoLeitura = 1
@@ -34,18 +30,10 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_splash)
         supportActionBar?.elevation = 0F
-
-        /*val Valores = hashMapOf(Pair("id", "7KcJkXNU8Pn7n4UxYD6B"), Pair("valor", "123"))
-
-        FirebaseFunctions.getInstance().getHttpsCallable("adicionarFila").call(Valores).addOnCompleteListener {
-            Log.i("Teste", it.exception?.localizedMessage)
-        }*/
     }
 
     override fun onResume() {
         super.onResume()
-
-        //Pedir as outras permissoes
 
         when {
             Permissao.veficarPermissao(this, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissaoCamera)
@@ -57,42 +45,42 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //carregandoLogin()
-    }
-
-    override fun dadosRecebidos(Lista: MutableList<Lojas>) {
+    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>) {
         ListaLocais.refazer(Lista)
-        Tamanho = Lista.size
-        if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty()){
-            DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
-        }
+        if(Lista.isNotEmpty() && Lista.size > 0){
+            Tamanho = Lista.size
 
-        if(Lista.isNotEmpty()){
-            for (Item in Lista){
-                CloudStorageFirebase().donwloadCloud(Item.id, TipoDonwload.ICONE, this)
+            if(Lista.isNotEmpty()){
+                for (Item in Lista){
+                    CloudStorageFirebase().donwloadCloud("${Item.id}.jpg", TipoDonwload.ICONE, this)
+                }
             }
-        } else {
+        } else{
             iniciarActivity(Intent(this, TelaPrincipal::class.java))
             finishAffinity()
         }
     }
 
-    override fun recuperado() {
-
-    }
-
     override fun imagemBaixada(Imagem: Bitmap?) {
-        //ListaBitmap.adicionar(Imagem)
-        //if(ListaBitmap.tamanho() == Tamanho){
-            if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty() && !Iniciado){
-                iniciarActivity(Intent(this, TelaPrincipal::class.java))
-                finishAffinity()
+        if(Imagem != null){
+            ListaBitmap.adicionar(Imagem)
+            if(ListaBitmap.tamanho() == Tamanho){
+                if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty() && !Iniciado){
+                    iniciarActivity(Intent(this, TelaPrincipal::class.java))
+                    finishAffinity()
+                }
             }
-        //}
+        } else if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty() && !Iniciado){
+            iniciarActivity(Intent(this, TelaPrincipal::class.java))
+            finishAffinity()
+        }
     }
 
+    override fun pessoaRecebida(Pessoa: Perfil) {
+        if (Pessoa.email.isNotEmpty()) {
+            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
+        }
+    }
 
     private fun carregandoLogin() {
         val User = FirebaseAutenticacao.Autenticacao.currentUser?.email
@@ -105,15 +93,18 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
         }
     }
 
-    override fun pessoaRecebida(Pessoa: Perfil) {
-        if (Pessoa.email.isNotEmpty()) {
-            DatabaseFirebaseRecuperar.recuperaDadosPessoa(Pessoa.email, this)
-            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
-        }
-    }
-
     private fun iniciarActivity(Iniciar:Intent){
         Iniciado = true
         startActivity(Iniciar)
     }
 }
+
+/*val Valores = hashMapOf(Pair("id", "7KcJkXNU8Pn7n4UxYD6B"), Pair("valor", "123"), Pair("horario", "0"), Pair("tipoFila", "filaNormal"))
+
+        FirebaseFunctions.getInstance().getHttpsCallable("adicionarFila").call(Valores).addOnCompleteListener {
+            if(it.isSuccessful){
+
+            } else {
+
+            }
+        }*/

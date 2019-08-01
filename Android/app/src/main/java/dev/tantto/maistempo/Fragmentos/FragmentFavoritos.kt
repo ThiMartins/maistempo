@@ -26,10 +26,6 @@ class FragmentFavoritos: Fragment() {
         Adaptador?.filtro(Valor)
     }
 
-    fun tamanhoLista() :Int{
-        return Adaptador?.itemCount!!
-    }
-
     fun reloadLista(){
         Adaptador?.reloadData()
     }

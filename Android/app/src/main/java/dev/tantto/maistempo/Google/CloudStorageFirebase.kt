@@ -3,6 +3,7 @@ package dev.tantto.maistempo.Google
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import java.io.File
@@ -46,16 +47,19 @@ class CloudStorageFirebase {
     }
 
     fun donwloadCloud(Email: String, Tipo:TipoDonwload, Interface:DownloadFotoCloud){
-        /*val Refencia = Store.getReference("${Tipo.Valor}/$Email")
+        val Refencia = Store.getReference("${Tipo.Valor}/${Email}")
         val arquivo = File.createTempFile("perfil", "jpg")
         Refencia.getFile(arquivo).addOnCompleteListener {
             if(it.isSuccessful){
                 val image = BitmapFactory.decodeFile(arquivo.absolutePath)
                 Interface.imagemBaixada(image)
                 arquivo.delete()
+            } else {
+                Interface.imagemBaixada(null)
             }
-        }*/
-        Interface.imagemBaixada(null)
+        }.addOnFailureListener {
+            Interface.imagemBaixada(null)
+        }
     }
 
 }

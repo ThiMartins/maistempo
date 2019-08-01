@@ -80,6 +80,14 @@ class ListaLocais {
             return ListaFavoritos.size
         }
 
+        fun recuperarPosicoesFavoritosBitmap() : MutableList<Int>{
+            val IndexLojas:MutableList<Int> = mutableListOf()
+            for (Item in recuperarFavoritos()){
+                IndexLojas.add(ListaLojas.indexOf(Item))
+            }
+            return IndexLojas
+        }
+
         fun recuperarFavoritos() : MutableList<Lojas>{
             return if(ListaFavoritos.isNotEmpty()){
                 val novaLista = ListaLocais.recuperarTudo().filterIndexed { index, lojas ->

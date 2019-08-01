@@ -93,7 +93,6 @@ class FragmentResumo : Fragment() {
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email
             if (!email.isNullOrEmpty()) {
                 mostrarAlerta()
-                //EnviarFilaMomento?.isEnabled = false
                 DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_FILA)
 
                 val Horas = Calendar.getInstance().get(Calendar.HOUR)
@@ -105,6 +104,13 @@ class FragmentResumo : Fragment() {
                 }
 
                 DatabaseFirebaseSalvar.adicionarNotaFila(LojaInfo?.id!!, ProgressoFila?.progress!!, Horas.toString(), Tipo!!)
+
+                /**
+                 *
+                 * Function mudar a fila
+                 * colocar um alert
+                 *
+                 */
             }
         }
 
