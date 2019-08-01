@@ -23,14 +23,19 @@ class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : Rec
     }
 
     override fun getItemCount(): Int {
-        return Lista.filaNormal.size
+        return when (Modo){
+            0 -> Lista.filaNormal.size
+            1 -> Lista.filaRapida.size
+            2 -> Lista.filaPreferencial.size
+            else -> 0
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when(Modo){
-            0 -> holder.setandoItens(Lista.filaNormal[position], Lista.horarios[position])
-            1 -> holder.setandoItens(Lista.filaRapida[position], Lista.horarios[position])
-            2 -> holder.setandoItens(Lista.filaPreferencial[position], Lista.horarios[position])
+            0 -> holder.setandoItens(Lista.filaNormal[(Lista.horarioInicio + position).toString()]?.toInt()!!, (Lista.horarioInicio + position))
+            1 -> holder.setandoItens(Lista.filaRapida[(Lista.horarioInicio + position).toString()]?.toInt()!!, (Lista.horarioInicio + position))
+            2 -> holder.setandoItens(Lista.filaPreferencial[(Lista.horarioInicio + position).toString()]?.toInt()!!, (Lista.horarioInicio + position))
         }
     }
 
@@ -41,13 +46,17 @@ class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : Rec
 
     class ViewHolder(private val Item: View, private val Contexto: Context) : RecyclerView.ViewHolder(Item){
 
-        fun setandoItens(Progresso:Int, Horario:String){
-            Item.findViewById<TextView>(R.id.HorarioFila).text = Horario
+        fun setandoItens(Progresso:Int, Horario:Int){
+            when {
+                Horario <= 9 -> Item.findViewById<TextView>(R.id.HorarioFila).text = String.format("0$Horario:00")
+                else -> Item.findViewById<TextView>(R.id.HorarioFila).text = String.format("$Horario:00")
+            }
             val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila1)
             ProgressoBarra.progress = 0
 
-            setandoCor(Progresso, ProgressoBarra)
-            colocandoAnimacao(ProgressoBarra, Progresso)
+            val ProgressoConvertido= Progresso * 15
+            setandoCor(ProgressoConvertido, ProgressoBarra)
+            colocandoAnimacao(ProgressoBarra, ProgressoConvertido)
 
         }
 

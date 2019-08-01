@@ -79,7 +79,7 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
         DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
     }
 
-    override fun dadosRecebidos(Lista: MutableList<Lojas>) {
+    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>) {
         if(Lista.isNotEmpty()){
             ListaLocais.refazer(Lista)
             Tamanho = Lista.size

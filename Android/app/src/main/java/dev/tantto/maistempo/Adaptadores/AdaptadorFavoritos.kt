@@ -11,10 +11,12 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
+import java.util.*
 
 class AdaptadorFavoritos(private val Contexto: Context) : RecyclerView.Adapter<AdaptadorFavoritos.Holder>() {
 
@@ -54,8 +56,17 @@ class AdaptadorFavoritos(private val Contexto: Context) : RecyclerView.Adapter<A
 
         fun adicionandoValores(Elementos: Lojas, position: Int){
             Titulo?.text = Elementos.titulo
-            Status?.text = Elementos.status[0]
-            //Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
+
+            val IndexBitmap = ListaLocais.recuperarPosicoesFavoritosBitmap()
+            Imagem?.setImageBitmap(ListaBitmap.recuperar(IndexBitmap[position]))
+
+            val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+            if(Horas >= Elementos.horarioInicio && Horas <= Elementos.horariofinal){
+                Status?.text = Contexto.getString(R.string.Aberto)
+            } else {
+                Status?.text = Contexto.getString(R.string.Fechado)
+            }
         }
 
         fun click(positionLoja: Lojas, position: Int){

@@ -172,8 +172,10 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
     }
 
     override fun imagemBaixada(Imagem: Bitmap?) {
-        //Foto?.setImageBitmap(Imagem)
-        //findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
+        if(Imagem != null){
+            Foto?.setImageBitmap(Imagem)
+            findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
+        }
     }
 
     override fun pessoaRecebida(Pessoa: Perfil) {

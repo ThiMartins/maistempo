@@ -68,7 +68,9 @@ class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<Adap
         }
 
         override fun imagemBaixada(Imagem: Bitmap?) {
-            //Foto?.setImageBitmap(Imagem)
+            if(Imagem != null){
+                Foto?.setImageBitmap(Imagem)
+            }
         }
 
     }

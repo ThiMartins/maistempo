@@ -11,11 +11,11 @@ admin.initializeApp();
 })*/
 
 
-/*exports.adicionarFilaNormal = functions.firestore.document('notasUsuarios/{uid}').onWrite((change, context) => {
+/*exports.fazerMedia = functions.firestore.document('notasUsuarios/{uid}').onWrite((change, context) => {
 
-    const data = change.after.data()['filaNormal'];
-    const previousData = change.before.data()['filaNormal'];
-    const previousTeste = change.before.data()['teste']
+    const filaNormal = change.after.data()['filaNormal'];
+    const filaRapida = change.before.data()['filaNormal'];
+    const filaPrefencial = change.before.data()['teste'];
 
     const asd = previousTeste.concat(data[11]);
 
@@ -23,29 +23,112 @@ admin.initializeApp();
 
 })*/
 
+exports.notasRanking = functions.https.onCall((data, context) => {
+
+    const DocumentoPassado = data['loja'];
+    const ValorPassado = data['valor'];
+    const PessoaPassada = data['pessoa'];
+
+
+    const valores = admin.firestore().doc('notasUsuarios/' + DocumentoPassado).get()
+        .then(snapshot => {
+
+            //Recuperar Documento
+            const Dados = snapshot.data();
+            const MediaAntiga = Dados['mediaRanking'];
+
+            if(MediaAntiga[PessoaPassada].exist()){
+                MediaAntiga[PessoaPassada] = ValorPassado;
+            } else {
+                MediaAntiga.put(PessoaPassada, ValorPassado);
+            }
+
+            var Media = 0.0;
+            const Tamanho = MediaAntiga.length;
+            MediaAntiga.forEach(function(valores) {
+                Media += valores;
+            });
+
+
+            const MediaFinal = Media / Tamanho;
+
+            admin.firestore().collection('lojas/').doc(DocumentoPassado).get()
+            .then(snapshotDoc =>{
+                const DadosMedia = snapshotDoc.data();
+
+                DadosMedia['mediaRanking'] = MediaFinal;
+
+                admin.firestore().collection('lojas/').doc(DocumentoPassado).set(DadosMedia);
+
+                return "ok";
+
+            })
+            .catch (error =>{
+                console.log(error);
+                return "Erro ao mandar a nota";
+            });
+            admin.firestore().collection('notasUsuarios/').doc(DocumentoPassado).set(Dados);
+
+            return "Fila Atualizado";
+
+        })
+        .catch(error =>{
+            console.log(error);
+            return "Erro ao atualizar lista";
+        });
+})
 
 exports.adicionarFila = functions.https.onCall((data, context) => {
 
-    const Documento = data['id'];
-    const Valor = data['valor'];
+    const DocumentoPassado = data['id'];
+    const ValorPassado = data['valor'];
+    const HorarioPassado = data['horario'];
+    const TipoFila = data['tipoFila']
 
-    //const Banco = await admin.firestore().document('notasUsuarios/'`${Documento}`);
-
-    //response.status(200).send("Adicionado");
-    const valores = admin.firestore().doc('notasUsuarios/7KcJkXNU8Pn7n4UxYD6B').get()
+    const valores = admin.firestore().doc('notasUsuarios/' + DocumentoPassado).get()
     .then(snapshot => {
+
+        //Recuperar Documento
         const Dados = snapshot.data();
-        console.log("Foi");
-        return Dados;
+        const FilaNormal = Dados[TipoFila];
+
+        const Horario = FilaNormal[HorarioPassado];
+        const ValorR = parseInt(ValorPassado);
+        Horario.push(ValorR);
+        FilaNormal[HorarioPassado] = Horario;
+
+        var Media = 0.0;
+        const Tamanho = Horario.length;
+        Horario.forEach(function(valores) {
+            Media += valores;
+        });
+
+
+        const MediaFinal = Media / Tamanho;
+
+        admin.firestore().collection('lojas/').doc(DocumentoPassado).get()
+        .then(snapshotDoc =>{
+            const DadosMedia = snapshotDoc.data();
+
+            const FilaMedia = DadosMedia[TipoFila];
+            FilaMedia[HorarioPassado] = MediaFinal;
+
+            admin.firestore().collection('lojas/').doc(DocumentoPassado).set(DadosMedia);
+
+            return "ok";
+
+        })
+        .catch (error =>{
+            console.log(error);
+            return "Erro ao mandar a nota";
+        });
+        admin.firestore().collection('notasUsuarios/').doc(DocumentoPassado).set(Dados);
+
+        return "Fila Atualizado";
 
     })
     .catch(error =>{
-        console.log("Erro");
-    })
-        //valores.then(snapshot =>{
-        //    const Data = snapshot.data()
-
-        //})
-    //    throw new functions.https.HttpsError('invalid-argument', `${valores}`);
-    //return valores
+        console.log(error);
+        return "Erro ao atualizar lista";
+    });
 });

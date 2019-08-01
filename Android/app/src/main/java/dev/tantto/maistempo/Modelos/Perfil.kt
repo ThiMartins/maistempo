@@ -4,7 +4,6 @@ import java.io.Serializable
 
 data class Perfil(
     var titulo:String = "User",
-    var imagem:String = "",
     var email:String = "email",
     var raio:Long = 100,
     var pontosCadastro:Long = 1,

@@ -1,6 +1,7 @@
 package dev.tantto.maistempo.Google
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.Source
@@ -17,9 +18,9 @@ enum class TipoPontos(val valor:String){
     PONTOS_CADASTRO("pontosCadastro")
 }
 
-enum class Respostas(valor: String){
-    SUCESSO("sucesso"),
-    ERRO("erro")
+enum class Respostas{
+    SUCESSO,
+    ERRO
 }
 
 enum class TipoFila(val valor: String){
@@ -85,21 +86,6 @@ class DatabaseFirebaseSalvar {
             }
         }
 
-        @Suppress("UNCHECKED_CAST")
-        fun salvarNotaRaking(Email: String, Id:String, Valor:Float){
-            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_NOTAS_USUARIOS.valor).document(Id).get(Source.SERVER).addOnCompleteListener {
-                if(it.isSuccessful){
-                    if(!it.result?.contains(Chaves.CHAVE_NOTAS_RANKING.valor)!!){
-                        val Iniciar = NotasLojasRaking(hashMapOf(Pair(Email, Valor)))
-                        FirebaseFirestore.getInstance().collection(Chaves.CHAVE_NOTAS_USUARIOS.valor).document(Id).set(Iniciar)
-                    } else if(it.result?.exists()!!){
-                        val Resultado = it.result?.get(Chaves.CHAVE_NOTAS_RANKING.valor) as HashMap<String, Float>
-                        Resultado[Email] = Valor
-                        FirebaseFirestore.getInstance().collection(Chaves.CHAVE_NOTAS_USUARIOS.valor).document(Id).update(Chaves.CHAVE_NOTAS_RANKING.valor, Resultado)
-                    }
-                }
-            }
-        }
 
         fun mudarRaio(Email: String, Valor: Int){
             FirebaseFirestore.getInstance().collection(Chaves.CHAVE_USUARIO.valor).document(Email).update(Chaves.CHAVE_RAIO.valor, Valor)
@@ -154,51 +140,32 @@ class DatabaseFirebaseRecuperar {
 
         @Suppress("unchecked_cast")
         fun recuperarLojasLocais(Cidade:String, Interface:DatabaseLocaisInterface){
-
-            /*FirebaseFirestore.getInstance().collection(Chaves.CHAVE_LOJA.valor).add(Lojas(
-                "+Tempo",
-                listOf("Aberto: 08:00/17:00", "Fechado"),
-                "https://firebasestorage.googleapis.com/v0/b/maistempo-desenvolvendo.appspot.com/o/iconesLojas%2FMaistempoCircle.png?alt=media&token=b9cf13f2-fc47-4382-8bb9-96b4eb029780",
-                0.5,
-                9.7,
-                "Avenida General Osório",
-                listOf(100, 80, 50, 30, 70, 5, 95),
-                listOf(20, 40, 75, 50, 60, 15, 25),
-                listOf(65, 20, 35, 80, 17, 50, 60),
-                "Sorocaba",
-                "15 99999-9999",
-                listOf("08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"),
-                10,
-                1,
-                4.5F
-            ))*/
-
-            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_LOJA.valor).whereEqualTo(Chaves.CHAVE_CIDADE.valor, Cidade).addSnapshotListener { querySnapshot, _ ->
+            FirebaseFirestore.getInstance().collection(Chaves.CHAVE_LOJA.valor).whereEqualTo(Chaves.CHAVE_CIDADE.valor, Cidade.toLowerCase()).addSnapshotListener { querySnapshot, _ ->
                 if(querySnapshot?.documents?.isNotEmpty()!!){
                     val ListaFinal = mutableListOf<Lojas>()
                     for(Item in querySnapshot){
                         ListaFinal.add(Lojas(
                             id = Item.id,
                             titulo =  Item["titulo"].toString(),
-                            status = Item["status"] as List<String>,
-                            imagem = Item["imagem"].toString(),
                             latitude = Item["latitude"].toString().toDouble(),
                             longitude = Item["longitude"].toString().toDouble(),
                             local = Item["local"].toString(),
-                            filaNormal = Item["filaNormal"] as List<Int>,
-                            cidade = Item["cidade"].toString(),
+                            filaNormal = Item["filaNormal"] as HashMap<String, Double>,
+                            cidade = Item["cidade"].toString().toLowerCase(),
                             telefone = Item["telefone"].toString(),
-                            horarios = Item["horarios"] as List<String>,
                             quantidadeAvaliacoesFila = Item["quantidadeAvaliacoesFila"].toString().toInt(),
                             quantidadeAvaliacoesRating = Item["quantidadeAvaliacoesRating"].toString().toInt(),
-                            filaPreferencial = Item["filaPreferencial"] as List<Int>,
-                            filaRapida = Item["filaRapida"] as List<Int>,
-                            mediaRating = Item["mediaRating"].toString().toFloat()
+                            filaPreferencial = Item["filaPreferencial"] as HashMap<String, Double>,
+                            filaRapida = Item["filaRapida"] as HashMap<String, Double>,
+                            horarioInicio = Item["horarioInicio"].toString().toInt(),
+                            horariofinal = Item["horarioFinal"].toString().toInt(),
+                            mediaRanking = Item["mediaRanking"].toString().toDouble()
                         ))
                     }
-                    Interface.dadosRecebidos(ListaFinal)
+
+                    Interface.dadosRecebidosLojas(ListaFinal)
                 } else{
-                    Interface.dadosRecebidos(mutableListOf())
+                    Interface.dadosRecebidosLojas(mutableListOf())
                 }
             }
         }
@@ -217,7 +184,7 @@ class DatabaseFirebaseRecuperar {
                         pontosTotais = documentSnapshot["pontosTotais"].toString().toLong(),
                         nascimento = documentSnapshot["nascimento"].toString(),
                         lojasFavoritas = documentSnapshot["lojasFavoritas"] as MutableList<String>,
-                        cidade = documentSnapshot["cidade"].toString()
+                        cidade = documentSnapshot["cidade"].toString().toLowerCase()
                     )
                     val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
                     ListaLocais.refazerFavoritos(ListaTemp)
@@ -232,7 +199,7 @@ class DatabaseFirebaseRecuperar {
                 if(documentSnapshot?.exists()!!){
                     val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
                     ListaLocais.refazerFavoritos(ListaTemp)
-                    Interface.recuperado()
+                    Interface.recuperadoFavoritos()
                 }
             }
         }
@@ -254,14 +221,14 @@ class DatabaseFirebaseRecuperar {
         }
 
         fun recuperarNotaRanking(Email:String, Interface:DatabaseNotaRaking){
-            //Recuperar o especifico
+
         }
     }
 }
 
 interface FavoritosRecuperados{
 
-    fun recuperado()
+    fun recuperadoFavoritos()
 }
 
 interface DatabaseNotaRaking{
@@ -272,7 +239,7 @@ interface DatabaseNotaRaking{
 
 interface DatabaseLocaisInterface{
 
-    fun dadosRecebidos(Lista:MutableList<Lojas>)
+    fun dadosRecebidosLojas(Lista:MutableList<Lojas>)
 
 }
 

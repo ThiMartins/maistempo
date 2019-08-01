@@ -11,15 +11,17 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.Telas.TelaResumo
+import java.util.*
 
 class AdaptadorLocal(private val Contexto:Context) : RecyclerView.Adapter<AdaptadorLocal.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(LayoutInflater.from(Contexto).inflate(R.layout.celula_itens, parent, false), Contexto)
+        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.celula_itens, parent, false), Contexto)
     }
 
     override fun getItemCount(): Int {
@@ -54,8 +56,15 @@ class AdaptadorLocal(private val Contexto:Context) : RecyclerView.Adapter<Adapta
 
         fun adicionandoValores(Elementos:Lojas, position: Int){
             Titulo?.text = Elementos.titulo
-            Status?.text = Elementos.status[0]
-            //Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
+            Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
+
+            val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+            if(Horas >= Elementos.horarioInicio && Horas <= Elementos.horariofinal){
+                Status?.text = Contexto.getString(R.string.Aberto)
+            } else {
+                Status?.text = Contexto.getString(R.string.Fechado)
+            }
         }
 
         fun click(positionLoja: Lojas, position: Int){
