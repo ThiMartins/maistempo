@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Adaptadores
+package dev.tantto.maistempo.adaptadores
 
 import android.content.Context
 import android.content.Intent
@@ -10,15 +10,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaResumo
+import dev.tantto.maistempo.telas.TelaResumoLoja
 import java.util.*
 
-class AdaptadorLocal(private val Contexto:Context) : RecyclerView.Adapter<AdaptadorLocal.Holder>() {
+class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<AdaptadorLocais.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(LayoutInflater.from(parent.context).inflate(R.layout.celula_itens, parent, false), Contexto)
@@ -56,7 +56,9 @@ class AdaptadorLocal(private val Contexto:Context) : RecyclerView.Adapter<Adapta
 
         fun adicionandoValores(Elementos:Lojas, position: Int){
             Titulo?.text = Elementos.titulo
-            Imagem?.setImageBitmap(ListaBitmap.recuperar(position))
+            if(ListaBitmap.tamanho() >= position + 1){
+                Imagem?.setImageBitmap(ListaBitmap.recuperar(Elementos.id))
+            }
 
             val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
 
@@ -69,9 +71,9 @@ class AdaptadorLocal(private val Contexto:Context) : RecyclerView.Adapter<Adapta
 
         fun click(positionLoja: Lojas, position: Int){
             CardLocal?.setOnClickListener {
-                val Iniciar = Intent(Contexto, TelaResumo::class.java)
-                Iniciar.putExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor, positionLoja)
-                Iniciar.putExtra(Chaves.CHAVE_POSICAO_LISTA.valor, position)
+                val Iniciar = Intent(Contexto, TelaResumoLoja::class.java)
+                Iniciar.putExtra(Chave.CHAVE_TELA_PRINCIPAL.valor, positionLoja)
+                Iniciar.putExtra(Chave.CHAVE_POSICAO_LISTA.valor, position)
                 Contexto.startActivity(Iniciar)
             }
         }

@@ -1,9 +1,8 @@
-package dev.tantto.maistempo.Google
+package dev.tantto.maistempo.google
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import java.io.File
@@ -25,7 +24,7 @@ class CloudStorageFirebase {
                     Interface.enviadaSucesso()
 
                 }.addOnFailureListener {
-                    Interface.falhaEnviar(it.localizedMessage)
+                    Interface.falhaEnviar(it.localizedMessage!!)
 
                 }.addOnProgressListener {
                     val Progresso = 100.0 * it.bytesTransferred / it.totalByteCount
@@ -47,12 +46,13 @@ class CloudStorageFirebase {
     }
 
     fun donwloadCloud(Email: String, Tipo:TipoDonwload, Interface:DownloadFotoCloud){
-        val Refencia = Store.getReference("${Tipo.Valor}/${Email}")
+        val Refencia = Store.getReference("${Tipo.Valor}/$Email")
         val arquivo = File.createTempFile("perfil", "jpg")
         Refencia.getFile(arquivo).addOnCompleteListener {
             if(it.isSuccessful){
                 val image = BitmapFactory.decodeFile(arquivo.absolutePath)
-                Interface.imagemBaixada(image)
+                val Imagem = Pair(Email, image)
+                Interface.imagemBaixada(hashMapOf(Imagem))
                 arquivo.delete()
             } else {
                 Interface.imagemBaixada(null)
@@ -74,6 +74,6 @@ interface EnviarFotoCloud{
 
 interface DownloadFotoCloud{
 
-    fun imagemBaixada(Imagem:Bitmap?)
+    fun imagemBaixada(Imagem:HashMap<String, Bitmap>?)
 
 }

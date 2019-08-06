@@ -1,18 +1,17 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
-import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
+import dev.tantto.maistempo.adaptadores.AdaptadorPager
 import dev.tantto.maistempo.Fragmentos.FragmentApresentacao
 import dev.tantto.maistempo.Fragmentos.FragmentLogin
 import dev.tantto.maistempo.Fragmentos.FragmentNovoUsuario
-import dev.tantto.maistempo.Google.*
+import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
@@ -28,6 +27,7 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
     private var TabIndicador:TabLayout? = null
     private var Iniciar:Intent? = null
     private var Tamanho = 0
+    private var Iniciado = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -54,7 +54,7 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
         val Lista = listOf(Apresentacao!!, Login!!, Novo!!)
 
         TabIndicador?.setupWithViewPager(Pagina, true)
-        Pagina?.adapter = ViewPagerAdaptador(Mananger, Lista)
+        Pagina?.adapter = AdaptadorPager(Mananger, Lista)
         Pagina?.currentItem = 1
     }
 
@@ -66,9 +66,9 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
 
     fun loginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
         Iniciar = Intent(this, TelaPrincipal::class.java)
-        Iniciar?.putExtra(Telas.GET_USER, User)
+        Iniciar?.putExtra(Tela.GET_USER, User)
         if(Pessoa != null){
-            Iniciar?.putExtra(Telas.GET_PESSOA, Pessoa)
+            Iniciar?.putExtra(Tela.GET_PESSOA, Pessoa)
             DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this)
         } else {
             DatabaseFirebaseRecuperar.recuperaDadosPessoa(User?.email!!, this)
@@ -79,7 +79,7 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
         DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
     }
 
-    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>) {
+    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>, Erros: String) {
         if(Lista.isNotEmpty()){
             ListaLocais.refazer(Lista)
             Tamanho = Lista.size
@@ -87,20 +87,38 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
                 CloudStorageFirebase().donwloadCloud(Item.id, TipoDonwload.ICONE, this)
             }
         } else {
-            if(Iniciar != null){
+            if(Iniciar != null && !Iniciado){
+                Iniciado = true
                 startActivity(Iniciar)
                 finishAffinity()
             }
         }
     }
 
-    override fun imagemBaixada(Imagem: Bitmap?) {
-        //ListaBitmap.adicionar(Imagem)
-        //if(ListaBitmap.tamanho() == Tamanho){
-            if(Iniciar != null){
+    override fun imagemBaixada(Imagem: HashMap<String, Bitmap>?) {
+        if(Imagem != null){
+            ListaBitmap.adicionar(Imagem)
+            if(ListaBitmap.tamanho() == Tamanho){
+                if(Iniciar != null && !Iniciado){
+                    Iniciado = true
+                    startActivity(Iniciar)
+                    finishAffinity()
+                }
+            }
+        } else {
+            if(Iniciar != null && !Iniciado){
+                Iniciado = true
                 startActivity(Iniciar)
                 finishAffinity()
             }
-        //}
+        }
     }
+
+    override fun onStop() {
+        super.onStop()
+        if(intent.hasExtra("Fechar")){
+            finishAffinity()
+        }
+    }
+
 }

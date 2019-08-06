@@ -6,18 +6,22 @@ class ListaBitmap {
 
     companion object {
 
-        private var Lista = mutableListOf<Bitmap>()
+        private var Lista = hashMapOf<String, Bitmap>()
 
-        fun adicionar(Image:Bitmap){
-            Lista.add(Image)
+        fun adicionar(Imagem:HashMap<String, Bitmap>){
+            Lista.putAll(Imagem)
         }
 
-        fun recuperar(Index:Int) : Bitmap?{
-            return Lista[Index]
+        fun recuperar(Index:String) : Bitmap?{
+            return Lista["$Index.jpg"]
         }
 
         fun tamanho() : Int{
             return Lista.size
+        }
+
+        fun refazer(Lista:HashMap<String, Bitmap>){
+            this.Lista = Lista
         }
 
     }

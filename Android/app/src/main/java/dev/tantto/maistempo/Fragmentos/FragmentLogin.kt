@@ -9,17 +9,17 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
-import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Google.AutenticacaoLogin
-import dev.tantto.maistempo.Google.FirebaseAutenticacao
-import dev.tantto.maistempo.Google.TiposErrosLogar
+import dev.tantto.maistempo.google.AutenticacaoLogin
+import dev.tantto.maistempo.google.FirebaseAutenticacao
+import dev.tantto.maistempo.google.TiposErrosLogar
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaLogin
+import dev.tantto.maistempo.telas.TelaLogin
 
 class FragmentLogin: Fragment(), AutenticacaoLogin{
 
-    private var Referecencia:TelaLogin? = null
+    private var referecencia:TelaLogin? = null
 
     private var UserName:EditText? = null
     private var Senha:EditText? = null
@@ -36,16 +36,16 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(Chaves.CHAVE_USERNAME.valor, UserName?.text.toString())
-        outState.putString(Chaves.CHAVE_SENHA.valor, Senha?.text.toString())
+        outState.putString(Chave.CHAVE_USERNAME.valor, UserName?.text.toString())
+        outState.putString(Chave.CHAVE_SENHA.valor, Senha?.text.toString())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState != null){
-            if(savedInstanceState.containsKey(Chaves.CHAVE_USERNAME.valor) && savedInstanceState.containsKey(Chaves.CHAVE_SENHA.valor)){
-                UserName?.setText(savedInstanceState.getString(Chaves.CHAVE_USERNAME.valor))
-                Senha?.setText(savedInstanceState.getString(Chaves.CHAVE_SENHA.valor))
+            if(savedInstanceState.containsKey(Chave.CHAVE_USERNAME.valor) && savedInstanceState.containsKey(Chave.CHAVE_SENHA.valor)){
+                UserName?.setText(savedInstanceState.getString(Chave.CHAVE_USERNAME.valor))
+                Senha?.setText(savedInstanceState.getString(Chave.CHAVE_SENHA.valor))
             }
         }
     }
@@ -63,16 +63,16 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
     }
 
     fun setandoReferencia(ref:TelaLogin) : FragmentLogin{
-        Referecencia = ref
+        referecencia = ref
         return this
     }
 
     private fun eventos() {
         BotaoApresentacao?.setOnClickListener {
-            Referecencia?.mudarTela(0)
+            referecencia?.mudarTela(0)
         }
         BotaoNovo?.setOnClickListener {
-            Referecencia?.mudarTela(2)
+            referecencia?.mudarTela(2)
         }
         Conectar?.setOnClickListener {
             verificar()
@@ -81,22 +81,22 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     private fun verificar(){
         if(UserName?.text?.isNotEmpty()!! && Senha?.text?.isNotEmpty()!!){
-            Alertas.criarAlerter(Referecencia!!, R.string.AguardeConectando, R.string.Conectando).show()
+            Alertas.criarAlerter(referecencia!!, R.string.AguardeConectando, R.string.Conectando).show()
             FirebaseAutenticacao.logarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
         } else {
-            Alertas.criarAlerter(Referecencia!!, R.string.CamposVazios, R.string.Atencao, 5000).show()
+            Alertas.criarAlerter(referecencia!!, R.string.CamposVazios, R.string.Atencao, 5000).show()
         }
     }
 
     override fun usuarioLogado(User: FirebaseUser?) {
-        Referecencia?.loginConcluido(User)
+        referecencia?.loginConcluido(User)
     }
 
     override fun erroLogar(Erro: TiposErrosLogar) {
         if(Erro == TiposErrosLogar.CONTA_NAO_EXISTENTE){
-            Alertas.criarAlerter(Referecencia!!, R.string.ContaNaoExistente, R.string.Atencao, 5000).show()
+            Alertas.criarAlerter(referecencia!!, R.string.ContaNaoExistente, R.string.Atencao, 5000).show()
         } else if(Erro == TiposErrosLogar.SENHA_INCORRETA){
-            Alertas.criarAlerter(Referecencia!!, R.string.SenhaIncorreta, R.string.Atencao, 5000).show()
+            Alertas.criarAlerter(referecencia!!, R.string.SenhaIncorreta, R.string.Atencao, 5000).show()
         }
     }
 }

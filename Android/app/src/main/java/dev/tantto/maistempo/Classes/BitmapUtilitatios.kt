@@ -2,25 +2,22 @@ package dev.tantto.maistempo.Classes
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.net.URL
 
-class bitmapUtils {
+class BitmapUtilitatios {
 
     companion object {
 
-        @Throws(IOException::class)
+        /*@Throws(IOException::class)
         fun baixarImagem(Url:String) : Bitmap {
             val endereco = URL(Url)
             val recuperarStream = endereco.openStream()
             val imagem = BitmapFactory.decodeStream(recuperarStream)
             recuperarStream.close()
             return imagem
-        }
+        }*/
 
         fun getImageUri(ImagemBitmap: Bitmap, Email:String, Contexto:Context): Uri {
             val bytes = ByteArrayOutputStream()

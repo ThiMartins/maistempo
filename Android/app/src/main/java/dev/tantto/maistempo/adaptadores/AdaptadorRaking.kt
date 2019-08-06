@@ -1,6 +1,5 @@
-package dev.tantto.maistempo.Adaptadores
+package dev.tantto.maistempo.adaptadores
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.view.LayoutInflater
@@ -9,18 +8,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import dev.tantto.maistempo.Google.CloudStorageFirebase
-import dev.tantto.maistempo.Google.DownloadFotoCloud
-import dev.tantto.maistempo.Google.TipoDonwload
+import dev.tantto.maistempo.google.CloudStorageFirebase
+import dev.tantto.maistempo.google.DownloadFotoCloud
+import dev.tantto.maistempo.google.TipoDonwload
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<AdaptadorRanking.ViewHolder>() {
+class AdaptadorRaking : RecyclerView.Adapter<AdaptadorRaking.ViewHolder>() {
 
-    var lista:List<Perfil> = mutableListOf()
+    private var lista:List<Perfil> = mutableListOf()
+    private var modo:Boolean = false
+    private var Posicao:Long = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(Contexto).inflate(R.layout.celula_ranking, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.celula_ranking, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -29,13 +30,24 @@ class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setandoValor()
-        holder.colocarValor(lista[position].titulo, lista[position].pontosTotais.toString(), position + 1)
+        if(modo){
+            holder.colocarValor(lista[position].titulo, lista[position].pontosTotais.toString(), Posicao)
+        } else {
+            holder.colocarValor(lista[position].titulo, lista[position].pontosTotais.toString(), (position + 1).toLong())
+        }
         holder.colocarImagem(lista[position].email)
     }
 
-    fun adicionandoValor(Novos:List<Perfil>){
-        lista = Novos
-        notifyDataSetChanged()
+    fun adicionandoValor(Novos:List<Perfil>, Posicao:Long = 0){
+        if(Posicao <= 0){
+            lista = Novos
+            notifyDataSetChanged()
+        } else {
+            modo = true
+            this.Posicao = Posicao
+            lista = Novos
+            notifyDataSetChanged()
+        }
     }
 
 
@@ -57,9 +69,9 @@ class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<Adap
             }
         }
 
-        fun colocarValor(NomeR:String, PontosR:String, PosicaoR:Int){
+        fun colocarValor(NomeR:String, PontosR:String, PosicaoR:Long = 0){
             Nome?.text = NomeR
-            Pontos?.text = PontosR
+            Pontos?.text = String.format("$PontosR pts")
             Posicao?.text = String.format("$PosicaoR#")
         }
 
@@ -67,9 +79,9 @@ class AdaptadorRanking(private val Contexto:Context) : RecyclerView.Adapter<Adap
             CloudStorageFirebase().donwloadCloud(Email, TipoDonwload.PERFIl, this)
         }
 
-        override fun imagemBaixada(Imagem: Bitmap?) {
+        override fun imagemBaixada(Imagem: HashMap<String, Bitmap>?) {
             if(Imagem != null){
-                Foto?.setImageBitmap(Imagem)
+                Foto?.setImageBitmap(Imagem.values.toList()[0])
             }
         }
 

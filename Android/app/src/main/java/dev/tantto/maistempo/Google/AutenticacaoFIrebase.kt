@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Google
+package dev.tantto.maistempo.google
 
 import com.google.firebase.auth.*
 import dev.tantto.maistempo.Modelos.Perfil

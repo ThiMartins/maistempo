@@ -1,7 +1,6 @@
 package dev.tantto.maistempo.Fragmentos
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,14 @@ import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Google.*
+import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaResumo
+import dev.tantto.maistempo.telas.TelaResumoLoja
 
-class FragmentAvaliacao : Fragment(), DatabaseNotaRaking, FunctionsRanking {
+class FragmentAvaliacao : Fragment() {
 
     private var Progresso:ProgressBar? = null
     private var NumeroAvailicao:TextView? = null
@@ -25,7 +24,7 @@ class FragmentAvaliacao : Fragment(), DatabaseNotaRaking, FunctionsRanking {
     private var Enviar:Button? = null
     private var Loja:Lojas? = null
 
-    private lateinit var Referencia:TelaResumo
+    private lateinit var referencia:TelaResumoLoja
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_avaliacao_local, container, false)
@@ -35,23 +34,22 @@ class FragmentAvaliacao : Fragment(), DatabaseNotaRaking, FunctionsRanking {
         super.onResume()
         configurandoView()
         setandoValores()
-        //DatabaseFirebaseRecuperar.recuperarNotaRanking(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
     }
 
-    fun setandoReferencias(Item:Lojas, Ref:TelaResumo){
+    fun setandoReferencias(Item:Lojas, ref:TelaResumoLoja){
         Loja = Item
-        Referencia = Ref
+        referencia = ref
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(Chaves.CHAVE_LOJA.valor, Loja)
+        outState.putSerializable(Chave.CHAVE_LOJA.valor, Loja)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        if(savedInstanceState != null && savedInstanceState.containsKey(Chaves.CHAVE_LOJA.valor)){
-            Loja = savedInstanceState.getSerializable(Chaves.CHAVE_LOJA.valor) as Lojas
+        if(savedInstanceState != null && savedInstanceState.containsKey(Chave.CHAVE_LOJA.valor)){
+            Loja = savedInstanceState.getSerializable(Chave.CHAVE_LOJA.valor) as Lojas
         }
     }
 
@@ -63,33 +61,27 @@ class FragmentAvaliacao : Fragment(), DatabaseNotaRaking, FunctionsRanking {
 
         Enviar?.setOnClickListener {
             val nota = RatingVoto?.rating!!
-            //Progresso?.progress = nota.toInt()
-            Alertas.criarAlerter(Referencia, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
+            //Progresso?.progress = ranking.toInt()
+            Alertas.criarAlerter(referencia, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
             RatingVoto?.isEnabled = false
 
-            CloudFunctions.salvarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, nota.toDouble(), this)
-            DatabaseFirebaseSalvar
-
+            //CloudFunctions.salvarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, ranking.toDouble(), this)
+            DatabaseFirebaseSalvar.enviarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, nota.toDouble())
         }
+
     }
 
-    override fun resultado(Valor: Resultado) {
+    /** override fun resultado(Valor: Resultado) {
         if(Valor == Resultado.SUCESSO){
-            Alertas.criarAlerter(Referencia, R.string.EnviadoComSucesso, R.string.Sucesso, 5000)
+            Alertas.criarAlerter(referencia, R.string.EnviadoComSucesso, R.string.Sucesso, 5000)
         } else {
-            Alertas.criarAlerter(Referencia, R.string.ErroAoEnviarRanking, R.string.Erro, 5000)
+            Alertas.criarAlerter(referencia, R.string.ErroAoEnviarRanking, R.string.Erro, 5000)
         }
-    }
+    }*/
 
     private fun setandoValores(){
         Progresso?.progress = Loja?.mediaRanking?.toInt()!! * 20
         NumeroAvailicao?.text = String.format(Loja?.quantidadeAvaliacoesRating.toString()  + " " + getString(R.string.Avalicoes))
-    }
-
-    override fun Nota(Nota: String?) {
-        if(!Nota.isNullOrEmpty()){
-            //RatingVoto?.rating = Nota.toFloat()
-        }
     }
 
 }

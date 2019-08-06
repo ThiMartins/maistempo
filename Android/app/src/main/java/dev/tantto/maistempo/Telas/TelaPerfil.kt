@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.app.Activity
 import android.content.Intent
@@ -16,12 +16,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Classes.bitmapUtils
-import dev.tantto.maistempo.Google.*
+import dev.tantto.maistempo.Classes.BitmapUtilitatios
+import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoCloud, DatabaseMudanca{
+class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoCloud, DatabaseMudanca{
 
     private val MODO_CAMERA = 0
     private val MODO_GALERIA = 1
@@ -110,7 +110,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
             R.id.DeletarConta -> deletarConta()
             R.id.SalvarAlteracoes -> salvarAlteracoes()
         }
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item!!)
     }
 
     private fun deletarConta(){
@@ -158,7 +158,7 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
             val FotoSelecionada = data.extras?.get("data") as Bitmap
-            CaminhoFoto = bitmapUtils.getImageUri(FotoSelecionada, Pessoa?.email!!, this)
+            CaminhoFoto = BitmapUtilitatios.getImageUri(FotoSelecionada, Pessoa?.email!!, this)
             Foto?.setImageBitmap(FotoSelecionada)
 
         } else if(requestCode == MODO_GALERIA && resultCode == Activity.RESULT_OK && data != null){
@@ -171,9 +171,9 @@ class TelaGeral : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClou
         }
     }
 
-    override fun imagemBaixada(Imagem: Bitmap?) {
+    override fun imagemBaixada(Imagem: HashMap<String, Bitmap>?) {
         if(Imagem != null){
-            Foto?.setImageBitmap(Imagem)
+            Foto?.setImageBitmap(Imagem.values.toList()[0])
             findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
         }
     }

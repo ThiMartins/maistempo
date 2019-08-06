@@ -1,15 +1,16 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.Manifest
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import dev.tantto.maistempo.Classes.Permissao
 import dev.tantto.maistempo.Classes.Permissoes
 import dev.tantto.maistempo.Classes.TipoDePermissao
-import dev.tantto.maistempo.Google.*
+import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
@@ -25,6 +26,7 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
     private val RequisicaoPermissaoCoarse = 4
     private var Iniciado = false
     private var Tamanho = 0
+    private var Pessoa:Perfil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,25 +47,30 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
         }
     }
 
-    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>) {
-        ListaLocais.refazer(Lista)
-        if(Lista.isNotEmpty() && Lista.size > 0){
-            Tamanho = Lista.size
+    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>, Erros: String) {
+        if(Erros.isEmpty()){
+            ListaLocais.refazer(Lista)
+            if(Lista.isNotEmpty() && Lista.size > 0){
+                Tamanho = Lista.size
 
-            if(Lista.isNotEmpty()){
-                for (Item in Lista){
-                    CloudStorageFirebase().donwloadCloud("${Item.id}.jpg", TipoDonwload.ICONE, this)
+                if(Lista.isNotEmpty()){
+                    for (Item in Lista){
+                        CloudStorageFirebase().donwloadCloud("${Item.id}.jpg", TipoDonwload.ICONE, this)
+                    }
                 }
+            } else{
+                iniciarActivity(Intent(this, TelaPrincipal::class.java))
+                finishAffinity()
             }
-        } else{
-            iniciarActivity(Intent(this, TelaPrincipal::class.java))
-            finishAffinity()
+        } else {
+            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa?.cidade!!, this)
         }
     }
 
-    override fun imagemBaixada(Imagem: Bitmap?) {
+    override fun imagemBaixada(Imagem: HashMap<String, Bitmap>?) {
         if(Imagem != null){
             ListaBitmap.adicionar(Imagem)
+            Log.i("Teste", ListaBitmap.tamanho().toString())
             if(ListaBitmap.tamanho() == Tamanho){
                 if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty() && !Iniciado){
                     iniciarActivity(Intent(this, TelaPrincipal::class.java))
@@ -78,6 +85,7 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
 
     override fun pessoaRecebida(Pessoa: Perfil) {
         if (Pessoa.email.isNotEmpty()) {
+            this.Pessoa = Pessoa
             DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
         }
     }
@@ -98,13 +106,3 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
         startActivity(Iniciar)
     }
 }
-
-/*val Valores = hashMapOf(Pair("id", "7KcJkXNU8Pn7n4UxYD6B"), Pair("valor", "123"), Pair("horario", "0"), Pair("tipoFila", "filaNormal"))
-
-        FirebaseFunctions.getInstance().getHttpsCallable("adicionarFila").call(Valores).addOnCompleteListener {
-            if(it.isSuccessful){
-
-            } else {
-
-            }
-        }*/

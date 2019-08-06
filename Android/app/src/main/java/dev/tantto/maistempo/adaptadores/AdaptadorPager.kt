@@ -1,10 +1,10 @@
-package dev.tantto.maistempo.Adaptadores
+package dev.tantto.maistempo.adaptadores
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
-class ViewPagerAdaptador(Gerenciador:FragmentManager, private val Fragmentos:List<Fragment>) : FragmentStatePagerAdapter(Gerenciador) {
+class AdaptadorPager(Gerenciador:FragmentManager, private val Fragmentos:List<Fragment>) : FragmentStatePagerAdapter(Gerenciador) {
 
     override fun getItem(position: Int): Fragment {
         return Fragmentos[position]

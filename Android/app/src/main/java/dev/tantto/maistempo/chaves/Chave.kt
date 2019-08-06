@@ -1,8 +1,7 @@
-package dev.tantto.maistempo.Chaves
+package dev.tantto.maistempo.chaves
 
-enum class Chaves(val valor:String) {
+enum class Chave(val valor:String) {
 
-    CHAVE_MARKES("MARKES"),
     CHAVE_LOJA("lojas"),
     CHAVE_USUARIO("usuarios"),
     CHAVE_CIDADE("cidade"),
@@ -14,7 +13,7 @@ enum class Chaves(val valor:String) {
     CHAVE_FAVORITOS("lojasFavoritas"),
     CHAVE_NOTAS_USUARIOS("notasUsuarios"),
     CHAVE_NOTAS_RANKING("notasRanking"),
-    CHAVE_NOTAS_FILA_NORMAL("filaNormal"),
-    CHAVE_POSICAO_LISTA("listaBitmap")
+    CHAVE_POSICAO_LISTA("listaBitmap"),
+    CHAVE_ADICIONAR_FILA_NOTA("adicionarFila")
 
 }
