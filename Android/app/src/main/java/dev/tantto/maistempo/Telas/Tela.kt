@@ -1,6 +1,6 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
-class Telas {
+class Tela {
     companion object{
         const val GET_USER = "USER"
         const val GET_PESSOA = "PESSOA"

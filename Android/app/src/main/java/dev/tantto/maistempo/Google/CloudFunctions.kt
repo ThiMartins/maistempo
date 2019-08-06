@@ -1,7 +1,7 @@
-package dev.tantto.maistempo.Google
+package dev.tantto.maistempo.google
 
 import com.google.firebase.functions.FirebaseFunctions
-import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.chaves.Chave
 
 enum class Resultado(val valor:String){
     SUCESSO("sucesso"),
@@ -12,18 +12,20 @@ class CloudFunctions {
 
     companion object {
 
-        fun salvarRanking(Id:String, Email:String, Valor:Double, Interface:FunctionsRanking){
+        fun adicionarNotaFila(Id:String, TipoFila:String, Valor:Double, Horario:String, anInterface:FunctionsInterface){
 
             val Dados = hashMapOf(
-                Pair("loja", Id),
+                Pair("id", Id),
                 Pair("valor", Valor.toString()),
-                Pair("pessoa", Email))
+                Pair("tipoFila", TipoFila),
+                Pair("horario", Horario)
+            )
 
-            FirebaseFunctions.getInstance().getHttpsCallable(Chaves.CHAVE_NOTAS_RANKING.valor).call(Dados).addOnCompleteListener {
+            FirebaseFunctions.getInstance().getHttpsCallable(Chave.CHAVE_ADICIONAR_FILA_NOTA.valor).call(Dados).addOnCompleteListener {
                 if(it.isSuccessful){
-                    Interface.resultado(Resultado.SUCESSO)
+                    anInterface.resultado(Resultado.SUCESSO)
                 } else {
-                    Interface.resultado(Resultado.ERRO)
+                    anInterface.resultado(Resultado.ERRO)
                 }
             }
         }
@@ -32,7 +34,7 @@ class CloudFunctions {
 
 }
 
-interface FunctionsRanking {
+interface FunctionsInterface {
 
     fun resultado(Valor:Resultado)
 

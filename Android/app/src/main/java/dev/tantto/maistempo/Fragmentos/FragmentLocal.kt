@@ -6,23 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import dev.tantto.maistempo.Adaptadores.AdaptadorLocal
+import dev.tantto.maistempo.adaptadores.AdaptadorLocais
 import dev.tantto.maistempo.R
 
 class FragmentLocal: Fragment() {
 
-    private var Adaptador:AdaptadorLocal? = null
+    private var adaptador:AdaptadorLocais? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val V = inflater.inflate(R.layout.fragment_local_perfil, container, false)
         val Lista = V.findViewById<RecyclerView>(R.id.Lista)
-        Adaptador = AdaptadorLocal(this.context!!)
-        Lista.adapter = Adaptador
+        adaptador = AdaptadorLocais(this.context!!)
+        Lista.adapter = adaptador
         return V
     }
 
     fun filtro(Valor:String){
-        Adaptador?.filtro(Valor)
+        adaptador?.filtro(Valor)
+    }
+
+    fun notificarMudanca(){
+        adaptador?.notifyDataSetChanged()
     }
 
 }

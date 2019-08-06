@@ -88,11 +88,14 @@ class ListaLocais {
             return IndexLojas
         }
 
-        fun recuperarFavoritos() : MutableList<Lojas>{
+        private fun recuperarFavoritos() : MutableList<Lojas>{
             return if(ListaFavoritos.isNotEmpty()){
-                val novaLista = ListaLocais.recuperarTudo().filterIndexed { index, lojas ->
-                    ListaFavoritos[index] == lojas.id
-                } as MutableList<Lojas>
+                val novaLista = mutableListOf<Lojas>()
+                for (Item in ListaLojas){
+                    if(ListaFavoritos.contains(Item.id)){
+                        novaLista.add(Item)
+                    }
+                }
                 novaLista
             } else {
                 mutableListOf()

@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,10 @@ import android.view.MenuItem
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.R
 
-class TelaTermos : AppCompatActivity() {
+class TelaTermo : AppCompatActivity() {
 
     private var Checado:CheckBox? = null
 
@@ -50,7 +50,7 @@ class TelaTermos : AppCompatActivity() {
             }
         }
 
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item!!)
     }
 
 }

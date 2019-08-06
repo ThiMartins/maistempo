@@ -23,7 +23,7 @@
                 android:value="@string/googleMapsKey" />
 
         <activity
-                android:name=".Telas.TelaSplash"
+                android:name=".telas.TelaSplash"
                 android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -32,30 +32,32 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Google.CloudMessasingFirebase" android:permission="">
+        <service
+                android:name=".google.CloudMessasingFirebase"
+                android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".Telas.TelaLogin"
+        <activity android:name=".telas.TelaLogin"
                   android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".Telas.TelaPrincipal" />
-        <activity android:name=".Telas.TelaResumo"
+        <activity android:name=".telas.TelaPrincipal" />
+        <activity android:name=".telas.TelaResumoLoja"
                   android:launchMode="singleInstance"
-                  android:parentActivityName=".Telas.TelaPrincipal"/>
-        <activity android:name=".Telas.TelaTermos"
+                  android:parentActivityName=".telas.TelaPrincipal"/>
+        <activity android:name=".telas.TelaTermo"
                   android:launchMode="singleInstance"
-                  android:parentActivityName=".Telas.TelaPrincipal"/>
-        <activity android:name=".Telas.TelaGeral"
+                  android:parentActivityName=".telas.TelaPrincipal"/>
+        <activity android:name=".telas.TelaPerfil"
                     android:launchMode="singleInstance"
-                    android:parentActivityName=".Telas.TelaPrincipal"/>
-        <activity android:name=".Telas.TelaRanking"
+                    android:parentActivityName=".telas.TelaPrincipal"/>
+        <activity android:name=".telas.TelaRanking"
                   android:launchMode="singleInstance"
-                  android:parentActivityName=".Telas.TelaPrincipal"/>
-        <activity android:name=".Telas.TelaMapa"
+                  android:parentActivityName=".telas.TelaPrincipal"/>
+        <activity android:name=".telas.TelaMapas"
                   android:launchMode="singleInstance"
-                  android:parentActivityName=".Telas.TelaPrincipal"/>
+                  android:parentActivityName=".telas.TelaPrincipal"/>
 
     </application>
 

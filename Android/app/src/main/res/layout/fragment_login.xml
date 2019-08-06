@@ -74,7 +74,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/Relembrar"/>
+                android:text="@string/Relembrar" android:checked="true"/>
 
         <Button
                 android:id="@+id/ConectarUsuario"

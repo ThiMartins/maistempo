@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Adaptadores
+package dev.tantto.maistempo.adaptadores
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 
-class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : RecyclerView.Adapter<AdaptadorFila.ViewHolder>() {
+class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : RecyclerView.Adapter<AdaptadorFilas.ViewHolder>() {
 
     private var Modo:Int = 0
 
@@ -32,10 +32,22 @@ class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : Rec
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val ChaveNormal = Lista.filaNormal.keys.toList().asReversed()
+        val ChaveRapida = Lista.filaRapida.keys.toList().asReversed()
+        val ChavePreferencial = Lista.filaPreferencial.keys.toList().asReversed()
         when(Modo){
-            0 -> holder.setandoItens(Lista.filaNormal[(Lista.horarioInicio + position).toString()]?.toInt()!!, (Lista.horarioInicio + position))
-            1 -> holder.setandoItens(Lista.filaRapida[(Lista.horarioInicio + position).toString()]?.toInt()!!, (Lista.horarioInicio + position))
-            2 -> holder.setandoItens(Lista.filaPreferencial[(Lista.horarioInicio + position).toString()]?.toInt()!!, (Lista.horarioInicio + position))
+            0 -> {
+                val ValorProgresso = Lista.filaNormal[ChaveNormal[position]].toString().toDouble() * 14.25
+                holder.setandoItens(ValorProgresso.toInt(), ChaveNormal[position].toInt())
+            }
+            1 -> {
+                val ValorProgresso = Lista.filaRapida[ChaveRapida[position]].toString().toDouble() * 14.25
+                holder.setandoItens(ValorProgresso.toInt(), ChaveRapida[position].toInt())
+            }
+            2 -> {
+                val ValorProgresso = Lista.filaPreferencial[ChavePreferencial[position]].toString().toDouble() * 14.25
+                holder.setandoItens(ValorProgresso.toInt(), ChavePreferencial[position].toInt())
+            }
         }
     }
 
@@ -54,9 +66,8 @@ class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : Rec
             val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila1)
             ProgressoBarra.progress = 0
 
-            val ProgressoConvertido= Progresso * 15
-            setandoCor(ProgressoConvertido, ProgressoBarra)
-            colocandoAnimacao(ProgressoBarra, ProgressoConvertido)
+            setandoCor(Progresso, ProgressoBarra)
+            colocandoAnimacao(ProgressoBarra, Progresso)
 
         }
 
@@ -72,6 +83,7 @@ class AdaptadorFila(private var Contexto:Context, private var Lista:Lojas) : Rec
 
         }
 
+        @Suppress("DEPRECATION")
         private fun setandoCor(Progresso: Int, ProgressoBarra: ProgressBar) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 when {

@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.os.Build
 import android.os.Bundle
@@ -9,21 +9,21 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import dev.tantto.maistempo.Adaptadores.ViewPagerAdaptador
-import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.adaptadores.AdaptadorPager
+import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.Fragmentos.FragmentAvaliacao
 import dev.tantto.maistempo.Fragmentos.FragmentResumo
-import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
-import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
-import dev.tantto.maistempo.Google.FavoritosRecuperados
-import dev.tantto.maistempo.Google.FirebaseAutenticacao
+import dev.tantto.maistempo.google.DatabaseFirebaseRecuperar
+import dev.tantto.maistempo.google.DatabaseFirebaseSalvar
+import dev.tantto.maistempo.google.FavoritosRecuperados
+import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
 import java.util.*
 
-class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
+class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados {
 
     private var Endereco:TextView? = null
     private var Telefone:TextView? = null
@@ -51,15 +51,16 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
     }
 
     private fun recuperarLoja() {
-        if (intent.hasExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor)) {
-            LojaInfo = intent.getSerializableExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor) as Lojas
+        if (intent.hasExtra(Chave.CHAVE_TELA_PRINCIPAL.valor)) {
+            LojaInfo = intent.getSerializableExtra(Chave.CHAVE_TELA_PRINCIPAL.valor) as Lojas
             Endereco?.text = String.format(getString(R.string.Endereco)+ " " + LojaInfo?.local)
             Telefone?.text = String.format(getString(R.string.Telefone) + " " + LojaInfo?.telefone)
 
             title = LojaInfo?.titulo
 
-            val Posicao = intent.getIntExtra(Chaves.CHAVE_POSICAO_LISTA.valor, 0)
-            Foto?.setImageBitmap(ListaBitmap.recuperar(Posicao))
+            if(ListaBitmap.tamanho() > 0){
+                Foto?.setImageBitmap(ListaBitmap.recuperar(LojaInfo?.id!!))
+            }
 
 
             val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
@@ -80,7 +81,7 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
         AvaliacaoResumo = FragmentAvaliacao()
         AvaliacaoResumo?.setandoReferencias(LojaInfo!!, this)
         val ListaFragmentos = listOf(FilaResumo!!, AvaliacaoResumo!!)
-        Pagina?.adapter = ViewPagerAdaptador(supportFragmentManager, ListaFragmentos)
+        Pagina?.adapter = AdaptadorPager(supportFragmentManager, ListaFragmentos)
 
         TabIndicator?.getTabAt(0)?.setText(R.string.Fila)
         TabIndicator?.getTabAt(1)?.setText(R.string.Availiacao)
@@ -121,7 +122,7 @@ class TelaResumo : AppCompatActivity(), FavoritosRecuperados {
 
         }
 
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item!!)
     }
 
     override fun recuperadoFavoritos() {

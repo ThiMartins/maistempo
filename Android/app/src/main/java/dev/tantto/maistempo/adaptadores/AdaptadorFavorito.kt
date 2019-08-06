@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Adaptadores
+package dev.tantto.maistempo.adaptadores
 
 import android.content.Context
 import android.content.Intent
@@ -10,15 +10,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaResumo
+import dev.tantto.maistempo.telas.TelaResumoLoja
 import java.util.*
 
-class AdaptadorFavoritos(private val Contexto: Context) : RecyclerView.Adapter<AdaptadorFavoritos.Holder>() {
+class AdaptadorFavorito(private val Contexto: Context) : RecyclerView.Adapter<AdaptadorFavorito.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(LayoutInflater.from(Contexto).inflate(R.layout.celula_itens, parent, false), Contexto)
@@ -30,7 +30,7 @@ class AdaptadorFavoritos(private val Contexto: Context) : RecyclerView.Adapter<A
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.setandoItens()
-        holder.adicionandoValores(ListaLocais.recuperarFavorito(position)!!, position)
+        holder.adicionandoValores(ListaLocais.recuperarFavorito(position)!!)
         holder.click(ListaLocais.recuperarFavorito(position)!!, position)
 
     }
@@ -54,11 +54,12 @@ class AdaptadorFavoritos(private val Contexto: Context) : RecyclerView.Adapter<A
 
         }
 
-        fun adicionandoValores(Elementos: Lojas, position: Int){
+        fun adicionandoValores(Elementos: Lojas){
             Titulo?.text = Elementos.titulo
 
-            val IndexBitmap = ListaLocais.recuperarPosicoesFavoritosBitmap()
-            Imagem?.setImageBitmap(ListaBitmap.recuperar(IndexBitmap[position]))
+            if(ListaBitmap.tamanho() > 0){
+                Imagem?.setImageBitmap(ListaBitmap.recuperar(Elementos.id))
+            }
 
             val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
 
@@ -71,9 +72,9 @@ class AdaptadorFavoritos(private val Contexto: Context) : RecyclerView.Adapter<A
 
         fun click(positionLoja: Lojas, position: Int){
             CardLocal?.setOnClickListener {
-                val Iniciar = Intent(Contexto, TelaResumo::class.java)
-                Iniciar.putExtra(Chaves.CHAVE_TELA_PRINCIPAL.valor, positionLoja)
-                Iniciar.putExtra(Chaves.CHAVE_POSICAO_LISTA.valor, position)
+                val Iniciar = Intent(Contexto, TelaResumoLoja::class.java)
+                Iniciar.putExtra(Chave.CHAVE_TELA_PRINCIPAL.valor, positionLoja)
+                Iniciar.putExtra(Chave.CHAVE_POSICAO_LISTA.valor, position)
                 Contexto.startActivity(Iniciar)
             }
         }

@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,12 +14,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
-import dev.tantto.maistempo.Chaves.Chaves
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Local
 import dev.tantto.maistempo.R
 
-class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
+class TelaMapas : AppCompatActivity(), OnMapReadyCallback {
 
     private val RequisicaoPermissao= 23
 
@@ -85,7 +84,9 @@ class TelaMapa : AppCompatActivity(), OnMapReadyCallback {
         for(Item in ListaLocais.recuperarTudo()){
             ListaMaps.add(Local(Item.longitude, Item.latitude, Item.titulo))
         }
-        adicionarMaker()
+        if(!ListaMaps.isNullOrEmpty()){
+            adicionarMaker()
+        }
     }
 
     private fun adicionarMaker(){

@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaPrincipal
+import dev.tantto.maistempo.telas.TelaPrincipal
 
 class Notificacao {
 
@@ -27,7 +27,13 @@ class Notificacao {
         Alerta.setSmallIcon(R.drawable.ic_launcher_foreground)
         Alerta.setContentTitle(Titulo)
         Alerta.setContentText(Corpo)
-        Alerta.priority = Notification.PRIORITY_MAX
+
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Alerta.priority = NotificationManager.IMPORTANCE_MAX
+        } else {
+            Alerta.priority = Notification.PRIORITY_MAX
+        }
         Alerta.setStyle(TextoGrande)
 
         val Gerenciador = Contexto.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

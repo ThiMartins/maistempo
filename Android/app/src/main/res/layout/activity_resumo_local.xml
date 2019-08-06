@@ -6,7 +6,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        style="@style/AppTheme.Constrainst">
 
     <ImageView
             android:id="@+id/FotoResumo"
@@ -16,6 +16,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="16dp"
+            android:scaleType="centerCrop"
             android:background="@drawable/borda_imagem"/>
 
     <TextView

@@ -1,33 +1,28 @@
 package dev.tantto.maistempo.Fragmentos
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
-import dev.tantto.maistempo.Adaptadores.AdaptadorFila
-import dev.tantto.maistempo.Chaves.Chaves
+import dev.tantto.maistempo.adaptadores.AdaptadorFilas
+import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Google.DatabaseFirebaseSalvar
-import dev.tantto.maistempo.Google.FirebaseAutenticacao
-import dev.tantto.maistempo.Google.TipoFila
-import dev.tantto.maistempo.Google.TipoPontos
+import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaResumo
+import dev.tantto.maistempo.telas.TelaResumoLoja
 import java.util.*
 
-class FragmentResumo : Fragment() {
+class FragmentResumo : Fragment(), FunctionsInterface {
 
-    private lateinit var Referencia:TelaResumo
+    private lateinit var referencia:TelaResumoLoja
 
     private var Lista:RecyclerView? = null
     private var NumeroAvaliacoes:TextView? = null
@@ -35,7 +30,7 @@ class FragmentResumo : Fragment() {
     private var ProgressoFila:SeekBar? = null
     private var Tabs:TabLayout? = null
     private var LojaInfo:Lojas? = null
-    private var Adaptador:AdaptadorFila? = null
+    private var adaptador:AdaptadorFilas? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_fila, container, false)
@@ -49,19 +44,19 @@ class FragmentResumo : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(Chaves.CHAVE_LOJA.valor, LojaInfo)
+        outState.putSerializable(Chave.CHAVE_LOJA.valor, LojaInfo)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        if(savedInstanceState != null && savedInstanceState.containsKey(Chaves.CHAVE_LOJA.valor)){
-            LojaInfo = savedInstanceState.getSerializable(Chaves.CHAVE_LOJA.valor) as Lojas
+        if(savedInstanceState != null && savedInstanceState.containsKey(Chave.CHAVE_LOJA.valor)){
+            LojaInfo = savedInstanceState.getSerializable(Chave.CHAVE_LOJA.valor) as Lojas
         }
     }
 
-    fun passandoLja(Ref:Lojas, RefTela:TelaResumo){
+    fun passandoLja(Ref:Lojas, refTelaLoja:TelaResumoLoja){
         LojaInfo = Ref
-        Referencia = RefTela
+        referencia = refTelaLoja
     }
 
     @Suppress("DEPRECATION")
@@ -85,7 +80,7 @@ class FragmentResumo : Fragment() {
             }
 
             override fun onTabSelected(p0: TabLayout.Tab?) {
-                Adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
+                adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
             }
         })
 
@@ -95,7 +90,7 @@ class FragmentResumo : Fragment() {
                 mostrarAlerta()
                 DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_FILA)
 
-                val Horas = Calendar.getInstance().get(Calendar.HOUR)
+                val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
                 val Tipo = when {
                     Tabs?.selectedTabPosition == 0 -> TipoFila.FilaNormal
                     Tabs?.selectedTabPosition == 1 -> TipoFila.FilaRapida
@@ -103,23 +98,23 @@ class FragmentResumo : Fragment() {
                     else -> null
                 }
 
-                DatabaseFirebaseSalvar.adicionarNotaFila(LojaInfo?.id!!, ProgressoFila?.progress!!, Horas.toString(), Tipo!!)
-
-                /**
-                 *
-                 * Function mudar a fila
-                 * colocar um alert
-                 *
-                 */
+                CloudFunctions.adicionarNotaFila(LojaInfo?.id!!, Tipo?.valor!!, ProgressoFila?.progress?.toDouble()!!, Horas.toString(), this)
+                Alertas.criarAlerter(referencia, R.string.EnviandoNota ,R.string.Enviando, 10000).show()
             }
         }
 
         NumeroAvaliacoes?.text = String.format(LojaInfo?.quantidadeAvaliacoesFila.toString() + " "+ getString(R.string.Avalicoes))
     }
 
+    override fun resultado(Valor: Resultado) {
+        if(Valor == Resultado.ERRO){
+            Alertas.criarAlerter(referencia, R.string.ErroEnviar, R.string.Atencao, 10000).show()
+        }
+    }
+
     private fun mostrarAlerta() {
         Alertas.criarAlerter(
-            Referencia,
+            referencia,
             "${getString(R.string.IntervaloFila)}: " +
                     "${
                     when (ProgressoFila?.progress) {
@@ -139,8 +134,8 @@ class FragmentResumo : Fragment() {
     }
 
     private fun configurandoAdapter() {
-        Adaptador = AdaptadorFila(this.context!!, LojaInfo!!)
-        Lista?.adapter = Adaptador
+        adaptador = AdaptadorFilas(this.context!!, LojaInfo!!)
+        Lista?.adapter = adaptador
         val Manager = LinearLayoutManager(this.context!!)
         Manager.orientation = LinearLayoutManager.HORIZONTAL
         Lista?.layoutManager = Manager

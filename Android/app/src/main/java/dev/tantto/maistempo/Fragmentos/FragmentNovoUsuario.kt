@@ -19,16 +19,16 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.Classes.*
-import dev.tantto.maistempo.Google.*
+import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.Telas.TelaLogin
+import dev.tantto.maistempo.telas.TelaLogin
 import java.text.DateFormat
 import java.util.*
 
 class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
-    private lateinit var ReferenciaTela:TelaLogin
+    private lateinit var referenciaTela:TelaLogin
 
     private val RequisicaoPermissao = 2
     private val MODO_CAMERA = 0
@@ -74,7 +74,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     }
 
     fun setandoReferencia(ref:TelaLogin) : FragmentNovoUsuario{
-        ReferenciaTela = ref
+        referenciaTela = ref
         return this
     }
 
@@ -122,20 +122,51 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                     DataTexto?.setText(DataFormatada)
                 }
             } else {
-                Toast.makeText(this.requireContext(), "Refatorando layout", Toast.LENGTH_LONG).show()
+                val TelaData = Alertas.criarAlertDialog(this.context!!)
+                TelaData.setPositiveButton(R.string.Ok) { _, _ ->
+
+                }
+                TelaData.setNegativeButton(R.string.Cancelar) { _, _ ->
+
+                }
+                val TelaFinal = TelaData.create()
+                TelaFinal.show()
+
+                val AdaptadorAno = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, (criarArray(Calendar.getInstance().get(Calendar.YEAR), 1900)))
+                val AdaptadorMes= ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, criarArray(1, 12))
+                val AdaptadorDia = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, criarArray(1, 31))
+
+                val AnoSpinner = TelaFinal.findViewById<Spinner>(R.id.AnoSpinner)
+                val MesSpinner = TelaFinal.findViewById<Spinner>(R.id.MesSpinner)
+                val DiaSpinner = TelaFinal.findViewById<Spinner>(R.id.DiaSpinner)
+
+                AnoSpinner.adapter = AdaptadorAno
+                MesSpinner.adapter = AdaptadorMes
+                DiaSpinner.adapter = AdaptadorDia
+
+
+
             }
 
         }
 
         Foto?.setOnClickListener {
-            if(Permissao.veficarPermissao(ReferenciaTela, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO){
-                ActivityCompat.requestPermissions(ReferenciaTela, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissao)
+            if(Permissao.veficarPermissao(referenciaTela, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO){
+                ActivityCompat.requestPermissions(referenciaTela, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissao)
             } else {
                 pegarFoto()
             }
 
         }
 
+    }
+
+    private fun criarArray(Inicio:Int, Fim:Int) : List<Int>{
+        val Lista = mutableListOf<Int>()
+        for (i in Inicio..Fim ){
+            Lista.add(i)
+        }
+        return Lista.toList()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -145,14 +176,14 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     pegarFoto()
                 } else{
-                    Alertas.criarAlerter(ReferenciaTela, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
+                    Alertas.criarAlerter(referenciaTela, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
                 }
             }
         }
     }
 
     private fun alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {
-        Alertas.criarAlerter(ReferenciaTela, Mensagem, Titulo, Duracao).show()
+        Alertas.criarAlerter(referenciaTela, Mensagem, Titulo, Duracao).show()
     }
 
     private fun pegarFoto() {
@@ -177,7 +208,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 }
             }
         }
-        Caixa.show()
+        Caixa.create().show()
     }
 
     private fun verificar() {
@@ -190,7 +221,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                             when {
                                 CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                                 FotoCamera != null -> {
-                                    CaminhoFoto = bitmapUtils.getImageUri(FotoCamera!!, Email?.text.toString(), ReferenciaTela)
+                                    CaminhoFoto = BitmapUtilitatios.getImageUri(FotoCamera!!, Email?.text.toString(), referenciaTela)
                                     CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                                 }
                                 else -> criarUsuario()
@@ -230,7 +261,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     }
 
     override fun usuarioCriado(User: FirebaseUser?, Pessoa: Perfil) {
-        ReferenciaTela.loginConcluido(User, Pessoa)
+        referenciaTela.loginConcluido(User, Pessoa)
     }
 
     override fun erroCriarUsuario(erro: TiposErrosCriar) {

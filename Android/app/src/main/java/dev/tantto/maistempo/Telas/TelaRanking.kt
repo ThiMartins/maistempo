@@ -1,43 +1,65 @@
-package dev.tantto.maistempo.Telas
+package dev.tantto.maistempo.telas
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import dev.tantto.maistempo.Adaptadores.AdaptadorRanking
-import dev.tantto.maistempo.Google.DatabaseFirebaseRecuperar
-import dev.tantto.maistempo.Google.DatabaseRakingInterface
+import com.google.firebase.functions.FirebaseFunctions
+import dev.tantto.maistempo.adaptadores.AdaptadorRaking
+import dev.tantto.maistempo.google.DatabaseFirebaseRecuperar
+import dev.tantto.maistempo.google.DatabaseRakingInterface
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.google.DatabasePessoaInterface
+import dev.tantto.maistempo.google.FirebaseAutenticacao
 
-class TelaRanking : AppCompatActivity(), DatabaseRakingInterface {
+class TelaRanking : AppCompatActivity(), DatabaseRakingInterface, DatabasePessoaInterface {
 
     private var ListaRecycler: RecyclerView? = null
-    private var Adapter: AdaptadorRanking? = null
+    private var adapter: AdaptadorRaking? = null
     private var Alerta:AlertDialog? = null
+    private var Posicao:Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.elevation = 0F
+        supportActionBar?.setTitle(R.string.Ranking)
         setContentView(R.layout.activity_ranking)
         DatabaseFirebaseRecuperar.recuperarTopRanking(this)
-
+        val valores = hashMapOf(Pair("email", FirebaseAutenticacao.Autenticacao.currentUser?.email!!))
+        FirebaseFunctions.getInstance().getHttpsCallable("rankingPessoa").call(valores).continueWith {
+            if(it.isSuccessful){
+                val Retorno = it.result?.data
+                if(Retorno != null){
+                    Posicao = Retorno.toString().toLong()
+                    DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
+                }
+            }
+        }
         val AlertaBuilder = AlertDialog.Builder(this)
         AlertaBuilder.setView(R.layout.loading)
         Alerta = AlertaBuilder.create()
         Alerta?.show()
     }
 
-    override fun topRanking(Lista: List<Perfil>) {
+    override fun topRanking(Lista: MutableList<Perfil>) {
         ListaRecycler = findViewById<RecyclerView>(R.id.ListaRanking)
-        Adapter = AdaptadorRanking(this)
-        val Manager = LinearLayoutManager(this)
-        Manager.orientation = RecyclerView.VERTICAL
-        ListaRecycler?.layoutManager = Manager
-        ListaRecycler?.adapter = Adapter
-        Adapter?.adicionandoValor(Lista)
+        val divisor = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        ListaRecycler?.addItemDecoration(divisor)
+        adapter = AdaptadorRaking()
+        ListaRecycler?.adapter = adapter
+        adapter?.adicionandoValor(Lista)
+
+
+    }
+
+    override fun pessoaRecebida(Pessoa: Perfil) {
+        val PessoaLista = findViewById<RecyclerView>(R.id.ListaRankingPessoa)
+        val NovoAdapter = AdaptadorRaking()
+        PessoaLista.adapter = NovoAdapter
+        NovoAdapter.adicionandoValor(listOf(Pessoa), Posicao)
         Alerta?.dismiss()
     }
 
