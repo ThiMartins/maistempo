@@ -13,5 +13,6 @@ data class Perfil(
     var nascimento:String = "",
     var senha:String = "",
     var lojasFavoritas:MutableList<String> = mutableListOf(),
-    var cidade:String = ""
+    var cidade:String = "",
+    var acesso:String = "user"
 ) : Serializable

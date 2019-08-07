@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import com.xw.repo.BubbleSeekBar
 import dev.tantto.maistempo.adaptadores.AdaptadorFilas
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.Classes.Alertas
@@ -27,7 +28,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
     private var Lista:RecyclerView? = null
     private var NumeroAvaliacoes:TextView? = null
     private var EnviarFilaMomento:Button? = null
-    private var ProgressoFila:SeekBar? = null
+    private var ProgressoFila:BubbleSeekBar? = null
     private var Tabs:TabLayout? = null
     private var LojaInfo:Lojas? = null
     private var adaptador:AdaptadorFilas? = null
@@ -65,7 +66,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         NumeroAvaliacoes = this.view?.findViewById<TextView>(R.id.NumeroAvaliacoes)
         Tabs = this.view?.findViewById<TabLayout>(R.id.TabLayoutFila)
         EnviarFilaMomento = this.view?.findViewById<Button>(R.id.EnviarFila)
-        ProgressoFila = this.view?.findViewById<SeekBar>(R.id.ProgressoFilaVoto)
+        ProgressoFila = this.view?.findViewById<BubbleSeekBar>(R.id.ProgressoFilaVoto)
 
         Tabs?.getTabAt(0)?.setText(R.string.Normal)
         Tabs?.getTabAt(1)?.setText(R.string.Rapida)

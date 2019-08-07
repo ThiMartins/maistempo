@@ -58,6 +58,11 @@
         <activity android:name=".telas.TelaMapas"
                   android:launchMode="singleInstance"
                   android:parentActivityName=".telas.TelaPrincipal"/>
+        <activity
+                android:name=".telas.TelaAdicionarLoja"
+                android:windowSoftInputMode="adjustResize"
+                android:launchMode="singleInstance"
+                android:parentActivityName=".telas.TelaPrincipal"/>
 
     </application>
 

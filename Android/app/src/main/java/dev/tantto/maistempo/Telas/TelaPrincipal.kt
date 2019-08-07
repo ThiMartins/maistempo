@@ -1,11 +1,8 @@
 package dev.tantto.maistempo.telas
 
 import android.content.Intent
-import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
@@ -14,20 +11,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.adaptadores.AdaptadorPager
-import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Classes.BuscarConcluida
-import dev.tantto.maistempo.Classes.BuscarLojasImagem
 import dev.tantto.maistempo.Fragmentos.FragmentFavoritos
 import dev.tantto.maistempo.Fragmentos.FragmentLocal
 import dev.tantto.maistempo.Fragmentos.FragmentPerfil
-import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.google.*
-import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRecuperados, BuscarConcluida{
+class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRecuperados{
 
     private var TodosLocais:FragmentLocal = FragmentLocal()
     private var FavoritosLocais:FragmentFavoritos = FragmentFavoritos()
@@ -36,8 +27,7 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
     private var Pagina:ViewPager? = null
     private var Pessoa:Perfil? = null
     private var ProgressoRaio:SeekBar? = null
-    private val handler = Handler(Looper.getMainLooper())
-    private var Modo:Boolean = false
+    private var NivelAcesso:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,17 +47,21 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("Acesso", NivelAcesso)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        if(savedInstanceState.containsKey("Acesso")){
+            NivelAcesso = savedInstanceState.getString("Acesso", "")
+        }
+    }
+
     override fun onRestart() {
         super.onRestart()
         FavoritosLocais.reloadLista()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(ListaLocais.tamanho() == 0){
-            Alertas.criarAlerter(this, R.string.ErroCidade, R.string.Atencao).show()
-        }
-        iniciarServico()
     }
 
     override fun recuperadoFavoritos() {
@@ -82,7 +76,12 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_tela_principal, menu)
+        if(intent.hasExtra("Acesso")){
+            NivelAcesso = "adm"
+            menuInflater.inflate(R.menu.menu_tela_principal_adm, menu)
+        } else {
+            menuInflater.inflate(R.menu.menu_tela_principal, menu)
+        }
 
         val PesquisaItem = menu?.findItem(R.id.PesquisaLocal)
         val Pesquisa = PesquisaItem?.actionView as SearchView
@@ -111,6 +110,12 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
             R.id.MudarRaio -> mudarRaio()
         }
 
+        if(NivelAcesso == "adm"){
+            if(R.id.AdicionarLoja == item?.itemId){
+                startActivity(Intent(this, TelaAdicionarLoja::class.java))
+            }
+        }
+
         return super.onOptionsItemSelected(item!!)
     }
 
@@ -127,37 +132,11 @@ class TelaPrincipal : AppCompatActivity(), DatabasePessoaInterface, FavoritosRec
         val AlertaFechado = Alerta.create()
         AlertaFechado.show()
         ProgressoRaio = AlertaFechado.findViewById<SeekBar>(R.id.ValorMudarRaio)
-        ProgressoRaio?.progress = Pessoa?.raio?.toInt()!!
+        //ProgressoRaio?.progress = Pessoa?.raio?.toString()?.toInt()!!
     }
 
     override fun pessoaRecebida(Pessoa: Perfil) {
         this.Pessoa = Pessoa
-    }
-
-    private fun iniciarServico(){
-        object : Runnable{
-            override fun run() {
-                handler.postDelayed(this, 600000)
-                this@TelaPrincipal.atualizarLista()
-            }
-        }.run()
-
-    }
-
-    private fun atualizarLista(){
-        if(Modo){
-            BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, this)
-        } else {
-            Modo = false
-        }
-    }
-
-    override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?) {
-        if (Modo && Lista?.isNotEmpty()!! && ListaImagem?.isNotEmpty()!!){
-            ListaLocais.refazer(Lista)
-            ListaBitmap.refazer(ListaImagem)
-            TodosLocais.notificarMudanca()
-        }
     }
 
 }

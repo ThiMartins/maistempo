@@ -30,6 +30,11 @@ class CloudFunctions {
             }
         }
 
+        fun adicionarNovoVoto(Id: String){
+            val Dados = hashMapOf(Pair("id", Id))
+            FirebaseFunctions.getInstance().getHttpsCallable(Chave.CHAVE_ADD_RANKING.valor).call(Dados)
+        }
+
     }
 
 }

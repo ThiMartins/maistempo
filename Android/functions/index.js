@@ -26,19 +26,7 @@ exports.rankingPessoa = functions.https.onCall( async (data, _context) => {
         console.log(erro);
         return Index;
     });
-})
-
-exports.fazerMedia = functions.firestore.document('usuarios/{uid}').onWrite((change, context) => {
-
-    const data = change.after.data();
-    const Cadastro = data['pontosCadastro'];
-    const Fila = data['pontosFila'];
-    const Locais = data['pontosLocais'];
-
-    const Soma = Cadastro + Fila + Locais;
-
-    return change.after.ref.set({ pontosTotais: Soma}, {merge: true});
-})
+});
 
 exports.adicionarFila = functions.https.onCall( async (data, _context) => {
 
@@ -64,7 +52,6 @@ exports.adicionarFila = functions.https.onCall( async (data, _context) => {
             FilaMudanca[HorarioPassado].forEach(element => {
                 ListaNova.push(element);
             });
-            ListaNova.push();
             ListaNova.push(parseFloat(ValorPassado));
             Object.assign(FilaMudanca[HorarioPassado], ListaNova);
         } else {
@@ -96,11 +83,10 @@ exports.adicionarFila = functions.https.onCall( async (data, _context) => {
             const FilaMedia = DadosMedia[TipoFila];
             const ValorNovo = Object.values(FilaMedia);
 
-            if(FilaMedia.hasOwnProperty(HorarioPassado)){
-                ValorNovo[HorarioPassado].push(parseFloat(MediaFinal));
-            } else {
-                Object.assign(FilaMedia, { [HorarioPassado]: MediaFinal});
-            }
+            Object.assign(FilaMedia, { [HorarioPassado]: MediaFinal});
+
+            var Quantidade = DadosMedia['quantidadeAvaliacoesFila'];
+            DadosMedia['quantidadeAvaliacoesFila'] = Quantidade + 1;
 
             admin.firestore().collection('lojas/').doc(DocumentoPassado).set(DadosMedia);
 
@@ -121,4 +107,37 @@ exports.adicionarFila = functions.https.onCall( async (data, _context) => {
         console.log(error);
         return "Erro ao atualizar lista";
     }
+});
+
+exports.adicionarAvalicaoPonto = functions.https.onCall( async (data, _context) => {
+
+    const Documento = data['id'];
+
+    return await admin.firestore().doc('lojas/' + Documento).get().then(snapshot => {
+        const Dados = snapshot.data();
+
+        var Quantidade = Dados['quantidadeAvaliacoesRating'];
+        Dados['quantidadeAvaliacoesRating'] = Quantidade + 1;
+
+        admin.firestore().collection('lojas/').doc(Documento).set(Dados);
+
+        return "ok";
+    })
+    .catch(erro => {
+        console.log(erro);
+        return "erro";
+    });
+
+});
+
+exports.fazerMedia = functions.firestore.document('usuarios/{uid}').onWrite((change, context) => {
+
+    const data = change.after.data();
+    const Cadastro = data['pontosCadastro'];
+    const Fila = data['pontosFila'];
+    const Locais = data['pontosLocais'];
+
+    const Soma = Cadastro + Fila + Locais;
+
+    return change.after.ref.set({ pontosTotais: Soma}, {merge: true});
 });

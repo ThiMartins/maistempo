@@ -41,13 +41,15 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private var DataTexto:EditText? = null
     private var Foto:ImageView? = null
     private var Criar:Button? = null
-    private var Data:Date = Date()
     private var CaminhoFoto:Uri? = null
     private var EscolherData:Button? = null
     private var FotoCamera:Bitmap? = null
     private var Cidade:EditText? = null
     private var CheckTermos:CheckBox? = null
     private var VerTermos:TextView? = null
+    private var AnoSpinner:Spinner? = null
+    private var MesSpinner:Spinner? = null
+    private var DiaSpinner:Spinner? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val Fragmento = inflater.inflate(R.layout.fragment_novo_usuario, container, false)
@@ -96,7 +98,6 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun eventos() {
         Criar?.setOnClickListener {
             verificar()
@@ -115,16 +116,25 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         EscolherData?.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 val DataNascimento = DatePickerDialog(this.requireContext())
+                DataNascimento.updateDate(Calendar.getInstance().get(Calendar.YEAR) - 18, Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
                 DataNascimento.show()
                 DataNascimento.setOnDateSetListener { _, year, month, dayOfMonth ->
-                    Data = Date(year - 1900, month, dayOfMonth)
-                    val DataFormatada = DateFormat.getDateInstance().format(Data)
+                    val ConverterData = Calendar.getInstance()
+                    ConverterData.set(year, month, dayOfMonth)
+                    val DataFormatada = DateFormat.getDateInstance().format(ConverterData.time)
                     DataTexto?.setText(DataFormatada)
                 }
             } else {
                 val TelaData = Alertas.criarAlertDialog(this.context!!)
                 TelaData.setPositiveButton(R.string.Ok) { _, _ ->
+                    val Dia = DiaSpinner?.selectedItem.toString().toInt()
+                    val Mes = MesSpinner?.selectedItem.toString().toInt()
+                    val Ano = AnoSpinner?.selectedItem.toString().toInt()
 
+                    val ConverterData = Calendar.getInstance()
+                    ConverterData.set(Ano, Mes, Dia)
+                    val DataFormatada = DateFormat.getDateInstance().format(ConverterData.time)
+                    DataTexto?.setText(DataFormatada)
                 }
                 TelaData.setNegativeButton(R.string.Cancelar) { _, _ ->
 
@@ -132,19 +142,17 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 val TelaFinal = TelaData.create()
                 TelaFinal.show()
 
-                val AdaptadorAno = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, (criarArray(Calendar.getInstance().get(Calendar.YEAR), 1900)))
+                val AdaptadorAno = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, criarArray( 1900, Calendar.getInstance().get(Calendar.YEAR)).reversed())
                 val AdaptadorMes= ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, criarArray(1, 12))
                 val AdaptadorDia = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, criarArray(1, 31))
 
-                val AnoSpinner = TelaFinal.findViewById<Spinner>(R.id.AnoSpinner)
-                val MesSpinner = TelaFinal.findViewById<Spinner>(R.id.MesSpinner)
-                val DiaSpinner = TelaFinal.findViewById<Spinner>(R.id.DiaSpinner)
+                AnoSpinner = TelaFinal.findViewById<Spinner>(R.id.AnoSpinner)
+                MesSpinner = TelaFinal.findViewById<Spinner>(R.id.MesSpinner)
+                DiaSpinner = TelaFinal.findViewById<Spinner>(R.id.DiaSpinner)
 
-                AnoSpinner.adapter = AdaptadorAno
-                MesSpinner.adapter = AdaptadorMes
-                DiaSpinner.adapter = AdaptadorDia
-
-
+                AnoSpinner?.adapter = AdaptadorAno
+                MesSpinner?.adapter = AdaptadorMes
+                DiaSpinner?.adapter = AdaptadorDia
 
             }
 

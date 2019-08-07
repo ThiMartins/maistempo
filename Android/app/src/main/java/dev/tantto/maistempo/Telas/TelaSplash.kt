@@ -1,15 +1,20 @@
 package dev.tantto.maistempo.telas
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import dev.tantto.maistempo.Classes.Permissao
-import dev.tantto.maistempo.Classes.Permissoes
-import dev.tantto.maistempo.Classes.TipoDePermissao
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import dev.tantto.maistempo.Classes.*
 import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
@@ -17,21 +22,20 @@ import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
 
-class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud, DatabasePessoaInterface {
+class TelaSplash : AppCompatActivity(), BuscarConcluida {
 
     private val RequisicaoPermissaoCamera = 0
     private val RequisicaoPermissaoLeitura = 1
     private val RequisicaoPermissaoEscrita = 2
     private val RequisicaoPermissaoFine = 3
     private val RequisicaoPermissaoCoarse = 4
-    private var Iniciado = false
-    private var Tamanho = 0
-    private var Pessoa:Perfil? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_splash)
         supportActionBar?.elevation = 0F
+
     }
 
     override fun onResume() {
@@ -43,66 +47,76 @@ class TelaSplash : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClo
             Permissao.veficarPermissao(this, Permissoes.ARMAZENAMENTO_WRITE) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), RequisicaoPermissaoEscrita)
             Permissao.veficarPermissao(this, Permissoes.LOCALIZACAO_COARSE) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), RequisicaoPermissaoCoarse)
             Permissao.veficarPermissao(this, Permissoes.LOCALIZACAO_FINE) != TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), RequisicaoPermissaoFine)
-            else -> carregandoLogin()
+            else -> iniciarVerificacoes()
         }
     }
 
-    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>, Erros: String) {
-        if(Erros.isEmpty()){
-            ListaLocais.refazer(Lista)
-            if(Lista.isNotEmpty() && Lista.size > 0){
-                Tamanho = Lista.size
+    private fun iniciarVerificacoes(){
+        if(Dados.recuperarLogin(this)) {
+            FirebaseAutenticacao.deslogarUser()
+        }
 
-                if(Lista.isNotEmpty()){
-                    for (Item in Lista){
-                        CloudStorageFirebase().donwloadCloud("${Item.id}.jpg", TipoDonwload.ICONE, this)
-                    }
-                }
-            } else{
-                iniciarActivity(Intent(this, TelaPrincipal::class.java))
-                finishAffinity()
-            }
+        if(internetConectado() == true){
+            carregandoLogin()
         } else {
-            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa?.cidade!!, this)
+            verificarInternet()
         }
     }
 
-    override fun imagemBaixada(Imagem: HashMap<String, Bitmap>?) {
-        if(Imagem != null){
-            ListaBitmap.adicionar(Imagem)
-            Log.i("Teste", ListaBitmap.tamanho().toString())
-            if(ListaBitmap.tamanho() == Tamanho){
-                if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty() && !Iniciado){
-                    iniciarActivity(Intent(this, TelaPrincipal::class.java))
-                    finishAffinity()
+    private fun verificarInternet(){
+        val Snack = Snackbar.make(findViewById(R.id.TelaSplash), R.string.SemConexao, Snackbar.LENGTH_INDEFINITE)
+        Snack.show()
+        object : Runnable{
+            override fun run() {
+                if(internetConectado() == false || internetConectado() == null) {
+                    handler.postDelayed(this, 100)
+                } else {
+                    Snack.setText(R.string.Conectado)
+                    Snack.duration = BaseTransientBottomBar.LENGTH_SHORT
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        Snack.view.setBackgroundColor(getColor(R.color.colorPrimary))
+                    }
+                    carregandoLogin()
                 }
             }
-        } else if(!FirebaseAutenticacao.Autenticacao.currentUser?.email.isNullOrEmpty() && !Iniciado){
-            iniciarActivity(Intent(this, TelaPrincipal::class.java))
-            finishAffinity()
-        }
-    }
-
-    override fun pessoaRecebida(Pessoa: Perfil) {
-        if (Pessoa.email.isNotEmpty()) {
-            this.Pessoa = Pessoa
-            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
-        }
+        }.run()
     }
 
     private fun carregandoLogin() {
         val User = FirebaseAutenticacao.Autenticacao.currentUser?.email
 
         if (!User.isNullOrEmpty()) {
-            DatabaseFirebaseRecuperar.recuperaDadosPessoa(User, this)
+            BuscarLojasImagem(User, this)
         } else {
             iniciarActivity(Intent(this, TelaLogin::class.java))
             finishAffinity()
         }
     }
 
+    override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil) {
+        if(Lista != null && ListaImagem != null){
+            ListaLocais.refazer(Lista)
+            ListaBitmap.refazer(ListaImagem)
+            if(Pessoa.acesso == "adm"){
+                val iniciar = Intent(this, TelaPrincipal::class.java)
+                iniciar.putExtra("Acesso", "adm")
+                iniciarActivity(iniciar)
+                finishAffinity()
+            } else {
+                iniciarActivity(Intent(this, TelaPrincipal::class.java))
+                finishAffinity()
+            }
+        }
+    }
+
     private fun iniciarActivity(Iniciar:Intent){
-        Iniciado = true
         startActivity(Iniciar)
     }
+
+    @Suppress("DEPRECATION")
+    private fun internetConectado() : Boolean? {
+        val ConexaoManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return ConexaoManager.activeNetworkInfo?.isConnected
+    }
+
 }

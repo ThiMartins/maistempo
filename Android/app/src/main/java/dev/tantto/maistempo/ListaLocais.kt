@@ -50,7 +50,7 @@ class ListaLocais {
         fun filto(Filtragem:String){
             ListaLojas =
                 (if(Filtragem.isNotEmpty()){
-                    ListaLojas.filter { it.titulo.contains(Filtragem) }
+                    ListaLojas.filter { it.titulo.toLowerCase().contains(Filtragem.toLowerCase()) }
                 } else{
                     BackupLojas!!
                 }) as MutableList<Lojas>
@@ -80,27 +80,6 @@ class ListaLocais {
             return ListaFavoritos.size
         }
 
-        fun recuperarPosicoesFavoritosBitmap() : MutableList<Int>{
-            val IndexLojas:MutableList<Int> = mutableListOf()
-            for (Item in recuperarFavoritos()){
-                IndexLojas.add(ListaLojas.indexOf(Item))
-            }
-            return IndexLojas
-        }
-
-        private fun recuperarFavoritos() : MutableList<Lojas>{
-            return if(ListaFavoritos.isNotEmpty()){
-                val novaLista = mutableListOf<Lojas>()
-                for (Item in ListaLojas){
-                    if(ListaFavoritos.contains(Item.id)){
-                        novaLista.add(Item)
-                    }
-                }
-                novaLista
-            } else {
-                mutableListOf()
-            }
-        }
     }
 
 }
