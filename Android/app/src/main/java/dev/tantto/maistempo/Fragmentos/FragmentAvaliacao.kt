@@ -67,17 +67,10 @@ class FragmentAvaliacao : Fragment() {
 
             //CloudFunctions.salvarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, ranking.toDouble(), this)
             DatabaseFirebaseSalvar.enviarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, nota.toDouble())
+            CloudFunctions.adicionarNovoVoto(Loja?.id!!)
         }
 
     }
-
-    /** override fun resultado(Valor: Resultado) {
-        if(Valor == Resultado.SUCESSO){
-            Alertas.criarAlerter(referencia, R.string.EnviadoComSucesso, R.string.Sucesso, 5000)
-        } else {
-            Alertas.criarAlerter(referencia, R.string.ErroAoEnviarRanking, R.string.Erro, 5000)
-        }
-    }*/
 
     private fun setandoValores(){
         Progresso?.progress = Loja?.mediaRanking?.toInt()!! * 20

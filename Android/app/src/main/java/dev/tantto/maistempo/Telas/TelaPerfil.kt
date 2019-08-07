@@ -174,8 +174,12 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
     override fun imagemBaixada(Imagem: HashMap<String, Bitmap>?) {
         if(Imagem != null){
             Foto?.setImageBitmap(Imagem.values.toList()[0])
-            findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
+
+        } else {
+            Foto?.setBackgroundResource(R.drawable.borda_imagem_cinza)
+            Foto?.setImageResource(R.drawable.person_dark_gray)
         }
+        findViewById<ProgressBar>(R.id.CaregandoImagem).visibility = ProgressBar.INVISIBLE
     }
 
     override fun pessoaRecebida(Pessoa: Perfil) {

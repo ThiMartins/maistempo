@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.Classes.Dados
 import dev.tantto.maistempo.google.AutenticacaoLogin
 import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.google.TiposErrosLogar
@@ -81,7 +82,7 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
 
     private fun verificar(){
         if(UserName?.text?.isNotEmpty()!! && Senha?.text?.isNotEmpty()!!){
-            Alertas.criarAlerter(referecencia!!, R.string.AguardeConectando, R.string.Conectando).show()
+            Alertas.criarAlerter(referecencia!!, R.string.AguardeConectando, R.string.Conectando, 30000).show()
             FirebaseAutenticacao.logarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
         } else {
             Alertas.criarAlerter(referecencia!!, R.string.CamposVazios, R.string.Atencao, 5000).show()
@@ -89,6 +90,11 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
     }
 
     override fun usuarioLogado(User: FirebaseUser?) {
+        if(!SalvarUsuario?.isChecked!!){
+            Dados.salvarLogin(true, this.requireContext())
+        } else {
+            Dados.salvarLogin(false, this.requireContext())
+        }
         referecencia?.loginConcluido(User)
     }
 

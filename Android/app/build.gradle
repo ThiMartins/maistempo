@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.google.gms.google-services'
 
+apply plugin: 'io.fabric'
+
 android {
     compileSdkVersion 29
     defaultConfig {
@@ -47,7 +49,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.firebase:firebase-firestore:20.2.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
-
+    implementation 'com.airbnb.android:lottie:2.8.0'
+    implementation 'com.xw.repo:bubbleseekbar:3.20-lite'
     implementation 'com.tapadoo.android:alerter:1.0.6'
 }

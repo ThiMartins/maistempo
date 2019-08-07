@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/PesquisaLocal"
+            android:icon="@drawable/search_white"
+            app:showAsAction="always"
+            android:title="@string/Pesquisa"
+            app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+
+    <item
+            android:id="@+id/AbrirMapa"
+            android:icon="@drawable/maps_white"
+            app:showAsAction="ifRoom"
+            android:title="@string/Mapas" />
+
+    <item
+            android:id="@+id/MudarRaio"
+            android:icon="@drawable/raio_white"
+            app:showAsAction="ifRoom"
+            android:title="@string/RaioPesquisa" />
+
+    <item
+            android:id="@+id/AdicionarLoja"
+            android:icon="@drawable/add_location_dark_white"
+            app:showAsAction="ifRoom"
+            android:title="@string/AdicionarLoja" />
+
+</menu>

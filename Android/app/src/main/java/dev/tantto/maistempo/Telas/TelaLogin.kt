@@ -76,7 +76,7 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
     }
 
     override fun pessoaRecebida(Pessoa: Perfil) {
-        DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade, this)
+        DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this)
     }
 
     override fun dadosRecebidosLojas(Lista: MutableList<Lojas>, Erros: String) {
@@ -84,7 +84,7 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
             ListaLocais.refazer(Lista)
             Tamanho = Lista.size
             for (Item in Lista){
-                CloudStorageFirebase().donwloadCloud(Item.id, TipoDonwload.ICONE, this)
+                CloudStorageFirebase().donwloadCloud("${Item.id}.jpg", TipoDonwload.ICONE, this)
             }
         } else {
             if(Iniciar != null && !Iniciado){

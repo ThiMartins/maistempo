@@ -14,6 +14,7 @@ enum class Chave(val valor:String) {
     CHAVE_NOTAS_USUARIOS("notasUsuarios"),
     CHAVE_NOTAS_RANKING("notasRanking"),
     CHAVE_POSICAO_LISTA("listaBitmap"),
-    CHAVE_ADICIONAR_FILA_NOTA("adicionarFila")
+    CHAVE_ADICIONAR_FILA_NOTA("adicionarFila"),
+    CHAVE_ADD_RANKING("adicionarAvalicaoPonto")
 
 }

@@ -58,18 +58,8 @@
     <string name="Data">Data de Nascimento</string>
     <string name="CriarConta">Criar Conta</string>
     <string name="Concordar">Concordo</string>
-    <string name="Termos">
-        Termos de utilizacao
-        \n 1 \n 2 \n 3 \n 4 \n 5 \n 6 \n 7
-        \n 8 \n 9 \n 10 \n 11 \n 12 \n 13 \n 14
-        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
-        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
-        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
-        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
-        \n 15 \n 16 \n 17 \n 18 \n 19 \n 20
-    </string>
     <string name="CriarUsuario">Crie a usa conta</string>
-    <string name="DataNascimento">Clique para colocar a data de nascimento</string>
+    <string name="DataNascimento">Data de nascimento</string>
     <string name="VisualizarTermos">Clique aqui para visualizar os termos</string>
     <string name="Atencao">Atenção</string>
     <string name="Aguarde">Aguarde um instante criando conta</string>
@@ -156,4 +146,286 @@
     <string name="ErroEnviar">Não foi possivel enviar</string>
     <string name="Pontinhos">…</string>
     <string name="Ranking">Ranking</string>
+    <string name="Mes">Mês</string>
+    <string name="Dia">Dia</string>
+    <string name="Ano">Ano</string>
+    <string name="SemConexao">Sem conexão</string>
+    <string name="Conectado">Conectado</string>
+    <string name="Indicacao">0 - Rapido 7 - Lento</string>
+
+    <string name="Termos">
+        1. APRESENTAÇÃO
+        Site.com.br – um serviço fornecido por:
+        Simple Host Informática Ltda.
+        CNPJ nº 24.054.546/0001-93
+
+        O presente Acordo estabelece os termos obrigacionais que irão reger a relação jurídica entre o site Site.com.br e seus Usuários (individualmente referidos como Usuário).
+
+        O presente Acordo de Utilização é um contrato, ainda que firmado por meio eletrônico, e possui eficácia e validade jurídicas, em conformidade com a legislação civil em vigor (artigos 422 e 425 do Código Civil, Lei nº 10.406/2002).
+
+        O objetivo deste contrato é assegurar a efetivação de uma política de transparência, privacidade e segurança para ambas as partes envolvidas, que permita a melhor utilização do site por seus Usuários.
+
+        Ao acessar o site Site.com.br e cadastrar-se, é preciso que você leia e concorde com os termos do acordo de utilização, o qual poderá ser atualizado, visando adequar-se à legislação vigente e aos novos serviços.
+
+        Ao utilizar os serviços do Site.com.br, é preciso que você se obrigue a determinados deveres, abaixo detalhados e, no momento em que qualquer deles for violado, este contrato será automaticamente rescindido e poderá ensejar eventuais medidas judiciais, em caso de prejuízo em face da fornecedora dos serviços e/ou de terceiros.
+
+        Caso a rescisão do presente contrato se dê por culpa exclusiva do Usuário, o mesmo não será reembolsado das quantias efetivamente despendidas.
+
+        O Usuário poderá ter acesso ao presente Acordo de Utilização, a qualquer tempo, através da página https://www.site.com.br/termos-de-utilizacao/
+
+        Igualmente, o Usuário poderá armazenar o presente instrumento mediante o seguinte procedimento: em qualquer página deste site, acessar o link ?acordo de utilização?, localizado ao final da página, e em seguida, acessar o dispositivo ?salvar como? ou similar, encontrado no menu de seu navegador, ou se preferir, o Usuário poderá imprimir o presente acordo para posterior consulta, ou para registro do contrato firmado entre as partes.
+
+        Após a leitura atenta do teor deste contrato, e se for de seu interesse, indique – na caixa de aceitação – a sua concordância com o mesmo. Em caso de concordância com os termos do acordo de utilização dos serviços, marque a opção correspondente.
+
+        Uma vez contratado, os deveres e as normas aqui transcritos considerar-se-ão lidos e deverão ser obrigatoriamente obedecidos. A partir do momento em que os serviços oferecidos neste site forem utilizados, a sua aceitação a este Termo estará sendo ratificada, indicando que o Usuário leu e concorda com o que está inserido em suas cláusulas.
+
+        2. DO SERVIÇO UTILIZADO
+        O Site.com.br oferece serviços de locação de equipamentos e sistemas para hospedagem de conteúdo em seus servidores, bem como o envio e recebimento de mensagens eletrônicas e-mail’s, servindo como meio para que pessoas empresas divulguem informações através da internet.
+
+        A oferta de serviços virtuais não está sujeita a qualquer tipo de autorização prévia pelo simples fato de ser fornecida por meio eletrônico.
+
+        O site se responsabiliza pela execução dos serviços que oferece aos seus Usuários, embora não tenha responsabilidade pelos conteúdos exibidos, mensagens enviadas ou recebidas, negócios realizados ou perdidos em função do serviço prestado.
+
+        Os serviços do Site.com.br somente serão oferecidos quando o site estiver no ar e disponível para acesso. Caso, temporariamente, o acesso ao site esteja interrompido para manutenção ou por outra razão, a prestação do serviço automaticamente será interrompida.
+
+        Caso novos serviços sejam incorporados ao site Site.com.br, os mesmos serão incluídos no presente Termo de Uso, incidindo, automaticamente, as regras já em vigor.
+
+        O Usuário tem conhecimento e concorda que o serviço é fornecido pelo site Site.com.br mediante acesso a World Wide Web através de dispositivos próprios para tanto, se responsabilizando, o Usuário, pelo equipamento técnico necessário como computador, softwares, modem etc, bem como pelo provedor de acesso à Internet.
+
+        A manifestação de vontade das partes contratantes nos contratos celebrados por meio eletrônico dar-se-á no momento da aceitação dos termos deste contrato. Tal manifestação será sempre considerada como inequívoca.
+
+        O Usuário, ao cadastrar-se no Site.com.br, receberá, automaticamente em seu e-mail registrado neste site, a confirmação da sua inscrição.
+
+        Caso o Usuário verifique algum dado errado, poderá o mesmo acessar a área ?Minha conta?, no site, e retificá-los a qualquer momento.
+
+        O Usuário do Site.com.br terá o direito de usar o serviço durante todo o período escolhido, não sendo o site obrigado a restituir quantias pagas, caso o Usuário desista do serviço contratado durante a vigência do contrato.
+
+        O pagamento do serviço contratado poderá ser feito através de Boleto bancário, pagável em qualquer Banco, ou outros meios disponibilizados em nosso sistema.
+
+        O Site.com.br oferece os seguintes serviços:
+
+        – Um endereço válido na internet, ou URL, gerado através de um subdomínio dentre os domínios disponíveis para este fim;
+        – Direito de uso exclusivamente em nossos servidores, de um dos modelos, dentre os disponíveis para este fim;
+        – Transferência de dados em seu site com limite mensal de acordo com o plano contratado.
+
+        O plano Free pode não estar disponível para contratação. Quando disponível, estará sujeito às seguintes regras:
+
+        – Os sites EasyPress e e-mails do plano free terão publicidade da Site.com.br ou de terceiros inserida no corpo, de tamanho e posição variáveis, onde a receita desta publicidade é exclusiva da Site.com.br. É facultado ao plano Free fazer atualização para qualquer plano de assinatura paga, removendo assim as publicidades a adquirindo os recursos e direitos do novo plano contratado. Utilizar técnicas para remover ou ocultar esta publicidade, é falta grave, culminando com a rescisão deste contrato;
+        – Recursos limitados conforme descrição em nosso site, e possibilidade de utilizar domínio próprio e contas de emails dependerá do produto contratado;
+        – Pode ser excluído por não seguir as condições deste contrato ou por não sofrer nova edição por três meses consecutivos;
+        – Pode ser excluído caso o Site.com.br cesse a disponibilização do plano Free em seu site;
+        – O conteúdo do site precisa atender às exigências do contrato do Google Adsense (https://www.google.com/intl/pt-BR/policies/terms/).
+
+        Todos os planos gratuitos precisam logar na conta de cliente em https://suporte.site.com.br mensalmente, como prova de atividade. Sites, hospedagens ou e-mails gratuitos que não fizerem a prova de atividade, não logando na conta indicada por mais de 30 dias, serão excluídos definitivamente do sistema, sem necessidade de aviso ou notificação prévia.
+
+        Os sites pagantes V4 e WordPress tem acesso a uma pasta com várias imagens que formam nosso Banco de Imagens. Sites sem pagamentos ou do plano Free não podem usar estas imagens, que serão exibidas temporariamente com uma marca d’água e deverão ser trocadas pelo usuário.
+
+        O sites com pagamentos terão direito a usar estas imagens, exclusivamente no site contratado e já pago.
+
+        As imagens do Site.com.br, sejam do modelo ou do banco de imagens somente poderão ser usadas no site contratado com o Site.com.br, não podendo ser copiadas, baixadas, compartilhadas nem transferidas para nenhum outro computador, sistema ou hospedagem. As imagens do nosso banco de imagens, somente poderão ser utilizadas no conteúdo do site contratado com o Site.com.br, e com as seguintes proibições:
+
+        – Produtos “impressão sob solicitação” online;
+        – Uso em qualquer logotipo ou marca comercial;
+        – Trabalhos pornográficos, obscenos ou difamatórios;
+        – Uso que represente o endosso pessoal do modelo;
+        – Uso que represente o modelo de forma sensível, ou seja, questões mentais, de saúde física, abuso substancial, comportamento criminal, atividade ou preferência sexual, sem ressalvas;
+        – Sub-licenciar, dar, compartilhar ou de outra forma transferir imagens/arquivos independentes;
+        – Exibição da imagem original digitalmente em tela maior do que 1200 x 800 pixels; Qualquer tamanho de reprodução é aceitável contanto que haja alterações substanciais ao conteúdo.
+
+        Todo o site, bem como seus módulos, instalados sob demanda ou não, são propriedade ou licenciados à Site.com.br e podem ser utilizados apenas em seu site contratado e hospedado nos nossos servidores.
+
+        O serviço FTP, caso disponível no seu plano, não pode ser usado para baixar os arquivos originais do servidor, como plugins, templates, temas, módulos, imagens, fontes, e códigos de programas. Deve seu usados apenas para manusear seus próprios arquivos ou enviar plugins e temas licenciados a você ao seu site.
+
+        Nos planos WordPress, EasyPress, EasyShop e Hospedagens, e outros planos, o envio de emails sem usar SMTP externo, é bem restrito, existindo apenas para troca de senha e formulário de contato do site. Quaisquer módulos de envio de emails devem usar SMTP externos e se sujeitar às nossa políticas de envio de spam. Envios de campanhas de e-mail, mailing, mala-direta,qualquer tipo de email em massa, envios de e-mail de um para muitos, não são permitidos em nossos servidores.
+
+        NO CASO DO CLIENTE UTILIZAR MEIOS DE PAGAMENTOS EM SEU SITE, A UTILIZAÇÃO DOS SISTEMAS ORA CONTRATADOS NÃO IMPLICA EM QUALQUER PARTICIPAÇÃO DA SITE.COM.BR NAS OPERAÇÕES QUE VENHAM A GERAR OS PAGAMENTOS QUE SERÃO EFETUADOS ELETRONICAMENTE, TRANSAÇÕES ESSAS QUE OCORRERÃO SEM QUALQUER CONHECIMENTO, AUTORIZAÇÃO, PARTICIPAÇÃO OU INGERÊNCIA DA SITE.COM.BR E SOBRE AS QUAIS A SITE.COM.BR NÃO POSSUI NENHUMA RESPONSABILIDADE.
+
+        3. DA ASSOCIAÇÃO
+        O Usuário do Site.com.br se compromete a fornecer dados pessoais verdadeiros, precisos, atuais e completos durante o procedimento de registro, cadastramento de seus dados e de cobrança dos valores pactuados, bem como a manter atualizadas as informações prestadas quando da associação.
+
+        Ao visitar uma página qualquer da Internet, o URL ou IP (Internet Protocol) requisitado é automaticamente gravado, assim como a data e horário, além do software de navegação utilizado.
+
+        Referidos dados se prestam a auxiliar o Site.com.br a manter um registro detalhado da conta de seus Usuários, auxiliando-os na escolha de promoções, produtos e serviços que ajudarão a tornar o site mais útil aos nossos Usuários.
+
+        O Site.com.br poderá fornecer um agregado de dados estatísticos sobre compras, perfil de consumo e padrões de navegação de seus usuários a terceiros idôneos.
+
+        Quando da associação ao site, o Usuário poderá fornecer, voluntariamente, através de pesquisas, promoções, questionários ofertados pelo Site.com.br isoladamente ou em conjunto com terceiros, alguns dados pessoais.
+
+        Tais dados pessoais, fornecidos voluntariamente por nossos Usuários, por meio de respostas em pesquisas, questionários e cadastros, são usados somente para aprimorar os conhecimentos que o Site.com.br possui em serviços on line, sendo os mesmos, estritamente confidenciais.
+
+        O Site.com.br poderá estabelecer um acordo com outras empresas para ofertas especiais, promoções e/ou assinaturas. Nesse caso, o Site.com.br exige que suas parceiras e/ou afiliadas incluam na oferta ou promoção apresentada as informações relativas à política de privacidade das mesmas.
+
+        O endereço de correio eletrônico informado no ato do cadastro será utilizado somente para os fins autorizados pelos Usuários, assim como para responder às dúvidas ou enviar informações e serviços sobre o site aos Usuários.
+
+        O Site.com.br alerta que não existe disponível, ainda, um recurso que impeça a cópia de imagem disponível na internet. Por tal razão, o Usuário deve estar ciente de que, uma vez inserida na rede virtual qualquer imagem, seja fotografia, figura ou reprodução, é possível sua cópia, reprodução ou impressão por terceiros que acessem o site. O Site.com.br não se responsabiliza por atos de terceiros que se apropriem das imagens vinculadas nos sites de seus usuários.
+
+        A Simple Host concede a você uma licença pessoal não exclusiva e não transferível para usar o Site.com.br somente nos servidores da Simple Host, disponibilizados para este fim.
+
+        Este uso será restrito ao período contratado, e será permitido desde que o Usuário não esteja inadimplente com seus pagamentos ou qualquer outra obrigação.
+
+        A Simple Host possui o direito exclusivo aos sistemas que compõem o Site.com.br e, a seu exclusivo critério pode iniciar, processar ou defender e controlar qualquer ação relacionada ao Site.com.br ou qualquer parte do sistema.
+
+        Você não deve contestar a validade de, por ato ou omissão por em perigo, ou tomar qualquer ação inconsistente com os direitos ou o pronto consentimento da Simple Host no Site.com.br ou em qualquer parte do sistema, em qualquer país, e não deve tentar registrar o Site.com.br ou qualquer parte do sistema, nem qualquer marca confundivelmente semelhante ao Site.com.br ou qualquer parte do sistema.
+
+        O fornecimento de falsa informação ou a utilização de informações de terceiros, constitui crime, qualificado no Código Penal Brasileiro. Caso decorra algum dano ou prejuízo a terceiros ou ao próprio Site.com.br, em função da atitude ilegal de algum de seus Usuários, este será compelido a indenizar o Site.com.br, sem prejuízo de vir a responder pelas perdas e danos respectivos.
+
+        Nesta hipótese, o Site.com.br se reserva o direito de encerrar sua Associação no momento em que tiver conhecimento da falsidade ou da má-fé empregadas pelo Usuário, podendo impedir seu posterior regresso nos serviços oferecidos pelo site, sem quaisquer ressarcimentos.
+
+        Caso haja suspeita ou fortes indícios da má utilização dos serviços do site por algum Usuário, o Site.com.br poderá retirar o site do ar, sem reembolso de valores eventualmente pagos, temporariamente ou em definitivo, mediante notificação ou aviso prévio a ser enviado por e-mail bem como recusar o novo cadastro do Usuário que tenha violado alguma das cláusulas inseridas neste Acordo.
+
+        Nesse caso, o Site.com.br não estará obrigado a restituir as quantias já pagas pelo Usuário.
+
+        Ao início do processo de cadastramento, o Usuário deverá escolher uma senha e uma identificação pessoal, sendo, ele próprio, unicamente responsável pela senha que escolher e por mantê-la em sigilo.
+
+        O Usuário compromete-se a notificar o site Site.com.br sobre qualquer uso não autorizado de sua senha ou conta, bem como qualquer quebra de segurança que possa vir a ocorrer.
+
+        Na ocorrência de promoções ou planos especiais, em que o Usuário poderá ser beneficiado com um período de serviço gratuito, abatimento dos valores padronizados ou outras ofertas, o Usuário poderá ser notificado por e-mail e/ou informado através de anúncios, ou no próprio site do Site.com.br. Os termos da promoção ficarão disponíveis para acesso em local de destaque.
+
+        4. DA REVOGAÇÃO OU CANCELAMENTO DO ACORDO DE UTILIZAÇÃO
+        O presente acordo de utilização poderá ser rescindido ou suspenso, sem aviso prévio, pelo Site.com.br em caso de inadimplência por mais de 30 dias ou violação de quaisquer termos especificados neste contrato, em conformidade com o artigo 474, primeira parte, do Código Civil. Ainda que não esteja legalmente obrigado, o Site.com.br poderá comunicar, via correio eletrônico, ao Usuário da inadimplência, rescisão ou suspensão de seus serviços.
+
+        Em caso de rescisão do presente acordo, oriunda da violação de quaisquer termos aqui especificados por parte do Usuário, o Site.com.br não restituirá ao mesmo as quantias já pagas.
+
+        Uma vêz rescindido este contrato, a Site.com.br poderá excluir todos os dados, arquivos, emails e informações do Usuário e dos serviços que este utilizava neste sistema ou nesta empresa.
+
+        5. DA POLÍTICA DE PRIVACIDADE E SEGURANÇA
+        O Site.com.br possui uma política de privacidade e segurança que visa proteger aos seus Usuários contra o uso indevido de suas informações pessoais por terceiros.
+
+        O Site.com.br não venderá ou compartilhará suas informações pessoais com terceiros. Somente mediante sua expressa autorização ou através de autorização judicial é que essas informações poderão ser divulgadas à autoridade solicitante. Caso o Usuário disponibilize suas informações constantes no site Site.com.br a terceiros, será de sua inteira responsabilidade o uso que esses venham a fazer das mesmas.
+
+        Para garantir a sua segurança, é recomendável que você altere sua senha de uso pessoal para acessar seu site ou sua conta de suporte, periodicamente, e que não a repasse a terceiros.
+
+        As senhas são encriptadas em nosso banco de dados, em caso de esquecimento, o Site.com.br enviará a um link para troca de senha para o endereço eletrônico informado em seu cadastro, assim que solicitado pelo link “Esqueci minha senha” na página inicial.
+
+        Ao acessar este site, coletamos informações através de cookies e outros meios, como seu IP, Browser, idioma, etc, para melhorar este site e utilizar em campanhas como Google adwords, remarketing, e outras.
+
+        Em caso de alterações na política de segurança do Site.com.br, o Usuário será avisado, seja através de seu e-mail ou por meio de anúncios de destaque em nossa página.
+
+        6. DA POLÍTICA DE SEGURANÇA
+        O Site.com.br utiliza a mais alta e adequada tecnologia disponível no mercado para garantir a segurança e a proteção de seus dados contra o acesso de pessoas não autorizadas ou o uso inapropriado.
+
+        Sua senha pessoal é confidencial e criptografada, o que garante seu sigilo. Somente mediante sua senha pessoal, você estará apto a alterar seus dados pessoais. Aconselhamos que você utilize uma seqüência de algarismos ou de letras que não lhe identifique diretamente.
+
+        Qualquer transação comercial com o propósito de pagamento e cobrança é criptografada antes que a transmissão dos dados seja realizada entre o Site.com.br e o banco.
+
+        O site Site.com.br busca oferecer um serviço de excelência e, para tanto, se baseia na legislação vigente do País e confia na boa-fé de seus Usuários para a prestação de seus serviços.
+
+        O Site.com.br não monitora ou edita os conteúdos de informação de seus Usuários, a menos que isso seja requerido para fins de direito, ou quando for necessário à proteção e defesa dos direitos de propriedade do Site.com.br, ou ainda, quando for necessária a proteção da segurança pessoal de seus Usuários. Conseqüentemente, o Site.com.br tem o direito (não a obrigação) de revisar o conteúdo divulgado pelos seus Usuários, podendo assim, retirar informações que estejam em confronto com as disposições contratuais contidas neste Acordo de Utilização ou com o sistema legal vigente, assim como rejeitar qualquer site, texto ou fotografia que desatenda aos requisitos inseridos neste contrato.
+
+        Assim sendo, o Site.com.br se reserva o direito de editar ou alterar o teor de qualquer site cadastrado por seus Usuários quando verificar a utilização de linguagem ofensiva ou que faça apologia de práticas ilegais; enfim, qualquer conteúdo que atente contra a lei, a moral ou aos bons costumes.
+
+        Quando identificado conteúdo que esteja em confronto com as disposições contratuais contidas neste Acordo de Utilização ou com o sistema legal vigente, o Site.com.br poderá excluir o site do Usuário, assim como rejeitar qualquer site, texto ou fotografia que desatenda aos requisitos inseridos neste contrato.
+
+        O Site.com.br poderá editar ou alterar o teor de qualquer site cadastrado por seus Usuários quando identificadas linguagem ofensiva ou que faça apologia de práticas ilegais, enfim, qualquer conteúdo que traga informações em que se identifica o titular ou que atentem contra a lei, a moral ou aos bons costumes.
+
+        O Site.com.br, ao ser acionado judicialmente por fato cometido por seus Usuários, tem o direito de reaver o que houver despendido judicialmente contra quem deu causa, exercitando seu direito de regresso.
+
+        O Site.com.br não se responsabiliza, e não poderá ser responsabilizado, pelo uso que terceiros façam das informações de acesso que o Usuário tenha fornecido a eles, tais como senha, login ou outra informação semelhante.
+
+
+        8. DAS OBRIGAÇÕES DO USUÁRIO
+        O Usuário se responsabiliza pela titularidade das informações que transmite ao site Site.com.br.
+
+        O Usuário deve fornecer dados corretos, exatos, precisos e atuais. Cada Usuário é pessoalmente responsável pelos dados que fornece.
+
+        O Site.com.br não se responsabiliza pela veracidade das informações prestadas por seus Usuários.
+
+        O fornecimento de falsas informações configura crime de falsidade ideológica, tipificado no art. 299 do Código Penal, cuja pena está estabelecida entre um a três anos de reclusão, acrescido de multa.
+
+        O fornecimento de falsa informação pelo Usuário dará direito ao Site.com.br de excluir o respectivo site do ar, sem aviso prévio, seja em caráter temporário, pelo tempo que o Site.com.br entender necessário para esclarecer a situação, ou em definitivo, a critério exclusivo do Site.com.br, em razão da violação dos termos deste acordo, sem que o Usuário seja ressarcido das quantias já pagas.
+
+        Os danos causados a terceiros pela utilização de informações falsas pelo Usuário sujeitará este último às penas da lei, bem como ao direito de regresso por parte do Site.com.br.
+
+        O usuário se obriga a cumprir e respeitar todos os termos do “Digital Millennium Copyright Act” (https://pt.wikipedia.org/wiki/Digital_Millennium_Copyright_Act)
+
+        O Usuário não poderá divulgar em seu site conteúdo de teor racista ou preconceituoso, não poderá violar direito de crianças ou adolescentes, não poderá divulgar, transmitir ou disponibilizar qualquer conteúdo que seja da titularidade de outrem, que viole direito autoral ou direito de imagem de terceiros, não podendo, ainda, enviar qualquer mensagem que contenha vírus, tampouco disseminar idéias de caráter pedófilo, discriminatório, difamatório, abusivo, profano, ofensivo ou ilegal.
+
+        O Usuário não poderá solicitar a qualquer outro Usuário ou terceiro que aja em seu nome, a menos que seja mediante procuração.
+
+        O Usuário não poderá utilizar terceiros para realizar qualquer ação, compra, venda ou cancelamento de produtos ou serviços através do site ou qualquer outra forma de comunicação oferecida pelo Site.com.br.
+
+        O Usuário não poderá transmitir correntes ou spam (mensagem eletrônica não-solicitada enviada em massa) em nenhuma hipótese, proveniente dos nossos servidores nem de terceiros.
+
+        Nossa tolerância a envio de spam é ZERO. O envio de spam constitui INFRAÇÃO GRAVE e sua conta poderá ter os limites reduzidos e ser encerrada imediatamente.
+
+        Nossos sistemas são monitorados em tempo real e contas com mais de 5% (cinco por cento) de devolução nos envios tem como consequência o bloqueio por até sete dias. A reincidência pode gerar o bloqueio por mais tempo ou até mesmo o encerramento da conta.
+
+        O Usuário não poderá enviar campanhas por e-mail utilizando nossos servidores, sob pena de bloqueio das contas e redução de limites de envio. Se desejado, este serviço poderá ser contratado adicionalmente. Consulte condições em nosso suporte.
+
+        O Usuário não poderá usar o site para divulgação de serviços de crédito, empréstimos, limpar nome, renda extra, correntes de qualquer tipo, marketing de rede e outras atividades sabidas como golpes virtuais.
+
+        O Usuário não poderá usar o site para divulgação de qualquer prática ilegal, abusiva ou que traga danos ou prejuízos a terceiros.
+
+        O Usuário não poderá incluir em seu site sugestões sexuais, incluindo linguagem ofensiva.
+
+        O Usuário manterá todas as informações fornecidas através do Site.com.br em sigilo e não está autorizado a cedê-las ou divulgá-las, sem a expressa permissão do Site.com.br.
+
+        O Usuário não poderá violar, intencionalmente ou não, qualquer norma legal presente no sistema legal brasileiro e internacional, tampouco alegar desconhecimento das disposições normativas vigentes.
+
+        O Usuário não poderá intervir no sistema de transmissão do Site.com.br nem mesmo copiar, reproduzir, duplicar ou fazer uso do conteúdo do site para qualquer finalidade, sendo responsabilizado pelas práticas ilegais que fizer, nesse intento.
+
+        Efetuar back-up redundante próprio, DECLARANDO-SE CIENTE DE QUE o Site.com.br NÃO TERÁ QUALQUER RESPONSABILIDADE PELA PERDA DE DADOS EM CASO DE PROBLEMAS NO BACK-UP POR ELA EFETUADO.
+
+        Efetuar as negociações e providências necessárias para a utilização dos meios de pagamentos integrados ao programa, caso disponíveis.
+
+        Não são permitidos hospedagem de sites com seguintes conteúdos/finalidades em nenhum plano: Adulto, Warez/hacking/phishing, Proxy, Download de arquivos, Scripts pague-para-surfar (Pay to surf), bux.to e similares, Scripts de jogos online, Torrents/trackers, Scripts de compartilhamento.
+
+        Não são permitidos hospedagem de sites com seguintes conteúdos/finalidades nos planos gratuitos: Scripts de chat, usado para armazenamento de arquivos, Websites revendidos ou prestação de serviços para terceiros.
+
+        Nossos servidores não podem ser usados para fazer upload, postar, enviar por email, transmitir ou disponibilizar de qualquer maneira qualquer conteúdo, material ou publicidade que: Você não tenha permissão de disponibilizar sob qualquer lei ou sob relações contratuais ou fiduciárias (como informação interna, informação proprietária e confidencial aprendida ou revelada como parte de uma relação empregatícia ou sob acordos de sigilo). Infrinja qualquer patente, marca registrada, direito de cópia ou qualquer outro tipo de direito de propriedade de qualquer entidade ou indivíduo. Não seja solicitada ou não autorizada, materiais promocionais, junk mail, spam, emails de corrente, esquemas de pirâmide, ou qualquer outra forma de solicitação, exceto em áreas (como lojas) que são designadas para estes propósitos. Contenha vírus de computador, ou qualquer código, arquivos ou programas projetados para interromper, destruir, ou limitar a funcionalidade de qualquer computador , software e hardware, ou equipamento de telecomunicação. Tenha propósito de distribuir arquivos, retransmissão ou fins de Streaming. seja ilegal, prejudicial, ameaçador, abusivo, ofensivo, injurioso, difamatório, vulgar, obsceno, calunioso, invasivo da privacidade de outras pessoas, odioso, ou racial, étnico ou censurável. Ferir menores de qualquer maneira. Personificar qualquer pessoa ou identidade, “perseguir” e/ou assediar outros. Forjar cabeçalhos ou manipular identificadores de qualquer forma a fim de esconder a origem de qualquer conteúdo transmitido pelo serviço. Interferir ou prejudicar o serviço ou servidores ou rede conectadas ao serviço, ou desobedecer qualquer requerimentos, procedimentos, politicas ou regulamentações das redes conectadas ao serviço. Violar uma lei local, estadual, nacional ou Internacional, com ou sem Intenção. Promover suporte material ou recursos (ou esconder a natureza, localização, fonte ou propriedade do suporte material ou recursos) para qualquer organização(ões) designada(s) pelos Estados Unidos como organização(ões) terrorista(s) internacional(is). Coletar ou armazenar dados sobre outros usuários. Utilizar nossos sistemas de forma abusiva, prejudicando o funcionamento de parte ou todo o sistema, ou utilizando mais de 50% da capacidade de um servidor, em qualquer recurso.
+
+        Caso haja violação a qualquer dessas disposições ou de quaisquer outras que estejam no presente Acordo de Utilização, o Site.com.br poderá, a seu critério, alterar ou suprimir o conteúdo do site, reduzir limites, encerrar a conta do usuário e bloquear em definitivo todo acesso ao site ou emails.
+
+        9.2. DAS IMAGENS E DO MATERIAL ANEXADO
+        O Usuário não poderá utilizar imagens que infrinjam direitos autorais, sob as penas da lei vigente.
+
+        As fotos não poderão registrar pessoas nuas, seminuas ou com exposição de partes íntimas do corpo, em poses pornográficas ou em atividades ilegais.
+
+        Eventualmente o Site.com.br poderá recusar conteúdo e/ou imagens que estejam em desacordo com o padrão estabelecido pelo site ou em desacordo com a legislação em vigor.
+
+        O Usuário não poderá copiar, reproduzir, transmitir, distribuir, publicar, explorar, ou de qualquer forma transferir qualquer material do Site.com.br em qualquer formato, eletrônico ou não, para seu uso pessoal ou qualquer outra finalidade comercial ou não.
+
+        10. DA PROPRIEDADE INTELECTUAL E USO INDEVIDO DO SITE
+        A Simple Host Informática Ltda. é a proprietária ou licenciada de todos os direitos relativos à Marca, softwares, imagens, mídias, título e serviços oferecidos através de seu site, não autorizando a reprodução, transmissão, exploração ou qualquer uso, comercial ou pessoal, do conteúdo do site.
+
+        A exploração, transmissão, reprodução total ou parcial do conteúdo do site ou sua utilização indevida sujeitará o infrator às penalidades legais.
+
+        11. DOS LINKS
+        O Site.com.br poderá, eventualmente, conter links de acesso a outros sites parceiros e/ou afiliados ou recursos na Internet. Caso haja o ingresso do Usuário em outro site, a relação jurídica dali decorrente não inclui o Site.com.br, alcançando somente o Usuário e o site acessado.
+
+        12. DO DE NÍVEL DE SERVIÇO – SLA
+        Acordo de Nível de Serviço (ANS ou SLA, do inglês Service Level Agreement)
+
+        Garantimos em nossos serviços o SLA de 99,5%
+
+        Significa que 99,5% do tempo os serviços contratados estarão disponíveiis para utilização.
+
+        O não atingimento deste SLA gerará para a CONTATANTE o direito de receber descontos sobre os valores das mensalidades devidas à Site.com.br nos percentuais abaixo previstos, descontos esses a serem concedidos no pagamento das mensalidades dos meses subsequentes àqueles em que o SLA for descumprido, a saber:
+
+        – 5% se a licença ficar fora do ar de 0,6% 1,0% do tempo;
+        – 10% se a licença ficar fora do ar de 1,1% 2,0% do tempo;
+        – 20% se a licença ficar fora do ar de 2,1% a 3,0% do tempo;
+        – 30% se a licença ficar fora do ar de 3,1% a 4,0% do tempo;
+        – 40% se a licença ficar fora do ar de 4,1% a 5,0% do tempo;
+        – 50% se a licença ficar fora do ar mais que 5,0% do tempo.
+
+        O desconto a ser concedido incidirá exclusivamente sobre o valor da mensalidade, devendo eventuais outros serviços contratados e/ou custo de utilização excedente serem integral e regularmente pagos.
+
+        A comunicação de descumprimento do SLA deverá ser formalizada pelo Usuário junto à Site.com.br no prazo máximo de 15 (quinze) dias da constatação desse descumprimento, sem o que o desconto deixará de ser exigível.
+
+        No tempo indisponível não serão computados falhas nos equipamentos e redes do Usuário ou da pessoa que estiver acessando os serviços, nem motivos de força maior.
+
+        15. DAS DISPOSIÇÕES FINAIS
+        Este Acordo será regido pelas leis do Brasil e atende ao sistema legal brasileiro, aos princípios gerais de direito e as normas internacionais de comércio eletrônico.
+
+        Caso o Usuário não concorde com determinada cláusula deste Acordo, e obtenha judicialmente a nulidade da mesma, os demais dispositivos não serão prejudicados e permanecerão em vigor.
+
+        AO CRIAR UM SITE OU UTILIZAR NOSSOS SERVIÇOS VOCÊ CONCORDA QUE LEU E COMPREENDEU OS TERMOS E DISPOSIÇÕES DESTE ACORDO DE UTILIZAÇÃO E ESTÁ CIENTE DE SEU INTEIRO TEOR, ACEITANDO SUAS CONDIÇÕES.
+    </string>
+    <string name="Local">Local</string>
+    <string name="CriarLoja">Criar Loja</string>
+    <string name="Latitude">Latitude</string>
+    <string name="Longitude">Longitude</string>
+    <string name="AddLocalMapa">Adicionar via mapa</string>
+    <string name="AdicionarLoja">Adicionar Loja</string>
 </resources>
