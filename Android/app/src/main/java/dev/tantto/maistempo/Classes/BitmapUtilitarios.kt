@@ -6,7 +6,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import java.io.ByteArrayOutputStream
 
-class BitmapUtilitatios {
+class BitmapUtilitarios {
 
     companion object {
 

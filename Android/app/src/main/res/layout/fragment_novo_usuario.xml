@@ -127,32 +127,34 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/CidadeInputLayout"
+        <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/CidadeReferencia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/DataInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/CidadeTexto"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"/>
+
+        <TextView
+                android:id="@+id/CidadeTexto"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/DataInputLayout"
-                app:layout_constraintEnd_toEndOf="parent">
-
-            <EditText
-                    android:id="@+id/CidadeReferencia"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/CidadeReferencia"
-                    android:inputType="text"
-                    android:autofillHints="no"
-                    tools:targetApi="o"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="16dp"
+                android:text="@string/CidadeEscolhida"
+                app:layout_constraintEnd_toStartOf="@id/CidadeReferencia"
+                android:textSize="18sp"/>
 
         <CheckBox
                 android:id="@+id/ConcordoTermos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/CidadeInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/CidadeReferencia"
                 android:layout_margin="16dp"/>
 
         <TextView
@@ -160,7 +162,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/ConcordoTermos"
-                app:layout_constraintTop_toBottomOf="@id/CidadeInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/CidadeReferencia"
                 android:layout_marginTop="21sp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"

@@ -44,7 +44,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private var CaminhoFoto:Uri? = null
     private var EscolherData:Button? = null
     private var FotoCamera:Bitmap? = null
-    private var Cidade:EditText? = null
+    private var Cidade:Spinner? = null
     private var CheckTermos:CheckBox? = null
     private var VerTermos:TextView? = null
     private var AnoSpinner:Spinner? = null
@@ -66,9 +66,20 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         DataTexto = Fragmento.findViewById<EditText>(R.id.DataNascimento)
         Criar = Fragmento.findViewById<Button>(R.id.CriarNovaConta)
         EscolherData = Fragmento.findViewById<Button>(R.id.AbrirDataPicker)
-        Cidade = Fragmento.findViewById<EditText>(R.id.CidadeReferencia)
+        Cidade = Fragmento.findViewById<Spinner>(R.id.CidadeReferencia)
         CheckTermos = Fragmento.findViewById<CheckBox>(R.id.ConcordoTermos)
         VerTermos = Fragmento.findViewById<TextView>(R.id.VerTermos)
+
+        val carregar = Alertas.alertaCarregando(this.requireContext())
+        carregar.show()
+
+        DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas{
+            override fun cidades(Lista: List<String>) {
+                carregar.dismiss()
+                val adapter = ArrayAdapter(this@FragmentNovoUsuario.requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, Lista)
+                Cidade?.adapter = adapter
+            }
+        })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Foto?.clipToOutline = true
@@ -223,13 +234,13 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         if(Nome?.text?.isNotEmpty()!! ){
             if (Email?.text?.toString()?.contains("@")!! && Email?.text.toString().contains(".com")){
                 if (Senha?.text?.toString()?.length!! >= 6){
-                    if(Cidade?.text.toString().isNotEmpty()){
+                    if(Cidade?.selectedItem.toString().isNotEmpty()){
                         if(CheckTermos?.isChecked!!){
                             alerta(R.string.Atencao, R.string.Aguarde)
                             when {
                                 CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                                 FotoCamera != null -> {
-                                    CaminhoFoto = BitmapUtilitatios.getImageUri(FotoCamera!!, Email?.text.toString(), referenciaTela)
+                                    CaminhoFoto = BitmapUtilitarios.getImageUri(FotoCamera!!, Email?.text.toString(), referenciaTela)
                                     CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                                 }
                                 else -> criarUsuario()
@@ -263,7 +274,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 email = Email?.text.toString(),
                 senha = Senha?.text.toString(),
                 nascimento = DataTexto?.text.toString(),
-                cidade = Cidade?.text.toString().toLowerCase()
+                cidade = Cidade?.selectedItem.toString().toLowerCase()
             ), this
         )
     }

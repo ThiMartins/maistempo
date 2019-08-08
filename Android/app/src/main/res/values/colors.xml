@@ -20,4 +20,6 @@
     <color name="VermelhoEscuro">#990000</color>
     <color name="VermelhoMuitoEscuro">#330000</color>
 
+    <color name="Transparente">#00000000</color>
+
 </resources>

@@ -1,5 +1,6 @@
 package dev.tantto.maistempo.telas
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,8 +16,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Classes.BitmapUtilitatios
+import androidx.core.app.ActivityCompat
+import dev.tantto.maistempo.Classes.*
 import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
@@ -82,8 +83,12 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
             val Iniciar = Intent()
             when (which) {
                 0 -> {
-                    Iniciar.action = MediaStore.ACTION_IMAGE_CAPTURE
-                    startActivityForResult(Iniciar, MODO_CAMERA)
+                    if(Permissao.veficarPermissao(this, Permissoes.CAMERA) == TipoDePermissao.PERMITIDO){
+                        Iniciar.action = MediaStore.ACTION_IMAGE_CAPTURE
+                        startActivityForResult(Iniciar, MODO_CAMERA)
+                    } else {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 2)
+                    }
                 }
                 1 -> {
                     Iniciar.type = "image/*"
@@ -158,7 +163,7 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
             val FotoSelecionada = data.extras?.get("data") as Bitmap
-            CaminhoFoto = BitmapUtilitatios.getImageUri(FotoSelecionada, Pessoa?.email!!, this)
+            CaminhoFoto = BitmapUtilitarios.getImageUri(FotoSelecionada, Pessoa?.email!!, this)
             Foto?.setImageBitmap(FotoSelecionada)
 
         } else if(requestCode == MODO_GALERIA && resultCode == Activity.RESULT_OK && data != null){

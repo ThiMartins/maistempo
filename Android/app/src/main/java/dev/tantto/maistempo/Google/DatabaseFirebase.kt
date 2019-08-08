@@ -7,8 +7,8 @@ import com.google.firebase.firestore.Query
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.Modelos.NotasUsuarios
 import dev.tantto.maistempo.Modelos.Perfil
-import java.io.IOException
 
 enum class TipoPontos(val valor:String){
     PONTOS_FILA("pontosFila"),
@@ -164,6 +164,28 @@ class DatabaseFirebaseSalvar {
                 Erro.printStackTrace()
             }
         }
+
+        fun adicionarLoja(LojaNova:Lojas, Caminho: Uri){
+            try {
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).add(LojaNova).addOnCompleteListener { documento ->
+                    if(documento.isSuccessful){
+                        val Item = NotasUsuarios(
+                            filaNormal = hashMapOf(),
+                            filaRapida = hashMapOf(),
+                            filaPreferencial = hashMapOf(),
+                            notasRanking = hashMapOf()
+                        )
+
+                        FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).document(documento.result?.id!!).set(Item).addOnCompleteListener {
+                           CloudStorageFirebase.salvarFotoCloud(Caminho, "${documento.result?.id!!}.jpg")
+                        }
+                    }
+                }
+            } catch (Erro:FirebaseFirestoreException){
+                Erro.printStackTrace()
+            }
+        }
+
     }
 
 }
@@ -174,57 +196,62 @@ class DatabaseFirebaseRecuperar {
 
         @Suppress("unchecked_cast")
         fun recuperarLojasLocais(Cidade:String, Interface:DatabaseLocaisInterface){
-            FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).whereEqualTo(Chave.CHAVE_CIDADE.valor, Cidade.toLowerCase()).addSnapshotListener { querySnapshot, firebaseException ->
-                when {
-                    querySnapshot?.documents?.isNotEmpty()!! -> {
-                        val ListaFinal = mutableListOf<Lojas>()
-                        for(Item in querySnapshot){
-                            ListaFinal.add(Lojas(
-                                id = Item.id,
-                                titulo =  Item["titulo"].toString(),
-                                latitude = Item["latitude"].toString().toDouble(),
-                                longitude = Item["longitude"].toString().toDouble(),
-                                local = Item["local"].toString(),
-                                filaNormal = Item["filaNormal"] as HashMap<String, Double>,
-                                cidade = Item["cidade"].toString().toLowerCase(),
-                                telefone = Item["telefone"].toString(),
-                                quantidadeAvaliacoesFila = Item["quantidadeAvaliacoesFila"].toString().toInt(),
-                                quantidadeAvaliacoesRating = Item["quantidadeAvaliacoesRating"].toString().toInt(),
-                                filaPreferencial = Item["filaPreferencial"] as HashMap<String, Double>,
-                                filaRapida = Item["filaRapida"] as HashMap<String, Double>,
-                                horarioInicio = Item["horarioInicio"].toString().toInt(),
-                                horariofinal = Item["horarioFinal"].toString().toInt(),
-                                mediaRanking = Item["mediaRanking"].toString().toDouble()
-                            ))
+            FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).whereEqualTo(Chave.CHAVE_CIDADE.valor, Cidade.toLowerCase()).get().addOnCompleteListener {
+                if(it.isSuccessful){
+                    when {
+                        !it.result?.isEmpty!! -> {
+                            val ListaFinal = mutableListOf<Lojas>()
+                            for(Item in it.result?.documents!!){
+                                ListaFinal.add(Lojas(
+                                    id = Item.id,
+                                    titulo =  Item["titulo"].toString(),
+                                    latitude = Item["latitude"].toString().toDouble(),
+                                    longitude = Item["longitude"].toString().toDouble(),
+                                    local = Item["local"].toString(),
+                                    filaNormal = Item["filaNormal"] as HashMap<String, Double>,
+                                    cidade = Item["cidade"].toString().toLowerCase(),
+                                    telefone = Item["telefone"].toString(),
+                                    quantidadeAvaliacoesFila = Item["quantidadeAvaliacoesFila"].toString().toInt(),
+                                    quantidadeAvaliacoesRating = Item["quantidadeAvaliacoesRating"].toString().toInt(),
+                                    filaPreferencial = Item["filaPreferencial"] as HashMap<String, Double>,
+                                    filaRapida = Item["filaRapida"] as HashMap<String, Double>,
+                                    horarioInicio = Item["horarioInicio"].toString().toInt(),
+                                    horarioFinal = Item["horarioFinal"].toString().toInt(),
+                                    mediaRanking = Item["mediaRanking"].toString().toDouble()
+                                ))
+                            }
+                            Interface.dadosRecebidosLojas(ListaFinal, "")
                         }
-                        Interface.dadosRecebidosLojas(ListaFinal, "")
+                        it.exception == null -> Interface.dadosRecebidosLojas(mutableListOf(), "")
+                        else -> Interface.dadosRecebidosLojas(mutableListOf(), it.exception?.localizedMessage!!)
                     }
-                    firebaseException == null -> Interface.dadosRecebidosLojas(mutableListOf(), "")
-                    else -> Interface.dadosRecebidosLojas(mutableListOf(), firebaseException.localizedMessage!!)
                 }
             }
         }
 
         @Suppress("UNCHECKED_CAST")
         fun recuperaDadosPessoa(Email:String, Interface:DatabasePessoaInterface){
-            FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
-                if(documentSnapshot?.exists()!!){
-                    val Item = Perfil(
-                        titulo = documentSnapshot["titulo"].toString(),
-                        email = documentSnapshot["email"].toString(),
-                        raio = documentSnapshot["raio"].toString().toLong(),
-                        pontosCadastro = documentSnapshot["pontosCadastro"].toString().toLong(),
-                        pontosFila = documentSnapshot["pontosFila"].toString().toLong(),
-                        pontosLocais = documentSnapshot["pontosLocais"].toString().toLong(),
-                        pontosTotais = documentSnapshot["pontosTotais"].toString().toLong(),
-                        nascimento = documentSnapshot["nascimento"].toString(),
-                        lojasFavoritas = documentSnapshot["lojasFavoritas"] as MutableList<String>,
-                        cidade = documentSnapshot["cidade"].toString().toLowerCase(),
-                        acesso = documentSnapshot["acesso"].toString()
-                    )
-                    val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
-                    ListaLocais.refazerFavoritos(ListaTemp)
-                    Interface.pessoaRecebida(Item)
+            FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).get().addOnCompleteListener {
+                if(it.isSuccessful){
+                    if(it.result?.exists()!!){
+                        val documentSnapshot = it.result?.data!!
+                        val Item = Perfil(
+                            titulo = documentSnapshot["titulo"].toString(),
+                            email = documentSnapshot["email"].toString(),
+                            raio = documentSnapshot["raio"].toString().toLong(),
+                            pontosCadastro = documentSnapshot["pontosCadastro"].toString().toLong(),
+                            pontosFila = documentSnapshot["pontosFila"].toString().toLong(),
+                            pontosLocais = documentSnapshot["pontosLocais"].toString().toLong(),
+                            pontosTotais = documentSnapshot["pontosTotais"].toString().toLong(),
+                            nascimento = documentSnapshot["nascimento"].toString(),
+                            lojasFavoritas = documentSnapshot["lojasFavoritas"] as MutableList<String>,
+                            cidade = documentSnapshot["cidade"].toString().toLowerCase(),
+                            acesso = documentSnapshot["acesso"].toString()
+                        )
+                        val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                        ListaLocais.refazerFavoritos(ListaTemp)
+                        Interface.pessoaRecebida(Item)
+                    }
                 }
             }
         }
@@ -257,7 +284,97 @@ class DatabaseFirebaseRecuperar {
             }
 
         }
+
+        @Suppress("UNCHECKED_CAST")
+        fun recuperarDadosLoja(Id:String, Interface:LojaRecuperada){
+            try {
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).document(Id).get().addOnCompleteListener {
+                    if (it.isSuccessful){
+                        if(it.result?.exists()!!){
+                            val Item = it.result?.data!!
+                            val ItemFinal = Lojas(
+                                id = it.result?.id!!,
+                                titulo =  Item["titulo"].toString(),
+                                latitude = Item["latitude"].toString().toDouble(),
+                                longitude = Item["longitude"].toString().toDouble(),
+                                local = Item["local"].toString(),
+                                filaNormal = Item["filaNormal"] as HashMap<String, Double>,
+                                cidade = Item["cidade"].toString().toLowerCase(),
+                                telefone = Item["telefone"].toString(),
+                                quantidadeAvaliacoesFila = Item["quantidadeAvaliacoesFila"].toString().toInt(),
+                                quantidadeAvaliacoesRating = Item["quantidadeAvaliacoesRating"].toString().toInt(),
+                                filaPreferencial = Item["filaPreferencial"] as HashMap<String, Double>,
+                                filaRapida = Item["filaRapida"] as HashMap<String, Double>,
+                                horarioInicio = Item["horarioInicio"].toString().toInt(),
+                                horarioFinal = Item["horarioFinal"].toString().toInt(),
+                                mediaRanking = Item["mediaRanking"].toString().toDouble()
+                            )
+                            Interface.dados(ItemFinal)
+                        }
+                    } else if (it.isCanceled){
+                        Interface.dados(null)
+                    }
+                }
+            } catch (Erro:FirebaseFirestoreException){
+                Erro.printStackTrace()
+                Interface.dados(null)
+            }
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        fun recuperarCidades(Interface:CidadesRecuperadas){
+            try {
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_ADM.valor).document(Chave.CHAVE_ADM_CIDADES.valor).get().addOnCompleteListener {
+                    if(it.isSuccessful){
+                        if(it.result?.exists()!!){
+                            val items = it.result?.data!!
+                            val lista = items["sao_paulo"] as List<String>
+                            Interface.cidades(lista)
+                        }
+                    }
+                }
+            } catch (Erro:FirebaseFirestoreException){
+                Erro.printStackTrace()
+            }
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        fun recuperarNotasRanking(Id:String, Interface:Ranking){
+            try {
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).document(Id).get().addOnCompleteListener {
+                    if (it.isSuccessful && it.result?.exists()!!){
+                        val Lista = mutableMapOf<String, Double>()
+                        Lista.putAll(it.result?.get("notasRanking")!! as MutableMap<String, Double>)
+                        Interface.notas(Lista)
+                    } else if(it.isSuccessful){
+                        Interface.notas(hashMapOf())
+                    }
+                }
+            } catch (Erro:FirebaseFirestoreException){
+                Erro.printStackTrace()
+            }
+        }
+
     }
+
+    interface Ranking{
+
+        fun notas(Lista:MutableMap<String, Double>)
+
+    }
+
+}
+
+interface CidadesRecuperadas{
+
+    fun cidades(Lista:List<String>)
+
+}
+
+interface LojaRecuperada{
+
+    fun dados(Loja:Lojas?)
+
 }
 
 interface FavoritosRecuperados{

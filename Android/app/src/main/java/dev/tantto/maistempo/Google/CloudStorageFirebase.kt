@@ -35,6 +35,24 @@ class CloudStorageFirebase {
             }
         }
 
+        fun salvarFotoCloud(Caminho:Uri?, Id:String){
+            val Referecia = Store.reference.child("iconesLojas/$Id")
+            if (Caminho != null){
+                Referecia.putFile(Caminho).addOnCompleteListener{
+                    //Interface.enviadaSucesso()
+
+                }.addOnFailureListener {
+                    //Interface.falhaEnviar(it.localizedMessage!!)
+
+                }.addOnProgressListener {
+                    //val Progresso = 100.0 * it.bytesTransferred / it.totalByteCount
+                    //Interface.enviarProgresso(Progresso)
+                }
+            } else {
+                //Interface.falhaEnviar("ERRO")
+            }
+        }
+
         fun mudarImagem(Caminho: Uri, Email: String) : UploadTask{
             return Store.reference.child("images/$Email").putFile(Caminho)
         }

@@ -56,6 +56,11 @@ class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : Re
         notifyDataSetChanged()
     }
 
+    fun atualizarLoja(Loja:Lojas){
+        Lista = Loja
+        notifyDataSetChanged()
+    }
+
     class ViewHolder(private val Item: View, private val Contexto: Context) : RecyclerView.ViewHolder(Item){
 
         fun setandoItens(Progresso:Int, Horario:Int){

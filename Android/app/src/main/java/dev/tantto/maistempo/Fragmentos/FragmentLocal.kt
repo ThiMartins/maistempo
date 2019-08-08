@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import dev.tantto.maistempo.Classes.BuscarConcluida
 import dev.tantto.maistempo.Classes.BuscarLojasImagem
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
@@ -44,7 +43,7 @@ class FragmentLocal: Fragment() {
         Swipe = view.findViewById(R.id.AtualizarLista)
         Swipe?.setOnRefreshListener {
 
-            BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarConcluida {
+            BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
                 override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil) {
                     Swipe?.isRefreshing = false
                     if(Lista != null  && ListaImagem != null){

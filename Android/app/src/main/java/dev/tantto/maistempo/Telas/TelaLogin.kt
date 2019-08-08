@@ -17,8 +17,9 @@ import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.chaves.Chave
 
-class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud, DatabasePessoaInterface {
+class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud {
 
     private var Login:FragmentLogin? = null
     private var Apresentacao:FragmentApresentacao? = null
@@ -37,7 +38,6 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
         configuracaoView()
         referenciandoFragments()
         setandoTela()
-
     }
 
     fun mudarTela(Valor:Int) {
@@ -66,17 +66,17 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
 
     fun loginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
         Iniciar = Intent(this, TelaPrincipal::class.java)
-        Iniciar?.putExtra(Tela.GET_USER, User)
+        Iniciar?.putExtra(Chave.CHAVE_USUARIO.valor, User)
         if(Pessoa != null){
-            Iniciar?.putExtra(Tela.GET_PESSOA, Pessoa)
+            Iniciar?.putExtra(Chave.CHAVE_PESSOA.valor, Pessoa)
             DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this)
         } else {
-            DatabaseFirebaseRecuperar.recuperaDadosPessoa(User?.email!!, this)
+            DatabaseFirebaseRecuperar.recuperaDadosPessoa(User?.email!!, object : DatabasePessoaInterface{
+                override fun pessoaRecebida(Pessoa: Perfil) {
+                    DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this@TelaLogin)
+                }
+            })
         }
-    }
-
-    override fun pessoaRecebida(Pessoa: Perfil) {
-        DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this)
     }
 
     override fun dadosRecebidosLojas(Lista: MutableList<Lojas>, Erros: String) {
@@ -116,7 +116,7 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
 
     override fun onStop() {
         super.onStop()
-        if(intent.hasExtra("Fechar")){
+        if(intent.hasExtra(Chave.CHAVE_FECHAR.valor)){
             finishAffinity()
         }
     }

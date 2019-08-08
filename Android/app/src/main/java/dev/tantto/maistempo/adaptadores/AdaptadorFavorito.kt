@@ -63,7 +63,7 @@ class AdaptadorFavorito(private val Contexto: Context) : RecyclerView.Adapter<Ad
 
             val Horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
 
-            if(Horas >= Elementos.horarioInicio && Horas <= Elementos.horariofinal){
+            if(Horas >= Elementos.horarioInicio && Horas <= Elementos.horarioFinal){
                 Status?.text = Contexto.getString(R.string.Aberto)
             } else {
                 Status?.text = Contexto.getString(R.string.Fechado)
