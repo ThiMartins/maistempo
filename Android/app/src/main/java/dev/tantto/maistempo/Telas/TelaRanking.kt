@@ -41,6 +41,7 @@ class TelaRanking : AppCompatActivity(), DatabaseRakingInterface, DatabasePessoa
         val AlertaBuilder = AlertDialog.Builder(this)
         AlertaBuilder.setView(R.layout.loading)
         Alerta = AlertaBuilder.create()
+        Alerta?.window?.setBackgroundDrawableResource(R.color.Transparente)
         Alerta?.show()
     }
 

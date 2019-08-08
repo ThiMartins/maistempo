@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +40,18 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         super.onResume()
         configurandoView()
         configurandoAdapter()
+
+        Lista?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+            }
+        })
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -58,6 +69,11 @@ class FragmentResumo : Fragment(), FunctionsInterface {
     fun passandoLja(Ref:Lojas, refTelaLoja:TelaResumoLoja){
         LojaInfo = Ref
         referencia = refTelaLoja
+    }
+
+    fun atualizarLoja(Ref: Lojas){
+        LojaInfo = Ref
+        adaptador?.atualizarLoja(Ref)
     }
 
     @Suppress("DEPRECATION")
@@ -110,6 +126,18 @@ class FragmentResumo : Fragment(), FunctionsInterface {
     override fun resultado(Valor: Resultado) {
         if(Valor == Resultado.ERRO){
             Alertas.criarAlerter(referencia, R.string.ErroEnviar, R.string.Atencao, 10000).show()
+        } else {
+            val alerta = Alertas.criarAlerter(referencia, R.string.Atualizando, R.string.Aguardando)
+            DatabaseFirebaseRecuperar.recuperarDadosLoja(LojaInfo?.id!!, object : LojaRecuperada{
+                override fun dados(Loja: Lojas?) {
+                    if(Loja != null){
+                        LojaInfo = Loja
+                        alerta.setDuration(1000)
+                    } else {
+                        Alertas.criarAlerter(referencia, R.string.ErroEnviar, R.string.Atencao, 5000)
+                    }
+                }
+            })
         }
     }
 

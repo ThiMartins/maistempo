@@ -2,9 +2,9 @@ package dev.tantto.maistempo.Classes
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import com.tapadoo.alerter.Alerter
 import dev.tantto.maistempo.R
 
@@ -43,6 +43,14 @@ class Alertas {
             val ViewInflado = LayoutInflater.from(Contexto).inflate(R.layout.calendario_alternativo, null)
             Alerta.setView(ViewInflado)
             Alerta.setTitle(R.string.DataNascimento)
+            return Alerta
+        }
+
+        fun alertaCarregando(Contexto:Context) : AlertDialog{
+            val AlertaBuilder = AlertDialog.Builder(Contexto)
+            AlertaBuilder.setView(R.layout.loading)
+            val Alerta = AlertaBuilder.create()
+            Alerta.window?.setBackgroundDrawableResource(R.color.Transparente)
             return Alerta
         }
     }

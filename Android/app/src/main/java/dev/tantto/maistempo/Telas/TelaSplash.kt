@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -21,8 +20,9 @@ import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.Modelos.Lojas
 import dev.tantto.maistempo.Modelos.Perfil
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.chaves.Chave
 
-class TelaSplash : AppCompatActivity(), BuscarConcluida {
+class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
     private val RequisicaoPermissaoCamera = 0
     private val RequisicaoPermissaoLeitura = 1
@@ -30,6 +30,7 @@ class TelaSplash : AppCompatActivity(), BuscarConcluida {
     private val RequisicaoPermissaoFine = 3
     private val RequisicaoPermissaoCoarse = 4
     private val handler = Handler(Looper.getMainLooper())
+    private var Iniciado = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,9 +98,9 @@ class TelaSplash : AppCompatActivity(), BuscarConcluida {
         if(Lista != null && ListaImagem != null){
             ListaLocais.refazer(Lista)
             ListaBitmap.refazer(ListaImagem)
-            if(Pessoa.acesso == "adm"){
+            if(Pessoa.acesso == Chave.CHAVE_ADM.valor){
                 val iniciar = Intent(this, TelaPrincipal::class.java)
-                iniciar.putExtra("Acesso", "adm")
+                iniciar.putExtra(Chave.CHAVE_ACESSO.valor, Chave.CHAVE_ADM.valor)
                 iniciarActivity(iniciar)
                 finishAffinity()
             } else {
@@ -110,7 +111,10 @@ class TelaSplash : AppCompatActivity(), BuscarConcluida {
     }
 
     private fun iniciarActivity(Iniciar:Intent){
-        startActivity(Iniciar)
+        if(!Iniciado){
+            startActivity(Iniciar)
+            Iniciado = true
+        }
     }
 
     @Suppress("DEPRECATION")

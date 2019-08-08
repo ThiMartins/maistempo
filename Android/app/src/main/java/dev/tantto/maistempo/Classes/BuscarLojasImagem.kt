@@ -48,11 +48,10 @@ class BuscarLojasImagem(Email: String, private var Interface: BuscarConcluida) :
             }
         }
     }
-}
 
+    interface BuscarConcluida {
 
-interface BuscarConcluida {
+        fun concluido(Modo:Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil)
 
-    fun concluido(Modo:Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil)
-
+    }
 }

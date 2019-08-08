@@ -15,6 +15,7 @@
             android:id="@+id/textView3"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
             android:layout_marginTop="32dp"/>
 
     <com.airbnb.lottie.LottieAnimationView
@@ -22,6 +23,7 @@
             android:layout_height="wrap_content"
             app:lottie_rawRes="@raw/download"
             app:lottie_autoPlay="true"
-            app:lottie_repeatMode="restart"/>
+            app:lottie_repeatMode="restart"
+            app:lottie_repeatCount="1000"/>
 
 </LinearLayout>

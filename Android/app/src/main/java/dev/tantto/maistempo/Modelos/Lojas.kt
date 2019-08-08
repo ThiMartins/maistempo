@@ -16,6 +16,6 @@ data class Lojas(
     var quantidadeAvaliacoesFila: Int,
     var quantidadeAvaliacoesRating: Int,
     var horarioInicio:Int,
-    var horariofinal:Int,
+    var horarioFinal:Int,
     var mediaRanking:Double
 ) : Serializable

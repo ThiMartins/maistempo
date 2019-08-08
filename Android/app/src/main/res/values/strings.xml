@@ -428,4 +428,22 @@
     <string name="Longitude">Longitude</string>
     <string name="AddLocalMapa">Adicionar via mapa</string>
     <string name="AdicionarLoja">Adicionar Loja</string>
+    <string name="Atualizando">Atualizando loja</string>
+    <string name="Cidade">Cidade</string>
+    <string name="CidadeEscolhida">Cidade:</string>
+    <string name="ErroNomeLoja">Por favor colocar o nome da loja</string>
+    <string name="ErroImagemLoja">Por favor colocar uma foto para a loja</string>
+    <string name="ErroLocalLoja">Por favor colocar o endereço da loja</string>
+    <string name="ErroTelefoneLojas">Por favor colocar o telefone da loja</string>
+    <string name="ErroLatitude">Por favor colocar a latitude, caso não saiba certifique-se de o endereço está correto e
+        aperta no botão \"Adicionar via Mapa\" para buscar a latitude automaticamente
+    </string>
+    <string name="ErroLongitudeLoja">Por favor colocar a longitude, caso não saiba certifique-se de o endereço está
+        correto e aperta no botão \"Adicionar via Mapa\" para buscar a longitude automaticamente
+    </string>
+    <string name="ErroCidadeLoja">Por favor colocar a cidade em que a loja fica</string>
+    <string name="HorarioInicio">Horário de abertura</string>
+    <string name="HorarioFim">Horário de fechamento</string>
+    <string name="ErroHorarioInicioLoja">Por favor colocar o horário que a loja abre</string>
+    <string name="ErroHorarioFimLoja">Por favor colocar o horário que a loja fecha</string>
 </resources>
