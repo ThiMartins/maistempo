@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Fragmentos
+package dev.tantto.maistempo.fragmentos
 
 import android.Manifest
 import android.app.Activity
@@ -18,9 +18,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
-import dev.tantto.maistempo.Classes.*
+import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.google.*
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaLogin
 import java.text.DateFormat
@@ -76,8 +76,11 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas{
             override fun cidades(Lista: List<String>) {
                 carregar.dismiss()
-                val adapter = ArrayAdapter(this@FragmentNovoUsuario.requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, Lista)
-                Cidade?.adapter = adapter
+                val contexto = this@FragmentNovoUsuario.context
+                if(contexto != null){
+                    val adapter = ArrayAdapter(contexto, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, Lista)
+                    Cidade?.adapter = adapter
+                }
             }
         })
 
@@ -170,7 +173,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         }
 
         Foto?.setOnClickListener {
-            if(Permissao.veficarPermissao(referenciaTela, Permissoes.CAMERA) != TipoDePermissao.PERMITIDO){
+            if(Permissao.veficarPermissao(referenciaTela, Permissao.Permissoes.CAMERA) != Permissao.TipoDePermissao.PERMITIDO){
                 ActivityCompat.requestPermissions(referenciaTela, arrayOf(Manifest.permission.CAMERA), RequisicaoPermissao)
             } else {
                 pegarFoto()

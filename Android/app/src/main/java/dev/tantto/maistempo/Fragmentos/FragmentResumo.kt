@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Fragmentos
+package dev.tantto.maistempo.fragmentos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,9 +13,9 @@ import com.google.android.material.tabs.TabLayout
 import com.xw.repo.BubbleSeekBar
 import dev.tantto.maistempo.adaptadores.AdaptadorFilas
 import dev.tantto.maistempo.chaves.Chave
-import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.classes.Alertas
 import dev.tantto.maistempo.google.*
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaResumoLoja
 import java.util.*
@@ -40,17 +40,6 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         super.onResume()
         configurandoView()
         configurandoAdapter()
-
-        Lista?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-
-            }
-        })
 
     }
 

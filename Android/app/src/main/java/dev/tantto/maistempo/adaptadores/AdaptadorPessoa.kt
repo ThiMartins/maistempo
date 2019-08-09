@@ -11,8 +11,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.ListaPerfil
-import dev.tantto.maistempo.Modelos.Geral
-import dev.tantto.maistempo.Modelos.Tipo
+import dev.tantto.maistempo.modelos.Geral
+import dev.tantto.maistempo.modelos.Tipo
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaPerfil
 import dev.tantto.maistempo.telas.TelaLogin

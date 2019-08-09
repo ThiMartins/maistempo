@@ -2,7 +2,7 @@ package dev.tantto.maistempo.google
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dev.tantto.maistempo.Notificacao.Notificacao
+import dev.tantto.maistempo.notificacao.Notificacao
 
 class CloudMessasingFirebase : FirebaseMessagingService() {
 

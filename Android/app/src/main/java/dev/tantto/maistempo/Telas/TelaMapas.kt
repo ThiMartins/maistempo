@@ -15,15 +15,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.Modelos.Local
+import dev.tantto.maistempo.modelos.Local
 import dev.tantto.maistempo.R
 
-class TelaMapas : AppCompatActivity(), OnMapReadyCallback {
+class   TelaMapas : AppCompatActivity(), OnMapReadyCallback {
 
     private val RequisicaoPermissao= 23
-
     private var MapaGoogle:GoogleMap? = null
-
     private var ListaMaps = mutableListOf<Local>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +99,7 @@ class TelaMapas : AppCompatActivity(), OnMapReadyCallback {
         val width = resources.displayMetrics.widthPixels
         val height = resources.displayMetrics.heightPixels
         val padding = (width * 0.10).toInt()
+
         MapaGoogle?.animateCamera(CameraUpdateFactory.newLatLngBounds(Bounds, width, height, padding))
     }
 

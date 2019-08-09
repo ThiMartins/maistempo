@@ -11,7 +11,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
 
 class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : RecyclerView.Adapter<AdaptadorFilas.ViewHolder>() {

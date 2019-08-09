@@ -23,3 +23,13 @@ enum class Chave(val valor:String) {
     CHAVE_FECHAR("Fechar")
 
 }
+
+enum class Requisicoes(val valor: Int){
+
+    REQUISICAO_CAMERA(0),
+    REQUISICAO_LEITURA_STORAGE(1),
+    REQUISICAO_ESCRITA_STORAGE(2),
+    REQUISICAO_FINE_ACCESS(3),
+    REQUISICAO_COARSE_ACCESS(3),
+
+}

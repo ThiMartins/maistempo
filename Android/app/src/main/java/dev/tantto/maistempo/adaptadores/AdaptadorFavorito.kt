@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaResumoLoja
 import java.util.*
@@ -30,8 +30,10 @@ class AdaptadorFavorito(private val Contexto: Context) : RecyclerView.Adapter<Ad
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.setandoItens()
-        holder.adicionandoValores(ListaLocais.recuperarFavorito(position)!!)
-        holder.click(ListaLocais.recuperarFavorito(position)!!, position)
+        if(ListaLocais.tamanho() != 0){
+            holder.adicionandoValores(ListaLocais.recuperarFavorito(position)!!)
+            holder.click(ListaLocais.recuperarFavorito(position)!!, position)
+        }
 
     }
 

@@ -6,9 +6,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.Modelos.Lojas
-import dev.tantto.maistempo.Modelos.NotasUsuarios
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.modelos.Lojas
+import dev.tantto.maistempo.modelos.NotasUsuarios
+import dev.tantto.maistempo.modelos.Perfil
 
 enum class TipoPontos(val valor:String){
     PONTOS_FILA("pontosFila"),

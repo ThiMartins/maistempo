@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Modelos
+package dev.tantto.maistempo.modelos
 
 class NotasUsuarios(
     var filaNormal:HashMap<String, List<Int>>,

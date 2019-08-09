@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Modelos
+package dev.tantto.maistempo.modelos
 
 enum class Tipo{
     GERAL,

@@ -1,7 +1,7 @@
 package dev.tantto.maistempo
 
-import dev.tantto.maistempo.Modelos.Geral
-import dev.tantto.maistempo.Modelos.Tipo
+import dev.tantto.maistempo.modelos.Geral
+import dev.tantto.maistempo.modelos.Tipo
 
 class ListaPerfil {
 

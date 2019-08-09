@@ -10,13 +10,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.adaptadores.AdaptadorPager
-import dev.tantto.maistempo.Fragmentos.FragmentFavoritos
-import dev.tantto.maistempo.Fragmentos.FragmentLocal
-import dev.tantto.maistempo.Fragmentos.FragmentPerfil
+import dev.tantto.maistempo.fragmentos.FragmentFavoritos
+import dev.tantto.maistempo.fragmentos.FragmentLocal
+import dev.tantto.maistempo.fragmentos.FragmentPerfil
 import dev.tantto.maistempo.google.*
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 
 class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
@@ -38,6 +38,7 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
         configurandoPager()
         setandoTabItens()
+
     }
 
     private fun configurandoPager() {

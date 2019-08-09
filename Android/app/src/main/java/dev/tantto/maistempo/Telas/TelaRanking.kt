@@ -9,7 +9,7 @@ import com.google.firebase.functions.FirebaseFunctions
 import dev.tantto.maistempo.adaptadores.AdaptadorRaking
 import dev.tantto.maistempo.google.DatabaseFirebaseRecuperar
 import dev.tantto.maistempo.google.DatabaseRakingInterface
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.google.DatabasePessoaInterface
 import dev.tantto.maistempo.google.FirebaseAutenticacao

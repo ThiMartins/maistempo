@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.google.CloudStorageFirebase
 import dev.tantto.maistempo.google.DownloadFotoCloud
 import dev.tantto.maistempo.google.TipoDonwload
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 
 class AdaptadorRaking : RecyclerView.Adapter<AdaptadorRaking.ViewHolder>() {

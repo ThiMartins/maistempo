@@ -7,31 +7,27 @@ import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
-import dev.tantto.maistempo.adaptadores.AdaptadorPager
-import dev.tantto.maistempo.Fragmentos.FragmentApresentacao
-import dev.tantto.maistempo.Fragmentos.FragmentLogin
-import dev.tantto.maistempo.Fragmentos.FragmentNovoUsuario
-import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.Modelos.Lojas
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.adaptadores.AdaptadorPager
+import dev.tantto.maistempo.fragmentos.FragmentApresentacao
+import dev.tantto.maistempo.fragmentos.FragmentLogin
+import dev.tantto.maistempo.fragmentos.FragmentNovoUsuario
+import dev.tantto.maistempo.modelos.Lojas
+import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.chaves.Chave
+import dev.tantto.maistempo.classes.BuscarLojasImagem
 
-class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoCloud {
+class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
     private var Login:FragmentLogin? = null
     private var Apresentacao:FragmentApresentacao? = null
     private var Novo:FragmentNovoUsuario? = null
     private var Pagina:ViewPager? = null
     private var TabIndicador:TabLayout? = null
-    private var Iniciar:Intent? = null
-    private var Tamanho = 0
-    private var Iniciado = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_login)
 
@@ -65,52 +61,20 @@ class TelaLogin : AppCompatActivity(), DatabaseLocaisInterface, DownloadFotoClou
     }
 
     fun loginConcluido(User:FirebaseUser?, Pessoa:Perfil? = null){
-        Iniciar = Intent(this, TelaPrincipal::class.java)
-        Iniciar?.putExtra(Chave.CHAVE_USUARIO.valor, User)
-        if(Pessoa != null){
-            Iniciar?.putExtra(Chave.CHAVE_PESSOA.valor, Pessoa)
-            DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this)
-        } else {
-            DatabaseFirebaseRecuperar.recuperaDadosPessoa(User?.email!!, object : DatabasePessoaInterface{
-                override fun pessoaRecebida(Pessoa: Perfil) {
-                    DatabaseFirebaseRecuperar.recuperarLojasLocais(Pessoa.cidade.toLowerCase(), this@TelaLogin)
-                }
-            })
+        if(Pessoa == null && User != null){
+            BuscarLojasImagem(User.email!!, this)
+        } else if(Pessoa != null){
+            BuscarLojasImagem(Pessoa.cidade, Pessoa, this)
         }
     }
 
-    override fun dadosRecebidosLojas(Lista: MutableList<Lojas>, Erros: String) {
-        if(Lista.isNotEmpty()){
+    override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
+        if(Modo && Lista != null && ListaImagem != null && Pessoa != null){
             ListaLocais.refazer(Lista)
-            Tamanho = Lista.size
-            for (Item in Lista){
-                CloudStorageFirebase().donwloadCloud("${Item.id}.jpg", TipoDonwload.ICONE, this)
-            }
-        } else {
-            if(Iniciar != null && !Iniciado){
-                Iniciado = true
-                startActivity(Iniciar)
-                finishAffinity()
-            }
-        }
-    }
-
-    override fun imagemBaixada(Imagem: HashMap<String, Bitmap>?) {
-        if(Imagem != null){
-            ListaBitmap.adicionar(Imagem)
-            if(ListaBitmap.tamanho() == Tamanho){
-                if(Iniciar != null && !Iniciado){
-                    Iniciado = true
-                    startActivity(Iniciar)
-                    finishAffinity()
-                }
-            }
-        } else {
-            if(Iniciar != null && !Iniciado){
-                Iniciado = true
-                startActivity(Iniciar)
-                finishAffinity()
-            }
+            ListaLocais.refazerFavoritos(Pessoa.lojasFavoritas)
+            ListaBitmap.refazer(ListaImagem)
+            startActivity(Intent(this, TelaPrincipal::class.java))
+            finishAffinity()
         }
     }
 
