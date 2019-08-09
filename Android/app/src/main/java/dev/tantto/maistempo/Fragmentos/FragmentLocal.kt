@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Fragmentos
+package dev.tantto.maistempo.fragmentos
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -8,18 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import dev.tantto.maistempo.Classes.BuscarLojasImagem
+import dev.tantto.maistempo.classes.BuscarLojasImagem
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.Modelos.Lojas
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.modelos.Lojas
+import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.adaptadores.AdaptadorLocais
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.google.FirebaseAutenticacao
 
 class FragmentLocal: Fragment() {
 
-    private var adaptador:AdaptadorLocais? = null
+    var adaptador:AdaptadorLocais? = null
     private var Swipe:SwipeRefreshLayout? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,7 +44,7 @@ class FragmentLocal: Fragment() {
         Swipe?.setOnRefreshListener {
 
             BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
-                override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil) {
+                override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
                     Swipe?.isRefreshing = false
                     if(Lista != null  && ListaImagem != null){
                         ListaLocais.refazer(Lista)

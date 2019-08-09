@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Classes
+package dev.tantto.maistempo.classes
 
 import android.content.Context
 

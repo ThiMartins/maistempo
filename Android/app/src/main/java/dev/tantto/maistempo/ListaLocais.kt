@@ -1,6 +1,6 @@
 package dev.tantto.maistempo
 
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.modelos.Lojas
 
 class ListaLocais {
 

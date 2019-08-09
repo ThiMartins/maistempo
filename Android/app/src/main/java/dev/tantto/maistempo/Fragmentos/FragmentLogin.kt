@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Fragmentos
+package dev.tantto.maistempo.fragmentos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.chaves.Chave
-import dev.tantto.maistempo.Classes.Alertas
-import dev.tantto.maistempo.Classes.Dados
+import dev.tantto.maistempo.classes.Alertas
+import dev.tantto.maistempo.classes.Dados
 import dev.tantto.maistempo.google.AutenticacaoLogin
 import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.google.TiposErrosLogar
@@ -60,7 +60,6 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
         BotaoNovo = View.findViewById<Button>(R.id.IrNovo)
 
         eventos()
-
     }
 
     fun setandoReferencia(ref:TelaLogin) : FragmentLogin{

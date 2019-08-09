@@ -1,7 +1,7 @@
 package dev.tantto.maistempo.google
 
 import com.google.firebase.auth.*
-import dev.tantto.maistempo.Modelos.Perfil
+import dev.tantto.maistempo.modelos.Perfil
 
 enum class TiposErrosCriar{
     SENHA_FRACA,

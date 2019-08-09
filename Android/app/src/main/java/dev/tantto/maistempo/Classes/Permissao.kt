@@ -1,25 +1,10 @@
-package dev.tantto.maistempo.Classes
+package dev.tantto.maistempo.classes
 
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
-
-enum class TipoDePermissao(val Valor:Int){
-    PERMITIDO(0),
-    SEM_PERMISSAO(1),
-    REPETIR_PEDIDO(2)
-}
-
-enum class Permissoes(val valor:String){
-    CAMERA(Manifest.permission.CAMERA),
-    ARMAZENAMENTO_READ(Manifest.permission.READ_EXTERNAL_STORAGE),
-    ARMAZENAMENTO_WRITE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-    LOCALIZACAO_FINE(Manifest.permission.ACCESS_FINE_LOCATION),
-    LOCALIZACAO_COARSE(Manifest.permission.ACCESS_COARSE_LOCATION)
-}
 
 class Permissao {
 
@@ -37,6 +22,20 @@ class Permissao {
             }
         }
 
+    }
+
+    enum class TipoDePermissao(val Valor:Int){
+        PERMITIDO(0),
+        SEM_PERMISSAO(1),
+        REPETIR_PEDIDO(2)
+    }
+
+    enum class Permissoes(val valor:String){
+        CAMERA(Manifest.permission.CAMERA),
+        ARMAZENAMENTO_READ(Manifest.permission.READ_EXTERNAL_STORAGE),
+        ARMAZENAMENTO_WRITE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+        LOCALIZACAO_FINE(Manifest.permission.ACCESS_FINE_LOCATION),
+        LOCALIZACAO_COARSE(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
 }

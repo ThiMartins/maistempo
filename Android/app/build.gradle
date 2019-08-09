@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
+    implementation 'com.firebase:geofire-java:3.0.0'
 
     implementation 'com.airbnb.android:lottie:2.8.0'
     implementation 'com.xw.repo:bubbleseekbar:3.20-lite'

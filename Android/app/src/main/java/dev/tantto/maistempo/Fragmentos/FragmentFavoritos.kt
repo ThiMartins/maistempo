@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Fragmentos
+package dev.tantto.maistempo.fragmentos
 
 import android.os.Bundle
 import android.view.LayoutInflater

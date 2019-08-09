@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Fragmentos
+package dev.tantto.maistempo.fragmentos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dev.tantto.maistempo.chaves.Chave
-import dev.tantto.maistempo.Classes.Alertas
+import dev.tantto.maistempo.classes.Alertas
 import dev.tantto.maistempo.google.*
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.adaptadores.AdaptadorTodasAvaliacoes
 import dev.tantto.maistempo.telas.TelaResumoLoja

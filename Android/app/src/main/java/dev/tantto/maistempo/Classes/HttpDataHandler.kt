@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Classes
+package dev.tantto.maistempo.classes
 
 import java.io.BufferedReader
 import java.io.IOException

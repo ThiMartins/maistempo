@@ -1,4 +1,4 @@
-package dev.tantto.maistempo.Notificacao
+package dev.tantto.maistempo.notificacao
 
 import android.app.Notification
 import android.app.NotificationChannel

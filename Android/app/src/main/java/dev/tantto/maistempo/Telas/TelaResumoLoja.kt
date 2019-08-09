@@ -12,11 +12,11 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.adaptadores.AdaptadorPager
 import dev.tantto.maistempo.chaves.Chave
-import dev.tantto.maistempo.Fragmentos.FragmentAvaliacao
-import dev.tantto.maistempo.Fragmentos.FragmentResumo
+import dev.tantto.maistempo.fragmentos.FragmentAvaliacao
+import dev.tantto.maistempo.fragmentos.FragmentResumo
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.google.*
 import java.util.*

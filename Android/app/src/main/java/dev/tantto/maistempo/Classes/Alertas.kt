@@ -1,8 +1,10 @@
-package dev.tantto.maistempo.Classes
+package dev.tantto.maistempo.classes
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.tapadoo.alerter.Alerter

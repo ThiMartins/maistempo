@@ -17,8 +17,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import dev.tantto.maistempo.Classes.*
-import dev.tantto.maistempo.Modelos.Lojas
+import dev.tantto.maistempo.classes.*
+import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.google.DatabaseFirebaseSalvar
 import org.json.JSONObject
@@ -55,7 +55,6 @@ class TelaAdicionarLoja : AppCompatActivity() {
         eventos()
 
     }
-
 
     private fun configurandoElementos() {
         Imagem = findViewById<ImageView>(R.id.FotoNovoLoja)
@@ -185,7 +184,7 @@ class TelaAdicionarLoja : AppCompatActivity() {
             val Iniciar = Intent()
             when (which) {
                 0 -> {
-                    if(Permissao.veficarPermissao(this, Permissoes.CAMERA) == TipoDePermissao.PERMITIDO){
+                    if(Permissao.veficarPermissao(this, Permissao.Permissoes.CAMERA) == Permissao.TipoDePermissao.PERMITIDO){
                         Iniciar.action = MediaStore.ACTION_IMAGE_CAPTURE
                         startActivityForResult(Iniciar, MODO_CAMERA)
                     } else {
