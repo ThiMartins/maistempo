@@ -1,11 +1,13 @@
 package dev.tantto.maistempo.google
 
 import android.net.Uri
+import com.firebase.geofire.GeoLocation
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaLocais
+import dev.tantto.maistempo.classes.LocalizacaoLojas
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.modelos.NotasUsuarios
 import dev.tantto.maistempo.modelos.Perfil
@@ -107,6 +109,14 @@ class DatabaseFirebaseSalvar {
             }
         }
 
+        fun mudarCidade(Email: String, Cidade: String){
+            try {
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).update(Chave.CHAVE_CIDADE.valor, Cidade)
+            } catch (Erro:FirebaseFirestoreException){
+
+            }
+        }
+
         fun mudarNomeComImagem(Email: String, Nome: String = "", Caminho:Uri = Uri.EMPTY, Resposta: DatabaseMudanca){
             try {
                 if(Nome.isNotEmpty() && Caminho == Uri.EMPTY){
@@ -165,7 +175,7 @@ class DatabaseFirebaseSalvar {
             }
         }
 
-        fun adicionarLoja(LojaNova:Lojas, Caminho: Uri){
+        fun adicionarLoja(LojaNova:Lojas, Caminho: Uri, Local:GeoLocation){
             try {
                 FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).add(LojaNova).addOnCompleteListener { documento ->
                     if(documento.isSuccessful){
@@ -176,8 +186,11 @@ class DatabaseFirebaseSalvar {
                             notasRanking = hashMapOf()
                         )
 
+                        LocalizacaoLojas.adicionarLojas(documento.result?.id!!, Local)
+
                         FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).document(documento.result?.id!!).set(Item).addOnCompleteListener {
-                           CloudStorageFirebase.salvarFotoCloud(Caminho, "${documento.result?.id!!}.jpg")
+                            CloudStorageFirebase.salvarFotoCloud(Caminho, "${documento.result?.id!!}.jpg")
+
                         }
                     }
                 }
@@ -341,15 +354,7 @@ class DatabaseFirebaseRecuperar {
         @Suppress("UNCHECKED_CAST")
         fun recuperarNotasRanking(Id:String, Interface:Ranking){
             try {
-                FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).document(Id).get().addOnCompleteListener {
-                    if (it.isSuccessful && it.result?.exists()!!){
-                        val Lista = mutableMapOf<String, Double>()
-                        Lista.putAll(it.result?.get("notasRanking")!! as MutableMap<String, Double>)
-                        Interface.notas(Lista)
-                    } else if(it.isSuccessful){
-                        Interface.notas(hashMapOf())
-                    }
-                }
+
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
             }

@@ -1,6 +1,5 @@
 package dev.tantto.maistempo.fragmentos
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,19 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import dev.tantto.maistempo.classes.BuscarLojasImagem
-import dev.tantto.maistempo.ListaBitmap
-import dev.tantto.maistempo.ListaLocais
-import dev.tantto.maistempo.modelos.Lojas
-import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.adaptadores.AdaptadorLocais
 import dev.tantto.maistempo.R
-import dev.tantto.maistempo.google.FirebaseAutenticacao
+import dev.tantto.maistempo.telas.TelaPrincipal
 
 class FragmentLocal: Fragment() {
 
-    var adaptador:AdaptadorLocais? = null
-    private var Swipe:SwipeRefreshLayout? = null
+    private var adaptador:AdaptadorLocais? = null
+    private var swipe:SwipeRefreshLayout? = null
+    private var Referencia:TelaPrincipal? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val V = inflater.inflate(R.layout.fragment_local, container, false)
@@ -36,25 +31,20 @@ class FragmentLocal: Fragment() {
     }
 
     fun notificarMudanca(){
+        swipe?.isRefreshing = false
         adaptador?.notifyDataSetChanged()
     }
 
-    private fun configurandoView(view:View){
-        Swipe = view.findViewById(R.id.AtualizarLista)
-        Swipe?.setOnRefreshListener {
-
-            BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
-                override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
-                    Swipe?.isRefreshing = false
-                    if(Lista != null  && ListaImagem != null){
-                        ListaLocais.refazer(Lista)
-                        ListaBitmap.refazer(ListaImagem)
-                        notificarMudanca()
-                    }
-                }
-            })
-        }
-
+    fun passandoReferencia(Passando:TelaPrincipal){
+        Referencia = Passando
     }
 
+    private fun configurandoView(view:View){
+        swipe = view.findViewById(R.id.AtualizarLista)
+        swipe?.setOnRefreshListener {
+            if(Referencia != null){
+                Referencia?.atualizarLista()
+            }
+        }
+    }
 }

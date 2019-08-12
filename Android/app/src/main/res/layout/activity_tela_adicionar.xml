@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:layout_constraintTop_toBottomOf="@id/LocalInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/CidadeInputLayoutLoja"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/AbrirMapaLoja"
+                app:layout_constraintTop_toBottomOf="@id/LocalInputLayout"
                 app:layout_constraintEnd_toEndOf="parent">
 
             <EditText
@@ -176,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/CidadeInputLayoutLoja"
+                app:layout_constraintTop_toBottomOf="@id/AbrirMapaLoja"
                 app:layout_constraintEnd_toStartOf="@id/HorarioFimInputLayoutLoja">
 
             <EditText
@@ -196,7 +196,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:layout_constraintStart_toEndOf="@id/HorarioInicioInputLayoutLoja"
-                app:layout_constraintTop_toBottomOf="@id/CidadeInputLayoutLoja"
+                app:layout_constraintTop_toBottomOf="@id/AbrirMapaLoja"
                 app:layout_constraintEnd_toEndOf="parent">
 
             <EditText

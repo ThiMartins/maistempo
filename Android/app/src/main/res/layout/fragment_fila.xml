@@ -32,26 +32,24 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-
         <com.xw.repo.BubbleSeekBar
-
+                android:id="@+id/ProgressoFilaVoto"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/ProgressoFilaVoto"
+                android:layout_margin="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/TabLayoutFila"
                 app:layout_constraintEnd_toStartOf="@id/EnviarFila"
-                android:layout_margin="16dp"
                 app:bsb_max="7"
                 app:bsb_min="0"
-                app:bsb_auto_adjust_section_mark="true"
+                app:bsb_progress="0"
                 app:bsb_section_count="7"
-                app:bsb_section_text_position="below_section_mark"
                 app:bsb_show_section_mark="true"
-                app:bsb_show_section_text="true"
-                app:bsb_show_thumb_text="true"
-                app:bsb_thumb_text_size="18sp"
-                app:bsb_touch_to_seek="true"/>
+                app:bsb_thumb_text_size="8sp"
+                app:bsb_section_text_size="8sp"
+                app:bsb_auto_adjust_section_mark="true"
+                app:bsb_touch_to_seek="true"
+                app:bsb_section_text_position="below_section_mark"/>
 
         <Button
                 android:id="@+id/EnviarFila"

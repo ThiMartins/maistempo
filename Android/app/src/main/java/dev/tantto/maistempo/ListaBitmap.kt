@@ -8,10 +8,6 @@ class ListaBitmap {
 
         private var Lista = hashMapOf<String, Bitmap>()
 
-        fun adicionar(Imagem:HashMap<String, Bitmap>){
-            Lista.putAll(Imagem)
-        }
-
         fun recuperar(Index:String) : Bitmap?{
             return Lista["$Index.jpg"]
         }

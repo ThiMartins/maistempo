@@ -65,30 +65,25 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         adaptador?.atualizarLoja(Ref)
     }
 
-    @Suppress("DEPRECATION")
     private fun configurandoView() {
-        Lista = this.view?.findViewById<RecyclerView>(R.id.ListaFila)
-        NumeroAvaliacoes = this.view?.findViewById<TextView>(R.id.NumeroAvaliacoes)
-        Tabs = this.view?.findViewById<TabLayout>(R.id.TabLayoutFila)
-        EnviarFilaMomento = this.view?.findViewById<Button>(R.id.EnviarFila)
-        ProgressoFila = this.view?.findViewById<BubbleSeekBar>(R.id.ProgressoFilaVoto)
+        recuperandoView()
+        configurandoTab()
 
-        Tabs?.getTabAt(0)?.setText(R.string.Normal)
-        Tabs?.getTabAt(1)?.setText(R.string.Rapida)
-        Tabs?.getTabAt(2)?.setText(R.string.Preferencial)
-        Tabs?.setOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
-            override fun onTabReselected(p0: TabLayout.Tab?) {
+        ProgressoFila?.setCustomSectionTextArray { sectionCount, array ->
+            array.clear()
 
-            }
+            array.put(0, "5 min")
+            array.put(1, "10 min")
+            array.put(2, "20 min")
+            array.put(3, "30 min")
+            array.put(4, "40 min")
+            array.put(5, "50 min")
+            array.put(6, "60 min")
+            array.put(7, "Mais")
 
-            override fun onTabUnselected(p0: TabLayout.Tab?) {
+            array
+        }
 
-            }
-
-            override fun onTabSelected(p0: TabLayout.Tab?) {
-                adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
-            }
-        })
 
         EnviarFilaMomento?.setOnClickListener {
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email
@@ -110,6 +105,33 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         }
 
         NumeroAvaliacoes?.text = String.format(LojaInfo?.quantidadeAvaliacoesFila.toString() + " "+ getString(R.string.Avalicoes))
+    }
+
+    private fun recuperandoView() {
+        Lista = this.view?.findViewById<RecyclerView>(R.id.ListaFila)
+        NumeroAvaliacoes = this.view?.findViewById<TextView>(R.id.NumeroAvaliacoes)
+        Tabs = this.view?.findViewById<TabLayout>(R.id.TabLayoutFila)
+        EnviarFilaMomento = this.view?.findViewById<Button>(R.id.EnviarFila)
+            ProgressoFila = this.view?.findViewById<BubbleSeekBar>(R.id.ProgressoFilaVoto)
+    }
+
+    private fun configurandoTab() {
+        Tabs?.getTabAt(0)?.setText(R.string.Normal)
+        Tabs?.getTabAt(1)?.setText(R.string.Rapida)
+        Tabs?.getTabAt(2)?.setText(R.string.Preferencial)
+        Tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
+            }
+        })
     }
 
     override fun resultado(Valor: Resultado) {

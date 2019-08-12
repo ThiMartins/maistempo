@@ -446,4 +446,10 @@
     <string name="HorarioFim">Horário de fechamento</string>
     <string name="ErroHorarioInicioLoja">Por favor colocar o horário que a loja abre</string>
     <string name="ErroHorarioFimLoja">Por favor colocar o horário que a loja fecha</string>
+    <string name="KM">KM</string>
+    <string name="Abrir">Ligar</string>
+    <string name="PedirGPS">Para determinar a distancia sua com as lojas precisamos que ligue o gps, caso não possa, não
+        será possivel determinar sua distância com a loja
+    </string>
+    <string name="GpsDesligado">Deseja ligar o GPS ?</string>
 </resources>

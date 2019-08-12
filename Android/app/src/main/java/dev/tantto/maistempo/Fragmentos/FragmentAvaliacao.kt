@@ -84,7 +84,6 @@ class FragmentAvaliacao : Fragment() {
             Alertas.criarAlerter(referencia, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
             RatingVoto?.isEnabled = false
 
-            //CloudFunctions.salvarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, ranking.toDouble(), this)
             DatabaseFirebaseSalvar.enviarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, nota.toDouble())
             CloudFunctions.adicionarNovoVoto(Loja?.id!!)
         }
@@ -98,7 +97,7 @@ class FragmentAvaliacao : Fragment() {
 
     private fun setandoValores(){
         Progresso?.progress = Loja?.mediaRanking?.toInt()!! * 20
-        //NumeroAvailicao?.text = String.format(Loja?.quantidadeAvaliacoesRating.toString()  + " " + getString(R.string.Avalicoes))
+        NumeroAvailicao?.text = String.format(Loja?.quantidadeAvaliacoesRating.toString()  + " " + getString(R.string.Avalicoes))
     }
 
 }

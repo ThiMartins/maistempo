@@ -3,6 +3,7 @@ package dev.tantto.maistempo.adaptadores
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.model.LatLng
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
+import dev.tantto.maistempo.ListaProximos
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.classes.LocalizacaoPessoa
 import dev.tantto.maistempo.telas.TelaResumoLoja
+import java.text.NumberFormat
 import java.util.*
 
 class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<AdaptadorLocais.Holder>() {
@@ -41,12 +46,12 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
         private var Imagem = Item.findViewById<ImageView>(R.id.ImagemLocal)
         private var CardLocal= Item.findViewById<CardView>(R.id.CardItemLocal)
         private var ResumoFila= Item.findViewById<View>(R.id.ModoFilaLocal)
+        private var DistanciaLoja = Item.findViewById<TextView>(R.id.DistanciaLoja)
 
         init {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Imagem.clipToOutline = true
             }
-            ResumoFila
         }
 
         fun adicionandoValores(Elementos:Lojas, position: Int){
@@ -61,6 +66,17 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
                 Status.text = Contexto.getString(R.string.Aberto)
             } else {
                 Status.text = Contexto.getString(R.string.Fechado)
+            }
+
+            if(ListaProximos.contem(Chave.CHAVE_MINHA_LOCALIZCAO.valor)){
+                val Coordenadas = LatLng(Elementos.latitude, Elementos.longitude)
+                val Valores = ListaProximos.recuperar(Chave.CHAVE_MINHA_LOCALIZCAO.valor)
+                val MinhaCoordenadas = LatLng(Valores.longitude, Valores.latitude)
+                val Resultado = NumberFormat.getInstance()
+                Resultado.maximumFractionDigits = 2
+                Log.i("Teste", MinhaCoordenadas.toString())
+                Log.i("Teste", Coordenadas.toString())
+                DistanciaLoja.text = String.format(Resultado.format((LocalizacaoPessoa.calcularDistancia(MinhaCoordenadas, Coordenadas)) / 1000) .toString() + "\n" + Contexto.getString(R.string.KM))
             }
 
             setandoBackground(fazerMedia(Elementos, Horas))
