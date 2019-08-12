@@ -3,11 +3,14 @@ package dev.tantto.maistempo.telas
 import android.Manifest
 import android.content.Intent
 import android.graphics.Bitmap
+import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -15,21 +18,37 @@ import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
+import dev.tantto.maistempo.R
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.modelos.Perfil
-import dev.tantto.maistempo.R
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.chaves.Requisicoes
+
 
 class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
     private val handler = Handler(Looper.getMainLooper())
     private var Iniciado = false
+    private var Pausado = false
+    private var PessoaPassada:Perfil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_splash)
         supportActionBar?.elevation = 0F
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Pausado = true
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        if(Pausado){
+           prepararInicio(PessoaPassada)
+        }
     }
 
     override fun onPostResume() {
@@ -38,13 +57,15 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
     }
 
     private fun veficarRequisicoes() {
-        when {
+        when{
             Permissao.veficarPermissao(this, Permissao.Permissoes.CAMERA) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), Requisicoes.REQUISICAO_CAMERA.valor)
             Permissao.veficarPermissao(this, Permissao.Permissoes.ARMAZENAMENTO_READ) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Requisicoes.REQUISICAO_LEITURA_STORAGE.valor)
             Permissao.veficarPermissao(this, Permissao.Permissoes.ARMAZENAMENTO_WRITE) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), Requisicoes.REQUISICAO_ESCRITA_STORAGE.valor)
             Permissao.veficarPermissao(this, Permissao.Permissoes.LOCALIZACAO_COARSE) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), Requisicoes.REQUISICAO_COARSE_ACCESS.valor)
             Permissao.veficarPermissao(this, Permissao.Permissoes.LOCALIZACAO_FINE) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), Requisicoes.REQUISICAO_FINE_ACCESS.valor)
-            else -> iniciarVerificacoes()
+            else -> {
+                iniciarVerificacoes()
+            }
         }
     }
 
@@ -53,11 +74,20 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
             FirebaseAutenticacao.deslogarUser()
         }
 
+        if(!LocalizacaoPessoa.providerAtivo(this, LocationManager.GPS_PROVIDER)){
+            val SnackGps = Snackbar.make(findViewById(R.id.TelaSplash), R.string.GpsDesligado, Snackbar.LENGTH_LONG)
+            SnackGps.setAction(R.string.Sim) {
+                val Iniciar = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(Iniciar)
+            }.show()
+        }
+
         if(VerificarInternet.internetConectado(this) == true){
             carregandoLogin()
         } else {
             verificarInternet()
         }
+
     }
 
     private fun verificarInternet(){
@@ -83,9 +113,9 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
     private fun carregandoLogin() {
         val User = FirebaseAutenticacao.Autenticacao.currentUser?.email
         if (!User.isNullOrEmpty()) {
-            BuscarLojasImagem(User, this)
+            BuscarLojasImagem(User, this@TelaSplash)
         } else {
-            iniciarActivity(Intent(this, TelaLogin::class.java))
+            iniciarActivity(Intent(this@TelaSplash, TelaLogin::class.java))
             finishAffinity()
         }
     }
@@ -102,17 +132,33 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
             ListaLocais.refazer(Lista)
             ListaBitmap.refazer(ListaImagem)
             if(Pessoa != null){
-                if(Pessoa.acesso == Chave.CHAVE_ADM.valor){
-                    val iniciar = Intent(this, TelaPrincipal::class.java)
-                    iniciar.putExtra(Chave.CHAVE_ACESSO.valor, Chave.CHAVE_ADM.valor)
-                    iniciarActivity(iniciar)
-                    finishAffinity()
-                } else {
-                    iniciarActivity(Intent(this, TelaPrincipal::class.java))
-                    finishAffinity()
-                }
+                verificacaoGPS(Pessoa)
             }
         }
     }
 
+    private fun verificacaoGPS(Pessoa: Perfil) {
+        BuscarLojasProximas(this, (Pessoa.raio.toDouble()) / 100).procurarProximos(object :
+            BuscarLojasProximas.BuscaConcluida {
+            override fun resultado(Modo: Boolean) {
+                if(Pausado){
+                    PessoaPassada = Pessoa
+                } else {
+                    prepararInicio(Pessoa)
+                }
+            }
+        })
+    }
+
+    private fun prepararInicio(Pessoa: Perfil?) {
+        if (Pessoa?.acesso == Chave.CHAVE_ADM.valor) {
+            val iniciar = Intent(this@TelaSplash, TelaPrincipal::class.java)
+            iniciar.putExtra(Chave.CHAVE_ACESSO.valor, Chave.CHAVE_ADM.valor)
+            iniciarActivity(iniciar)
+            finishAffinity()
+        } else {
+            iniciarActivity(Intent(this@TelaSplash, TelaPrincipal::class.java))
+            finishAffinity()
+        }
+    }
 }

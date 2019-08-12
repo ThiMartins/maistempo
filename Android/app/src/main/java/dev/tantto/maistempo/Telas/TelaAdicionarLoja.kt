@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.firebase.geofire.GeoLocation
 import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
@@ -151,7 +152,9 @@ class TelaAdicionarLoja : AppCompatActivity() {
             horarioInicio = HorarioInicio?.text?.toString()?.toInt()!!,
             horarioFinal =  HorarioFim?.text?.toString()?.toInt()!!,
             mediaRanking = 0.0
-        ), CaminhoFoto!!)
+        ), CaminhoFoto!!, GeoLocation(Latitude?.text?.toString()?.toDouble()!!, Longitude?.text?.toString()?.toDouble()!!)
+        )
+
     }
 
     private fun alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {
@@ -167,13 +170,15 @@ class TelaAdicionarLoja : AppCompatActivity() {
         val download = RecuperarCoordenadas(object  : Recuperado{
             override fun recuperado(Modo: Boolean, Latitude: String?, Longitude: String?) {
                 if(Modo){
-
+                    this@TelaAdicionarLoja.Latitude?.setText(Latitude)
+                    this@TelaAdicionarLoja.Longitude?.setText(Longitude)
+                    Alerta.dismiss()
                 } else {
                     Alerta.dismiss()
                 }
             }
         })
-        download.execute(("Rua Américo Figuereido, 547, Sorocaba").replace(" ","+"))
+        download.execute((Local?.text?.toString() + ", ${Cidade?.text?.toString()}").replace(" ","+"))
 
     }
 
@@ -250,10 +255,6 @@ class TelaAdicionarLoja : AppCompatActivity() {
 
                 val lat = (json.get("results") as JSONArray).getJSONObject(0).getJSONObject("geometry").getJSONObject("location").get("lat").toString()
                 val lng = (json.get("results") as JSONArray).getJSONObject(0).getJSONObject("geometry").getJSONObject("location").get("lng").toString()
-
-                Log.i("Teste", lat)
-                Log.i("Teste", lng)
-                Log.i("Teste", json.toString())
 
                 anInterface.recuperado(true, lat, lng)
 

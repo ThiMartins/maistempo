@@ -10,7 +10,7 @@ class ListaProximos {
 
         fun adicionar(Id:String, Local:GeoLocation){
             if(!Lista.contains(Id)){
-                Lista.put(Id, Local)
+                Lista[Id] = Local
             }
         }
 
@@ -18,16 +18,12 @@ class ListaProximos {
             return Lista[Chave]!!
         }
 
-        fun recuperarChave() : List<String>{
-            return Lista.keys.toList()
+        fun limpar(){
+            Lista.clear()
         }
 
-        fun recuperarValores() : List<GeoLocation> {
-            return Lista.values.toList()
-        }
-
-        fun recuperarTudo() : MutableMap<String, GeoLocation>{
-            return Lista
+        fun contem(Id: String): Boolean {
+            return Lista.containsKey(Id)
         }
 
     }

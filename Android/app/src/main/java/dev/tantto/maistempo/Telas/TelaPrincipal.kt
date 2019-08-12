@@ -1,8 +1,10 @@
 package dev.tantto.maistempo.telas
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
@@ -10,6 +12,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import dev.tantto.maistempo.ListaBitmap
+import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.adaptadores.AdaptadorPager
 import dev.tantto.maistempo.fragmentos.FragmentFavoritos
@@ -18,6 +22,8 @@ import dev.tantto.maistempo.fragmentos.FragmentPerfil
 import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.chaves.Chave
+import dev.tantto.maistempo.modelos.Lojas
 
 class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
@@ -41,22 +47,27 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState)
+        TodosLocais.passandoReferencia(this)
+    }
+
     private fun configurandoPager() {
+        TodosLocais.passandoReferencia(this)
         Tabs?.setupWithViewPager(Pagina)
         val ListaFragmentos = listOf(TodosLocais, FavoritosLocais, Perfil)
         Pagina?.adapter = AdaptadorPager(supportFragmentManager, ListaFragmentos)
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("Acesso", NivelAcesso)
+        outState.putString(Chave.CHAVE_ACESSO.valor, NivelAcesso)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        if(savedInstanceState.containsKey("Acesso")){
-            NivelAcesso = savedInstanceState.getString("Acesso", "")
+        if(savedInstanceState.containsKey(Chave.CHAVE_ACESSO.valor)){
+            NivelAcesso = savedInstanceState.getString(Chave.CHAVE_ACESSO.valor, "")
         }
     }
 
@@ -77,8 +88,8 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if(intent.hasExtra("Acesso")){
-            NivelAcesso = "adm"
+        if(intent.hasExtra(Chave.CHAVE_ACESSO.valor)){
+            NivelAcesso = Chave.CHAVE_ADM.valor
             menuInflater.inflate(R.menu.menu_tela_principal_adm, menu)
         } else {
             menuInflater.inflate(R.menu.menu_tela_principal, menu)
@@ -111,7 +122,7 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
             R.id.MudarRaio -> mudarRaio()
         }
 
-        if(NivelAcesso == "adm"){
+        if(NivelAcesso == Chave.CHAVE_ADM.valor){
             if(R.id.AdicionarLoja == item?.itemId){
                 startActivity(Intent(this, TelaAdicionarLoja::class.java))
             }
@@ -142,6 +153,27 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                 ProgressoRaio?.progress = Pessoa.raio.toString().toInt()
             }
         })
+    }
+
+    fun atualizarLista(){
+        DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
+            override fun pessoaRecebida(Pessoa: Perfil) {
+                BuscarLojasProximas(this@TelaPrincipal, (Pessoa.raio / 100).toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
+                    override fun resultado(Modo: Boolean) {
+                        BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
+                            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
+                                if(Lista != null  && ListaImagem != null){
+                                    ListaLocais.refazer(Lista)
+                                    ListaBitmap.refazer(ListaImagem)
+                                    TodosLocais.notificarMudanca()
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+        })
+
     }
 
 }

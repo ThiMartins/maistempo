@@ -38,6 +38,7 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
     private var PontosLocais:TextView? = null
     private var PontosTotal:TextView? = null
     private var Pessoa:Perfil? = null
+    private var Cidade:EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,7 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
 
     private fun setandoValores(Pessoa:Perfil){
         Nome?.setText(Pessoa.titulo)
+        Cidade?.setText(Pessoa.cidade)
         RaioPesquisa?.progress = Pessoa.raio.toInt()
         PontosCadastro?.text = String.format(Pessoa.pontosCadastro.toString() + getString(R.string.Pontos))
         PontosAvaliacaoFila?.text = String.format(Pessoa.pontosFila.toString() + getString(R.string.Pontos))
@@ -60,6 +62,7 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
     private fun configurandoView() {
         Foto = findViewById(R.id.FotoPerfil)
         Nome = findViewById(R.id.NomePerfil)
+        Cidade = findViewById(R.id.CidadePerfil)
         RaioPesquisa = findViewById<ProgressBar>(R.id.DistanciaDesejada)
         PontosCadastro = findViewById(R.id.CadastroPontos)
         PontosAvaliacaoFila = findViewById(R.id.AvaliacaoFilaPontos)
@@ -143,6 +146,10 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
         } else if(Pessoa?.titulo == Nome?.text?.toString() && CaminhoFoto != Uri.EMPTY){
             Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando).show()
             DatabaseFirebaseSalvar.mudarNomeComImagem(Pessoa?.email!!, "", CaminhoFoto!! , this)
+        }
+
+        if(Cidade?.text?.toString() != Pessoa?.cidade){
+            DatabaseFirebaseSalvar.mudarCidade(Pessoa?.cidade!!, Cidade?.text?.toString()!!)
         }
 
         if(Pessoa?.raio?.toInt() != RaioPesquisa?.progress){

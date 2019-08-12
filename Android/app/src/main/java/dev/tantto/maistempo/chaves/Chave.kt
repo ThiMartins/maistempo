@@ -19,8 +19,8 @@ enum class Chave(val valor:String) {
     CHAVE_ADM("adm"),
     CHAVE_ADM_CIDADES("cidades"),
     CHAVE_ACESSO("Acesso"),
-    CHAVE_PESSOA("pessoa"),
-    CHAVE_FECHAR("Fechar")
+    CHAVE_FECHAR("Fechar"),
+    CHAVE_MINHA_LOCALIZCAO("localizacao")
 
 }
 
