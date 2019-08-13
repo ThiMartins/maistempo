@@ -19,6 +19,7 @@ class BuscarLojasImagem() : DatabasePessoaInterface, DatabaseLocaisInterface, Do
     }
 
     constructor(Cidade:String, Pessoa: Perfil?, Interface: BuscarConcluida) : this(){
+        this.InterfaceBusca = Interface
         this.Pessoa = Pessoa
         if(Pessoa != null){
             DatabaseFirebaseRecuperar.recuperaDadosPessoa(Pessoa.email, this)
@@ -69,10 +70,4 @@ class BuscarLojasImagem() : DatabasePessoaInterface, DatabaseLocaisInterface, Do
         fun concluido(Modo:Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?)
 
     }
-
-    /*interface BuscarLocalizacao{
-
-        fun concluido(Modo: Boolean, Lista: MutableList<Lojas>)
-
-    }*/
 }

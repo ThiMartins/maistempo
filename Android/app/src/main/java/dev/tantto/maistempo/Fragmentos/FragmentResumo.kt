@@ -1,6 +1,9 @@
 package dev.tantto.maistempo.fragmentos
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +26,7 @@ import java.util.*
 class FragmentResumo : Fragment(), FunctionsInterface {
 
     private lateinit var referencia:TelaResumoLoja
+    private val handler = Handler(Looper.getMainLooper())
 
     private var Lista:RecyclerView? = null
     private var NumeroAvaliacoes:TextView? = null
@@ -30,6 +34,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
     private var ProgressoFila:BubbleSeekBar? = null
     private var Tabs:TabLayout? = null
     private var LojaInfo:Lojas? = null
+    private var NovaLoja:Lojas? = null
     private var adaptador:AdaptadorFilas? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,7 +74,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         recuperandoView()
         configurandoTab()
 
-        ProgressoFila?.setCustomSectionTextArray { sectionCount, array ->
+        ProgressoFila?.setCustomSectionTextArray { _, array ->
             array.clear()
 
             array.put(0, "5 min")
@@ -132,6 +137,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
                 adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
             }
         })
+        adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
     }
 
     override fun resultado(Valor: Resultado) {
@@ -139,17 +145,39 @@ class FragmentResumo : Fragment(), FunctionsInterface {
             Alertas.criarAlerter(referencia, R.string.ErroEnviar, R.string.Atencao, 10000).show()
         } else {
             val alerta = Alertas.criarAlerter(referencia, R.string.Atualizando, R.string.Aguardando)
-            DatabaseFirebaseRecuperar.recuperarDadosLoja(LojaInfo?.id!!, object : LojaRecuperada{
-                override fun dados(Loja: Lojas?) {
-                    if(Loja != null){
-                        LojaInfo = Loja
-                        alerta.setDuration(1000)
+            alerta.show()
+
+            object : Runnable{
+                override fun run() {
+                    if(NovaLoja == null){
+                        handler.postDelayed(this, 2000)
+                        verificarAtualizacao()
                     } else {
-                        Alertas.criarAlerter(referencia, R.string.ErroEnviar, R.string.Atencao, 5000)
+                        NumeroAvaliacoes?.text = String.format(NovaLoja?.quantidadeAvaliacoesFila.toString() + " "+ getString(R.string.Avalicoes))
+                        alerta.setDuration(1000)
+                        LojaInfo = NovaLoja
+                        adaptador?.notifyDataSetChanged()
+                        NovaLoja = null
                     }
                 }
-            })
+            }.run()
         }
+    }
+
+    private fun verificarAtualizacao() {
+        DatabaseFirebaseRecuperar.recuperarDadosLoja(LojaInfo?.id!!, object : LojaRecuperada {
+            override fun dados(Loja: Lojas?) {
+                if (Loja != null) {
+                    Log.i("Teste", Loja.toString())
+                    if(LojaInfo?.quantidadeAvaliacoesFila != Loja.quantidadeAvaliacoesFila){
+                        NovaLoja = Loja
+                    }
+
+                } else {
+                    Alertas.criarAlerter(referencia, R.string.ErroEnviar, R.string.Atencao, 5000)
+                }
+            }
+        })
     }
 
     private fun mostrarAlerta() {

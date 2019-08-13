@@ -2,6 +2,7 @@ package dev.tantto.maistempo.google
 
 import com.google.firebase.functions.FirebaseFunctions
 import dev.tantto.maistempo.chaves.Chave
+import dev.tantto.maistempo.classes.Dados
 
 enum class Resultado(val valor:String){
     SUCESSO("sucesso"),
@@ -33,6 +34,17 @@ class CloudFunctions {
         fun adicionarNovoVoto(Id: String){
             val Dados = hashMapOf(Pair("id", Id))
             FirebaseFunctions.getInstance().getHttpsCallable(Chave.CHAVE_ADD_RANKING.valor).call(Dados)
+        }
+
+        fun adicionarNotaLoja(Email:String, Nota:Double, Loja:String){
+
+            val Dados = hashMapOf(
+                Pair("email", Email),
+                Pair("valor", Nota),
+                Pair("loja", Loja)
+            )
+
+            FirebaseFunctions.getInstance().getHttpsCallable(Chave.CHAVE_NOTA_LOJA.valor).call(Dados)
         }
 
     }

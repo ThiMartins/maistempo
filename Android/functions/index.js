@@ -130,6 +130,36 @@ exports.adicionarAvalicaoPonto = functions.https.onCall( async (data, _context) 
 
 });
 
+exports.adicionarNotaLocal = functions.https.onCall(async (data, _context) =>{
+
+    const email = data["email"];
+    const valor = data["valor"];
+    const loja = data["loja"];
+
+    return await admin.firestore().doc('notasUsuarios/' + loja).get().then(snapshot =>{
+
+        const Dados = snapshot.data()
+        const notas = Dados["notasRanking"];
+
+        const NotasChaves = Object.keys(notas);
+        const NotasValues = Object.values(notas);
+
+        if(NotasChaves.hasOwnProperty(email)){
+            notas[email] = valor;
+        } else {
+            Object.assign(notas, { [email] : valor});
+        }
+
+        admin.firestore().collection('notasUsuarios/').doc(loja).set(Dados);
+        return "ok";
+    })
+    .catch(erro =>{
+        console.log(erro);
+        return "erro";
+    })
+
+})
+
 exports.fazerMedia = functions.firestore.document('usuarios/{uid}').onWrite((change, context) => {
 
     const data = change.after.data();

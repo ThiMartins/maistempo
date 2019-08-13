@@ -26,6 +26,7 @@ import org.json.JSONObject
 import java.lang.Exception
 import org.json.JSONArray
 import org.json.JSONException
+import java.io.IOException
 
 class TelaAdicionarLoja : AppCompatActivity() {
 
@@ -216,7 +217,11 @@ class TelaAdicionarLoja : AppCompatActivity() {
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
             val FotoSelecionada = data.extras?.get("data") as Bitmap
-            CaminhoFoto = BitmapUtilitarios.getImageUri(FotoSelecionada, "loja", this)
+            try {
+                CaminhoFoto = BitmapUtilitarios.getImageUri(FotoSelecionada, "loja", this)
+            } catch (Erro:IOException){
+                Erro.printStackTrace()
+            }
             Imagem?.setImageBitmap(FotoSelecionada)
 
         } else if(requestCode == MODO_GALERIA && resultCode == Activity.RESULT_OK && data != null){

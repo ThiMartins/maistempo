@@ -67,7 +67,7 @@ class FragmentAvaliacao : Fragment() {
         VerAvaliacoes?.setOnClickListener {
             val alertaCarregando = Alertas.alertaCarregando(this.requireContext())
             alertaCarregando.show()
-            DatabaseFirebaseRecuperar.recuperarNotasRanking(Loja?.id!!, object : DatabaseFirebaseRecuperar.Ranking{
+            DatabaseFirebaseRecuperar.recuperarNotasRanking(object : DatabaseFirebaseRecuperar.Ranking{
                 override fun notas(Lista: MutableMap<String, Double>) {
                     alertaCarregando.dismiss()
                     val ListaBottom = BottomSheetDialog(this@FragmentAvaliacao.requireContext())
@@ -84,7 +84,11 @@ class FragmentAvaliacao : Fragment() {
             Alertas.criarAlerter(referencia, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
             RatingVoto?.isEnabled = false
 
-            DatabaseFirebaseSalvar.enviarRanking(Loja?.id!!, FirebaseAutenticacao.Autenticacao.currentUser?.email!!, nota.toDouble())
+            val email = FirebaseAutenticacao.Autenticacao.currentUser?.email!!
+
+            //DatabaseFirebaseSalvar.enviarRanking(Loja?.id!!, email, nota.toDouble())
+            DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_AVALIACAO)
+            CloudFunctions.adicionarNotaLoja(email, nota.toDouble(), Loja?.id!!)
             CloudFunctions.adicionarNovoVoto(Loja?.id!!)
         }
 

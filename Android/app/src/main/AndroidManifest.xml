@@ -16,7 +16,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
-            android:name=".Application">
+            android:name=".ApplicationClasse">
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
@@ -44,24 +44,24 @@
                   android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".telas.TelaPrincipal" />
         <activity android:name=".telas.TelaResumoLoja"
-                  android:launchMode="singleInstance"
+                  android:launchMode="singleTask"
                   android:parentActivityName=".telas.TelaPrincipal"/>
         <activity android:name=".telas.TelaTermo"
-                  android:launchMode="singleInstance"
+                  android:launchMode="singleTask"
                   android:parentActivityName=".telas.TelaPrincipal"/>
         <activity android:name=".telas.TelaPerfil"
-                    android:launchMode="singleInstance"
+                    android:launchMode="singleTask"
                     android:parentActivityName=".telas.TelaPrincipal"/>
         <activity android:name=".telas.TelaRanking"
-                  android:launchMode="singleInstance"
+                  android:launchMode="singleTask"
                   android:parentActivityName=".telas.TelaPrincipal"/>
         <activity android:name=".telas.TelaMapas"
-                  android:launchMode="singleInstance"
+                  android:launchMode="singleTask"
                   android:parentActivityName=".telas.TelaPrincipal"/>
         <activity
                 android:name=".telas.TelaAdicionarLoja"
                 android:windowSoftInputMode="adjustResize"
-                android:launchMode="singleInstance"
+                android:launchMode="singleTask"
                 android:parentActivityName=".telas.TelaPrincipal"/>
 
     </application>

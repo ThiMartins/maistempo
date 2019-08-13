@@ -5,7 +5,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".telas.TelaPrincipal">
+        tools:context=".telas.TelaPrincipal"
+        android:id="@+id/TelaPrincipal">
 
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/TabPrincipal"

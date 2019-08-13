@@ -56,6 +56,10 @@ class FirebaseAutenticacao{
         fun deslogarUser(){
             Autenticacao.signOut()
         }
+
+        fun apagarConta(){
+            Autenticacao.currentUser?.delete()
+        }
     }
 
 }
