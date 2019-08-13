@@ -10,6 +10,7 @@
             android:id="@+id/NomePessoa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
     <RatingBar
             android:id="@+id/VotoPessoa"
             android:layout_width="wrap_content"

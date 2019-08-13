@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -24,13 +23,13 @@ import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.chaves.Requisicoes
 
-
 class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
     private val handler = Handler(Looper.getMainLooper())
     private var Iniciado = false
     private var Pausado = false
     private var PessoaPassada:Perfil? = null
+    private var TipoRequisicao = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +46,8 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
     override fun onRestart() {
         super.onRestart()
         if(Pausado){
-           prepararInicio(PessoaPassada)
+            Pausado = false
+            prepararInicio(PessoaPassada)
         }
     }
 
@@ -58,11 +58,26 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
     private fun veficarRequisicoes() {
         when{
-            Permissao.veficarPermissao(this, Permissao.Permissoes.CAMERA) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), Requisicoes.REQUISICAO_CAMERA.valor)
-            Permissao.veficarPermissao(this, Permissao.Permissoes.ARMAZENAMENTO_READ) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Requisicoes.REQUISICAO_LEITURA_STORAGE.valor)
-            Permissao.veficarPermissao(this, Permissao.Permissoes.ARMAZENAMENTO_WRITE) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), Requisicoes.REQUISICAO_ESCRITA_STORAGE.valor)
-            Permissao.veficarPermissao(this, Permissao.Permissoes.LOCALIZACAO_COARSE) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), Requisicoes.REQUISICAO_COARSE_ACCESS.valor)
-            Permissao.veficarPermissao(this, Permissao.Permissoes.LOCALIZACAO_FINE) != Permissao.TipoDePermissao.PERMITIDO -> ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), Requisicoes.REQUISICAO_FINE_ACCESS.valor)
+            Permissao.veficarPermissao(this, Permissao.Permissoes.CAMERA) != Permissao.TipoDePermissao.PERMITIDO && TipoRequisicao == 0 -> {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), Requisicoes.REQUISICAO_CAMERA.valor)
+                TipoRequisicao = TipoRequisicao or 1
+            }
+            Permissao.veficarPermissao(this, Permissao.Permissoes.ARMAZENAMENTO_READ) != Permissao.TipoDePermissao.PERMITIDO && TipoRequisicao < 2 -> {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Requisicoes.REQUISICAO_LEITURA_STORAGE.valor)
+                TipoRequisicao = TipoRequisicao or 2
+            }
+            Permissao.veficarPermissao(this, Permissao.Permissoes.ARMAZENAMENTO_WRITE) != Permissao.TipoDePermissao.PERMITIDO && TipoRequisicao < 4 -> {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), Requisicoes.REQUISICAO_ESCRITA_STORAGE.valor)
+                TipoRequisicao = TipoRequisicao or 4
+            }
+            Permissao.veficarPermissao(this, Permissao.Permissoes.LOCALIZACAO_COARSE) != Permissao.TipoDePermissao.PERMITIDO && TipoRequisicao < 8 -> {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), Requisicoes.REQUISICAO_COARSE_ACCESS.valor)
+                TipoRequisicao = TipoRequisicao or 8
+            }
+            Permissao.veficarPermissao(this, Permissao.Permissoes.LOCALIZACAO_FINE) != Permissao.TipoDePermissao.PERMITIDO && TipoRequisicao < 16 -> {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), Requisicoes.REQUISICAO_FINE_ACCESS.valor)
+                TipoRequisicao = TipoRequisicao or 16
+            }
             else -> {
                 iniciarVerificacoes()
             }

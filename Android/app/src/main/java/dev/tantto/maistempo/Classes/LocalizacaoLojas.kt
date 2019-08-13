@@ -1,6 +1,5 @@
 package dev.tantto.maistempo.classes
 
-import android.util.Log
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
@@ -18,7 +17,7 @@ class LocalizacaoLojas {
         fun adicionarLojas(Nome:String, Localizacao: GeoLocation) {
             GeoFireReferencia = GeoFire(Referencia)
             GeoFireReferencia?.setLocation(Nome, Localizacao) { key, _ ->
-                Log.i("Teste", "Mensagem $key")
+
             }
 
         }
@@ -27,12 +26,14 @@ class LocalizacaoLojas {
             GeoFireReferencia = GeoFire(Referencia)
             GeoFireReferencia?.queryAtLocation(Localizacao, Raio)?.addGeoQueryEventListener(object : GeoQueryEventListener{
                 override fun onGeoQueryReady() {
-
+                    Interface.lojaRecebida(null, null)
                 }
 
                 override fun onKeyEntered(key: String?, location: GeoLocation?) {
                     if(key != null && location != null){
                         Interface.lojaRecebida(key, location)
+                    } else {
+                        Interface.lojaRecebida(null, null)
                     }
                 }
 
@@ -54,7 +55,7 @@ class LocalizacaoLojas {
 
     interface LocalizacaoLoja {
 
-        fun lojaRecebida(Id:String, Localizacao: GeoLocation)
+        fun lojaRecebida(Id:String?, Localizacao: GeoLocation?)
 
     }
 

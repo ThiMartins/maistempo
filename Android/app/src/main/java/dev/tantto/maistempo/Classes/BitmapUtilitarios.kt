@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 class BitmapUtilitarios {
 
@@ -19,6 +20,7 @@ class BitmapUtilitarios {
             return imagem
         }*/
 
+        @Throws(IOException::class)
         fun getImageUri(ImagemBitmap: Bitmap, Email:String, Contexto:Context): Uri {
             val bytes = ByteArrayOutputStream()
             ImagemBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)

@@ -44,17 +44,13 @@ class DatabaseFirebaseSalvar {
 
         fun adicionarPontos(Email: String, Pontos:Int, Tipo:TipoPontos){
             try {
-                val Documento =
-                    FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).get()
-                Documento.addOnSuccessListener {
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).get().addOnSuccessListener {
                     val valorRecuperado = it.get(Tipo.valor).toString().toLong()
                     val fila = it.get(TipoPontos.PONTOS_FILA.valor).toString().toLong()
                     val avaliacao = it.get(TipoPontos.PONTOS_AVALIACAO.valor).toString().toLong()
                     val cadastro = it.get(TipoPontos.PONTOS_CADASTRO.valor).toString().toLong()
-                    FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email)
-                        .update(Tipo.valor, Pontos + valorRecuperado)
-                    FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email)
-                        .update(TipoPontos.PONTOS_TOTAIS.valor, fila + avaliacao + cadastro + 1)
+                    FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).update(Tipo.valor, Pontos + valorRecuperado)
+                    FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).update(TipoPontos.PONTOS_TOTAIS.valor, fila + avaliacao + cadastro + 1)
                 }
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
@@ -160,16 +156,6 @@ class DatabaseFirebaseSalvar {
             try {
                 FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).delete()
                 CloudStorageFirebase.deletarImagem(Email)
-            } catch (Erro:FirebaseFirestoreException){
-                Erro.printStackTrace()
-            }
-        }
-
-        fun enviarRanking(Id:String, Email:String, Valor:Double){
-            try {
-                FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).document(Id).update(Chave.CHAVE_NOTAS_RANKING.valor, hashMapOf(
-                    Pair(Email, Valor)
-                ))
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
             }
@@ -352,9 +338,18 @@ class DatabaseFirebaseRecuperar {
         }
 
         @Suppress("UNCHECKED_CAST")
-        fun recuperarNotasRanking(Id:String, Interface:Ranking){
+        fun recuperarNotasRanking(Interface:Ranking){
             try {
-
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).limit(10).get().addOnCompleteListener {
+                    if (it.isSuccessful){
+                        val valores = it.result?.documents!!
+                        val Lista = mutableMapOf<String, Double>()
+                        for (Item in valores){
+                            Lista.putAll(Item["notasRanking"] as HashMap<String, Double>)
+                        }
+                        Interface.notas(Lista)
+                    }
+                }
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
             }

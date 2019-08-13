@@ -21,6 +21,7 @@ import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
+import java.io.IOException
 
 class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoCloud, DatabaseMudanca{
 
@@ -128,8 +129,9 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
         }
         Aletar.setPositiveButton(R.string.Sim) { _, _ ->
             if(Pessoa != null){
-                FirebaseAutenticacao.deslogarUser()
                 DatabaseFirebaseSalvar.deletarConta(Pessoa?.email!!)
+                FirebaseAutenticacao.apagarConta()
+                FirebaseAutenticacao.deslogarUser()
                 startActivity(Intent(this, TelaLogin::class.java))
                 finishAffinity()
             }
@@ -170,7 +172,11 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
 
         if(requestCode == MODO_CAMERA && resultCode == Activity.RESULT_OK && data != null){
             val FotoSelecionada = data.extras?.get("data") as Bitmap
-            CaminhoFoto = BitmapUtilitarios.getImageUri(FotoSelecionada, Pessoa?.email!!, this)
+            try {
+                CaminhoFoto = BitmapUtilitarios.getImageUri(FotoSelecionada, Pessoa?.email!!, this)
+            } catch (Erro:IOException){
+                Erro.printStackTrace()
+            }
             Foto?.setImageBitmap(FotoSelecionada)
 
         } else if(requestCode == MODO_GALERIA && resultCode == Activity.RESULT_OK && data != null){

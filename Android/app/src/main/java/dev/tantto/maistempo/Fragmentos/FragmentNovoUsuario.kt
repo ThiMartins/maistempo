@@ -23,6 +23,7 @@ import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaLogin
+import java.io.IOException
 import java.text.DateFormat
 import java.util.*
 
@@ -243,8 +244,12 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                             when {
                                 CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
                                 FotoCamera != null -> {
-                                    CaminhoFoto = BitmapUtilitarios.getImageUri(FotoCamera!!, Email?.text.toString(), referenciaTela)
-                                    CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                                    try {
+                                        CaminhoFoto = BitmapUtilitarios.getImageUri(FotoCamera!!, Email?.text.toString(), referenciaTela)
+                                        CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                                    } catch (Erro:IOException){
+                                        Erro.printStackTrace()
+                                    }
                                 }
                                 else -> criarUsuario()
                             }

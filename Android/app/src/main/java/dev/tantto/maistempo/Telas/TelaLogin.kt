@@ -70,10 +70,14 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
     override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
         if(Modo && Lista != null && ListaImagem != null && Pessoa != null){
+            val Iniciar = Intent(this, TelaPrincipal::class.java)
+            if(Pessoa.acesso == Chave.CHAVE_ADM.valor){
+                Iniciar.putExtra(Chave.CHAVE_ACESSO.valor, Chave.CHAVE_ADM.valor)
+            }
             ListaLocais.refazer(Lista)
             ListaLocais.refazerFavoritos(Pessoa.lojasFavoritas)
             ListaBitmap.refazer(ListaImagem)
-            startActivity(Intent(this, TelaPrincipal::class.java))
+            startActivity(Iniciar)
             finishAffinity()
         }
     }

@@ -2,15 +2,17 @@ package dev.tantto.maistempo.telas
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
@@ -47,16 +49,9 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState)
-        TodosLocais.passandoReferencia(this)
-    }
-
-    private fun configurandoPager() {
-        TodosLocais.passandoReferencia(this)
-        Tabs?.setupWithViewPager(Pagina)
-        val ListaFragmentos = listOf(TodosLocais, FavoritosLocais, Perfil)
-        Pagina?.adapter = AdaptadorPager(supportFragmentManager, ListaFragmentos)
+    override fun onPostResume() {
+        super.onPostResume()
+        verificarGps()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -66,6 +61,7 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+        TodosLocais.passandoReferencia(this)
         if(savedInstanceState.containsKey(Chave.CHAVE_ACESSO.valor)){
             NivelAcesso = savedInstanceState.getString(Chave.CHAVE_ACESSO.valor, "")
         }
@@ -78,6 +74,13 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
     override fun recuperadoFavoritos() {
         FavoritosLocais.reloadLista()
+    }
+
+    private fun configurandoPager() {
+        TodosLocais.passandoReferencia(this)
+        Tabs?.setupWithViewPager(Pagina)
+        val ListaFragmentos = listOf(TodosLocais, FavoritosLocais, Perfil)
+        Pagina?.adapter = AdaptadorPager(supportFragmentManager, ListaFragmentos)
     }
 
     private fun setandoTabItens() {
@@ -155,6 +158,16 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
         })
     }
 
+    private fun verificarGps(){
+        if(!LocalizacaoPessoa.providerAtivo(this, LocationManager.GPS_PROVIDER)){
+            val SnackGps = Snackbar.make(findViewById(R.id.TelaPrincipal), R.string.GpsDesligado, Snackbar.LENGTH_LONG)
+            SnackGps.setAction(R.string.Sim) {
+                val Iniciar = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(Iniciar)
+            }.show()
+        }
+    }
+
     fun atualizarLista(){
         DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
             override fun pessoaRecebida(Pessoa: Perfil) {
@@ -163,9 +176,11 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                         BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
                             override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
                                 if(Lista != null  && ListaImagem != null){
-                                    ListaLocais.refazer(Lista)
-                                    ListaBitmap.refazer(ListaImagem)
-                                    TodosLocais.notificarMudanca()
+                                    if(Lista.isNotEmpty()){
+                                        ListaLocais.refazer(Lista)
+                                        ListaBitmap.refazer(ListaImagem)
+                                        TodosLocais.notificarMudanca()
+                                    }
                                 }
                             }
                         })
