@@ -94,11 +94,23 @@
                 android:textColor="@android:color/white"/>
 
         <Button
+                android:id="@+id/EsqueciSenha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ConectarUsuario"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:text="@string/EsqueciSenhaMinha"
+                android:textAllCaps="false"
+                android:textColor="@color/colorAccent"/>
+
+        <Button
                 android:id="@+id/IrApresentacao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ConectarUsuario"
+                app:layout_constraintTop_toBottomOf="@id/EsqueciSenha"
                 android:layout_margin="16dp"
                 android:drawableLeft="@drawable/arrow_left_dark_gray"
                 android:drawableStart="@drawable/arrow_left_dark_gray"
@@ -112,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ConectarUsuario"
+                app:layout_constraintTop_toBottomOf="@id/EsqueciSenha"
                 android:layout_margin="16dp"
                 android:drawableRight="@drawable/arrow_right_dark_gray"
                 android:drawableEnd="@drawable/arrow_right_dark_gray"

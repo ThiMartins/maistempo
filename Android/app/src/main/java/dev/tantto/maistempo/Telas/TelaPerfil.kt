@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -33,13 +30,14 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
 
     private var Foto:ImageView? = null
     private var Nome:EditText? = null
-    private var RaioPesquisa:ProgressBar? = null
+    private var Cidade:Spinner? = null
     private var PontosCadastro:TextView? = null
     private var PontosAvaliacaoFila:TextView? = null
     private var PontosLocais:TextView? = null
     private var PontosTotal:TextView? = null
     private var Pessoa:Perfil? = null
-    private var Cidade:EditText? = null
+    private var Senha:EditText? = null
+    private var Modo:Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +50,6 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
 
     private fun setandoValores(Pessoa:Perfil){
         Nome?.setText(Pessoa.titulo)
-        Cidade?.setText(Pessoa.cidade)
-        RaioPesquisa?.progress = Pessoa.raio.toInt()
         PontosCadastro?.text = String.format(Pessoa.pontosCadastro.toString() + getString(R.string.Pontos))
         PontosAvaliacaoFila?.text = String.format(Pessoa.pontosFila.toString() + getString(R.string.Pontos))
         PontosLocais?.text = String.format(Pessoa.pontosLocais.toString() + getString(R.string.Pontos))
@@ -64,15 +60,30 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
         Foto = findViewById(R.id.FotoPerfil)
         Nome = findViewById(R.id.NomePerfil)
         Cidade = findViewById(R.id.CidadePerfil)
-        RaioPesquisa = findViewById<ProgressBar>(R.id.DistanciaDesejada)
         PontosCadastro = findViewById(R.id.CadastroPontos)
         PontosAvaliacaoFila = findViewById(R.id.AvaliacaoFilaPontos)
         PontosLocais = findViewById(R.id.AvaliacaoLocalPontos)
         PontosTotal = findViewById(R.id.TotalPontos)
+        Senha = findViewById(R.id.SenhaNova)
 
         Foto?.setOnClickListener {
             exibirCaixa()
         }
+
+        val carregar = Alertas.alertaCarregando(this)
+        carregar.show()
+
+        DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas{
+            override fun listaCidades(Lista: List<String>?) {
+                carregar.dismiss()
+                if(Lista != null){
+                    val adapter = ArrayAdapter(this@TelaPerfil, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, Lista)
+                    Cidade?.adapter = adapter
+
+                    Cidade?.setSelection(adapter.getPosition(Pessoa?.cidade!!))
+                }
+            }
+        })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Foto?.clipToOutline = true
@@ -150,12 +161,30 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
             DatabaseFirebaseSalvar.mudarNomeComImagem(Pessoa?.email!!, "", CaminhoFoto!! , this)
         }
 
-        if(Cidade?.text?.toString() != Pessoa?.cidade){
-            DatabaseFirebaseSalvar.mudarCidade(Pessoa?.cidade!!, Cidade?.text?.toString()!!)
+
+
+        if(Cidade?.selectedItem?.toString() != Pessoa?.cidade){
+            Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando).show()
+            DatabaseFirebaseSalvar.mudarCidade(Pessoa?.email!!, Cidade?.selectedItem?.toString()!!)
         }
 
-        if(Pessoa?.raio?.toInt() != RaioPesquisa?.progress){
-            DatabaseFirebaseSalvar.mudarRaio(Pessoa?.email!!, RaioPesquisa?.progress!!)
+        if(Senha?.text?.toString()?.isNotEmpty()!! && !Modo){
+            if(Senha?.text?.toString()?.length!! >= 6){
+                Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando, 5000).show()
+                FirebaseAutenticacao.mudarSenha(Senha?.text.toString(), object : FirebaseAutenticacao.Mudanca{
+                    override fun resultado(Modo: Boolean) {
+                        if(Modo){
+                            this@TelaPerfil.Modo = true
+                            Alertas.criarAlerter(this@TelaPerfil, R.string.SenhaSalva, R.string.Aguardando, 5000).show()
+                        } else {
+                            Alertas.criarAlerter(this@TelaPerfil, R.string.ErroSenhaMudanca, R.string.Aguardando, 5000).show()
+                        }
+                    }
+                })
+            } else {
+                Alertas.criarAlerter(this, R.string.ErroSenha, R.string.Aguardando, 5000).show()
+            }
+
         }
     }
 

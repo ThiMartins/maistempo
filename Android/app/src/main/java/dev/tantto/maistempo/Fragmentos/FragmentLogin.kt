@@ -28,6 +28,7 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
     private var Conectar:Button? = null
     private var BotaoApresentacao:Button? = null
     private var BotaoNovo:Button? = null
+    private var EsqueciSenha:Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val View = inflater.inflate(R.layout.fragment_login, container, false)
@@ -58,6 +59,7 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
         Conectar = View.findViewById<Button>(R.id.ConectarUsuario)
         BotaoApresentacao = View.findViewById<Button>(R.id.IrApresentacao)
         BotaoNovo = View.findViewById<Button>(R.id.IrNovo)
+        EsqueciSenha = View.findViewById<Button>(R.id.EsqueciSenha)
 
         eventos()
     }
@@ -76,6 +78,23 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
         }
         Conectar?.setOnClickListener {
             verificar()
+        }
+
+        EsqueciSenha?.setOnClickListener {
+            if(UserName?.text?.toString()?.isNotEmpty()!! && UserName?.text?.toString()?.contains("@")!! && UserName?.text?.toString()?.contains(".com")!!){
+                Alertas.criarAlerter(referecencia!!, R.string.EnviandoPedido    , R.string.Atencao, 5000).show()
+                FirebaseAutenticacao.recuperarSenha(UserName?.text?.toString()!!, object : FirebaseAutenticacao.Mudanca{
+                    override fun resultado(Modo: Boolean) {
+                        if(Modo){
+                            Alertas.criarAlerter(referecencia!!, R.string.EnviadoRecuperaSenha, R.string.Atencao, 10000).show()
+                        } else {
+                            Alertas.criarAlerter(referecencia!!, R.string.ErroEnviarRecupera, R.string.Atencao, 10000).show()
+                        }
+                    }
+                })
+            } else {
+                Alertas.criarAlerter(referecencia!!, R.string.CampoEmailSenha, R.string.Atencao, 5000).show()
+            }
         }
     }
 

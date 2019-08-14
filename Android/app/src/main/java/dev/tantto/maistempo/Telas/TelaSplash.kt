@@ -147,13 +147,21 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
             ListaLocais.refazer(Lista)
             ListaBitmap.refazer(ListaImagem)
             if(Pessoa != null){
+                ListaLocais.refazerFavoritos(Pessoa.lojasFavoritas)
                 verificacaoGPS(Pessoa)
             }
+        } else {
+            prepararInicio(Pessoa)
         }
     }
 
     private fun verificacaoGPS(Pessoa: Perfil) {
-        BuscarLojasProximas(this, (Pessoa.raio.toDouble()) / 100).procurarProximos(object :
+        val Raio = if(Pessoa.raio >= 5){
+            50.0
+        } else {
+            Pessoa.raio.toDouble()
+        }
+        BuscarLojasProximas(this,   Raio / 100).procurarProximos(object :
             BuscarLojasProximas.BuscaConcluida {
             override fun resultado(Modo: Boolean) {
                 if(Pausado){
@@ -176,4 +184,5 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
             finishAffinity()
         }
     }
+
 }

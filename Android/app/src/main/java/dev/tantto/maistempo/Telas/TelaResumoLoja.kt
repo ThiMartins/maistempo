@@ -49,6 +49,11 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
 
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        FilaResumo.atualizar()
+    }
+
     private fun recuperarLoja() {
         if (intent.hasExtra(Chave.CHAVE_TELA_PRINCIPAL.valor)) {
             LojaInfo = intent.getSerializableExtra(Chave.CHAVE_TELA_PRINCIPAL.valor) as Lojas

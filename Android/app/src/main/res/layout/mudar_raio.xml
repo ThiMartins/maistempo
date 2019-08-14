@@ -36,4 +36,12 @@
             android:layout_marginEnd="4dp"
             android:max="500"/>
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Inforaio"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ValorMudarRaio"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

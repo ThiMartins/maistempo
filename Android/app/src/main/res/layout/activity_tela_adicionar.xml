@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:layout_constraintTop_toBottomOf="@id/CidadeInputLayoutLoja"
+                app:layout_constraintTop_toBottomOf="@id/CidadeReferenciaLoja"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -150,25 +150,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="16dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/CidadeInputLayoutLoja"
+        <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/LocalInputLayout"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toStartOf="@id/CidadeReferenciaLoja"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/Cidade"
+                android:textSize="18sp"/>
 
-            <EditText
-                    android:id="@+id/CidadeReferenciaLoja"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/Cidade"
-                    android:inputType="text"
-                    android:autofillHints="no"
-                    tools:targetApi="o"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
+        <Spinner
+                android:id="@+id/CidadeReferenciaLoja"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintTop_toBottomOf="@id/LocalInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/HorarioInicioInputLayoutLoja"
