@@ -452,4 +452,20 @@
         será possivel determinar sua distância com a loja
     </string>
     <string name="GpsDesligado">Deseja ligar o GPS ?</string>
+    <string name="NovaSenha">Nova senha (opcional)</string>
+    <string name="SenhaSalva">Senha salva com sucesso</string>
+    <string name="ErroSenhaMudanca">Não foi possivel mudar a senha, verifique sua conexão ou tente mais tarde</string>
+    <string name="EsqueciSenhaMinha">Esqueci minha senha</string>
+    <string name="CampoEmailSenha">Por favor colocar o email para recuperar a senha</string>
+    <string name="ErroEnviarRecupera">Não foi possivel enviar o email de recuperação, por favor verifique seu email se
+        está correto e ativo
+    </string>
+    <string name="EnviadoRecuperaSenha">Entre no seu email para mudar a senha</string>
+    <string name="EnviandoPedido">Enviando pedido de recuperação de senha</string>
+    <string name="ErroLojas">Não foi possivel encontrar lojas nessas configurações, mude o raio de pesquisa ou a cidade
+        de referência
+    </string>
+    <string name="Inforaio">Coloque no maximo para a leitura de 50Km</string>
+    <string name="CriarLojaMensagem">Criando Loja</string>
+    <string name="ErroCriarLoja">Não foi possivel criar esta loja</string>
 </resources>

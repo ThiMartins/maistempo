@@ -60,6 +60,30 @@ class FirebaseAutenticacao{
         fun apagarConta(){
             Autenticacao.currentUser?.delete()
         }
+
+        fun mudarSenha(NovaSenha:String, Interface:Mudanca){
+            Autenticacao.currentUser?.updatePassword(NovaSenha)?.addOnCompleteListener {
+                if(it.isSuccessful){
+                    Interface.resultado(true)
+                }
+            }
+        }
+
+        fun recuperarSenha(Email:String, Interface:Mudanca){
+            Autenticacao.sendPasswordResetEmail(Email).addOnCompleteListener {
+                if(it.isSuccessful){
+                    Interface.resultado(true)
+                } else {
+                    Interface.resultado(false)
+                }
+            }
+        }
+    }
+
+    interface Mudanca {
+
+        fun resultado(Modo: Boolean)
+
     }
 
 }

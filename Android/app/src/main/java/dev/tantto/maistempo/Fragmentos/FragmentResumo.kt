@@ -60,6 +60,10 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         }
     }
 
+    fun atualizar(){
+        Tabs?.getTabAt(0)?.select()
+    }
+
     fun passandoLja(Ref:Lojas, refTelaLoja:TelaResumoLoja){
         LojaInfo = Ref
         referencia = refTelaLoja
@@ -137,7 +141,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
                 adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
             }
         })
-        adaptador?.mudarValores(Tabs?.selectedTabPosition!!)
+
     }
 
     override fun resultado(Valor: Resultado) {

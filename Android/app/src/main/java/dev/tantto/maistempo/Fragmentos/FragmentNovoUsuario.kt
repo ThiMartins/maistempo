@@ -75,10 +75,10 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         carregar.show()
 
         DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas{
-            override fun cidades(Lista: List<String>) {
+            override fun listaCidades(Lista: List<String>?) {
                 carregar.dismiss()
                 val contexto = this@FragmentNovoUsuario.context
-                if(contexto != null){
+                if(contexto != null && Lista != null){
                     val adapter = ArrayAdapter(contexto, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, Lista)
                     Cidade?.adapter = adapter
                 }
@@ -282,7 +282,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 email = Email?.text.toString(),
                 senha = Senha?.text.toString(),
                 nascimento = DataTexto?.text.toString(),
-                cidade = Cidade?.selectedItem.toString().toLowerCase()
+                cidade = Cidade?.selectedItem.toString()
             ), this
         )
     }

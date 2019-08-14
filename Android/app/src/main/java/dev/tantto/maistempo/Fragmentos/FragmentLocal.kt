@@ -39,6 +39,12 @@ class FragmentLocal: Fragment() {
         Referencia = Passando
     }
 
+    fun cancelarAtualizacao(){
+        if(swipe?.isRefreshing!!){
+            swipe?.isRefreshing = false
+        }
+    }
+
     private fun configurandoView(view:View){
         swipe = view.findViewById(R.id.AtualizarLista)
         swipe?.setOnRefreshListener {

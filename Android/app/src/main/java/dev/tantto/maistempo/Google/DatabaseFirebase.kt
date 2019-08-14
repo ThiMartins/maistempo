@@ -161,7 +161,7 @@ class DatabaseFirebaseSalvar {
             }
         }
 
-        fun adicionarLoja(LojaNova:Lojas, Caminho: Uri, Local:GeoLocation){
+        fun adicionarLoja(LojaNova:Lojas, Caminho: Uri, Local:GeoLocation, Interface:CriarLoja){
             try {
                 FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).add(LojaNova).addOnCompleteListener { documento ->
                     if(documento.isSuccessful){
@@ -176,14 +176,22 @@ class DatabaseFirebaseSalvar {
 
                         FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).document(documento.result?.id!!).set(Item).addOnCompleteListener {
                             CloudStorageFirebase.salvarFotoCloud(Caminho, "${documento.result?.id!!}.jpg")
-
+                            Interface.resultado(true)
                         }
+                    } else {
+                        Interface.resultado(false)
                     }
                 }
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
             }
         }
+
+    }
+
+    interface CriarLoja{
+
+        fun resultado(Modo:Boolean)
 
     }
 
@@ -195,7 +203,7 @@ class DatabaseFirebaseRecuperar {
 
         @Suppress("unchecked_cast")
         fun recuperarLojasLocais(Cidade:String, Interface:DatabaseLocaisInterface){
-            FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).whereEqualTo(Chave.CHAVE_CIDADE.valor, Cidade.toLowerCase()).get().addOnCompleteListener {
+            FirebaseFirestore.getInstance().collection(Chave.CHAVE_LOJA.valor).whereEqualTo(Chave.CHAVE_CIDADE.valor, Cidade).get().addOnCompleteListener {
                 if(it.isSuccessful){
                     when {
                         !it.result?.isEmpty!! -> {
@@ -244,11 +252,11 @@ class DatabaseFirebaseRecuperar {
                             pontosTotais = documentSnapshot["pontosTotais"].toString().toLong(),
                             nascimento = documentSnapshot["nascimento"].toString(),
                             lojasFavoritas = documentSnapshot["lojasFavoritas"] as MutableList<String>,
-                            cidade = documentSnapshot["cidade"].toString().toLowerCase(),
+                            cidade = documentSnapshot["cidade"].toString(),
                             acesso = documentSnapshot["acesso"].toString()
                         )
-                        val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
-                        ListaLocais.refazerFavoritos(ListaTemp)
+                        //val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                        //ListaLocais.refazerFavoritos(ListaTemp)
                         Interface.pessoaRecebida(Item)
                     }
                 }
@@ -321,19 +329,34 @@ class DatabaseFirebaseRecuperar {
         }
 
         @Suppress("UNCHECKED_CAST")
-        fun recuperarCidades(Interface:CidadesRecuperadas){
+        fun recuperarCidades(Interface:CidadesRecuperadas?){
             try {
                 FirebaseFirestore.getInstance().collection(Chave.CHAVE_ADM.valor).document(Chave.CHAVE_ADM_CIDADES.valor).get().addOnCompleteListener {
                     if(it.isSuccessful){
                         if(it.result?.exists()!!){
-                            val items = it.result?.data!!
-                            val lista = items["sao_paulo"] as List<String>
-                            Interface.cidades(lista)
+                            if(Interface != null){
+                                try {
+                                    val items = it.result?.data
+                                    if(items != null){
+                                        val lista = items["sao_paulo"] as List<String>
+                                        Interface.listaCidades(lista)
+                                    } else {
+                                        Interface.listaCidades(null)
+                                    }
+                                } catch (Erro:KotlinNullPointerException){
+                                    Erro.printStackTrace()
+                                }
+                            }
+                        } else {
+                            Interface?.listaCidades(null)
                         }
+                    } else {
+                        Interface?.listaCidades(null)
                     }
                 }
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
+                Interface?.listaCidades(null)
             }
         }
 
@@ -367,7 +390,7 @@ class DatabaseFirebaseRecuperar {
 
 interface CidadesRecuperadas{
 
-    fun cidades(Lista:List<String>)
+    fun listaCidades(Lista:List<String>?)
 
 }
 

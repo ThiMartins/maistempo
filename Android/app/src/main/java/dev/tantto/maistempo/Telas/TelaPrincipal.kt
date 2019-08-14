@@ -46,11 +46,6 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
         configurandoPager()
         setandoTabItens()
-
-    }
-
-    override fun onPostResume() {
-        super.onPostResume()
         verificarGps()
     }
 
@@ -171,7 +166,12 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     fun atualizarLista(){
         DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
             override fun pessoaRecebida(Pessoa: Perfil) {
-                BuscarLojasProximas(this@TelaPrincipal, (Pessoa.raio / 100).toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
+                val Raio = if(Pessoa.raio >= 5){
+                    50.0
+                } else {
+                    Pessoa.raio.toDouble()
+                }
+                BuscarLojasProximas(this@TelaPrincipal, Raio / 100).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
                     override fun resultado(Modo: Boolean) {
                         BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
                             override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
@@ -181,6 +181,9 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                                         ListaBitmap.refazer(ListaImagem)
                                         TodosLocais.notificarMudanca()
                                     }
+                                } else {
+                                    TodosLocais.cancelarAtualizacao()
+                                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
                                 }
                             }
                         })

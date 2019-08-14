@@ -10,10 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,6 +18,8 @@ import com.firebase.geofire.GeoLocation
 import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.google.CidadesRecuperadas
+import dev.tantto.maistempo.google.DatabaseFirebaseRecuperar
 import dev.tantto.maistempo.google.DatabaseFirebaseSalvar
 import org.json.JSONObject
 import java.lang.Exception
@@ -36,7 +35,7 @@ class TelaAdicionarLoja : AppCompatActivity() {
     private var Telefone:EditText? = null
     private var Latitude:EditText? = null
     private var Longitude:EditText? = null
-    private var Cidade:EditText? = null
+    private var Cidade:Spinner? = null
     private var HorarioInicio:EditText? = null
     private var HorarioFim:EditText? = null
     private var AdicionarImage:TextView? = null
@@ -65,12 +64,25 @@ class TelaAdicionarLoja : AppCompatActivity() {
         Telefone = findViewById<EditText>(R.id.TelefoneNovoLoja)
         Latitude = findViewById<EditText>(R.id.LatitudeLoja)
         Longitude = findViewById<EditText>(R.id.LongitudeLoja)
-        Cidade = findViewById<EditText>(R.id.CidadeReferenciaLoja)
+        Cidade = findViewById<Spinner>(R.id.CidadeReferenciaLoja)
         AdicionarImage = findViewById<TextView>(R.id.AddImagemLoja)
         AdicionarViaMapa = findViewById<Button>(R.id.AbrirMapaLoja)
         AdicionarLoja = findViewById<Button>(R.id.CriarNovaLoja)
         HorarioInicio = findViewById<EditText>(R.id.HorarioInicioLoja)
         HorarioFim = findViewById<EditText>(R.id.HorarioFimLoja)
+
+        val carregar = Alertas.alertaCarregando(this)
+        carregar.show()
+
+        DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas {
+            override fun listaCidades(Lista: List<String>?) {
+                carregar.dismiss()
+                if(Lista != null){
+                    val adapter = ArrayAdapter(this@TelaAdicionarLoja, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, Lista)
+                    Cidade?.adapter = adapter
+                }
+            }
+        })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Imagem?.clipToOutline = true
@@ -118,10 +130,6 @@ class TelaAdicionarLoja : AppCompatActivity() {
                 alerta(R.string.ErroLongitudeLoja, R.string.Atencao)
                 Longitude?.requestFocus()
             }
-            Cidade?.text?.toString()?.isEmpty()!! -> {
-                alerta(R.string.ErroCidadeLoja, R.string.Atencao)
-                Cidade?.requestFocus()
-            }
             HorarioInicio?.text?.toString()?.isEmpty()!! ->{
                 alerta(R.string.ErroHorarioInicioLoja, R.string.Atencao)
                 HorarioInicio?.requestFocus()
@@ -137,6 +145,7 @@ class TelaAdicionarLoja : AppCompatActivity() {
     }
 
     private fun criarLoja(){
+        alerta(R.string.CriarLojaMensagem, R.string.Atencao)
         DatabaseFirebaseSalvar.adicionarLoja(Lojas(
             id = "",
             titulo = Nome?.text?.toString()!!,
@@ -146,15 +155,22 @@ class TelaAdicionarLoja : AppCompatActivity() {
             filaNormal = hashMapOf(),
             filaRapida = hashMapOf(),
             filaPreferencial = hashMapOf(),
-            cidade = Cidade?.text?.toString()?.toLowerCase()!!,
+            cidade = Cidade?.selectedItem?.toString()!!,
             telefone = Telefone?.text?.toString()!!,
             quantidadeAvaliacoesFila = 0,
             quantidadeAvaliacoesRating =  0,
             horarioInicio = HorarioInicio?.text?.toString()?.toInt()!!,
             horarioFinal =  HorarioFim?.text?.toString()?.toInt()!!,
             mediaRanking = 0.0
-        ), CaminhoFoto!!, GeoLocation(Latitude?.text?.toString()?.toDouble()!!, Longitude?.text?.toString()?.toDouble()!!)
-        )
+        ), CaminhoFoto!!, GeoLocation(Latitude?.text?.toString()?.toDouble()!!, Longitude?.text?.toString()?.toDouble()!!), object : DatabaseFirebaseSalvar.CriarLoja{
+            override fun resultado(Modo: Boolean) {
+                if(Modo){
+                    this@TelaAdicionarLoja.finish()
+                } else {
+                    alerta(R.string.ErroCriarLoja, R.string.Atencao)
+                }
+            }
+        })
 
     }
 
@@ -179,7 +195,7 @@ class TelaAdicionarLoja : AppCompatActivity() {
                 }
             }
         })
-        download.execute((Local?.text?.toString() + ", ${Cidade?.text?.toString()}").replace(" ","+"))
+        download.execute((Local?.text?.toString() + ", ${Cidade?.selectedItem?.toString()}").replace(" ","+"))
 
     }
 
