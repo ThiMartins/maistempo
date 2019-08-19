@@ -16,7 +16,7 @@ class LocalizacaoLojas {
 
         fun adicionarLojas(Nome:String, Localizacao: GeoLocation) {
             GeoFireReferencia = GeoFire(Referencia)
-            GeoFireReferencia?.setLocation(Nome, Localizacao) { key, _ ->
+            GeoFireReferencia?.setLocation(Nome, Localizacao) { _, _ ->
 
             }
 

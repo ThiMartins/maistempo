@@ -2,8 +2,10 @@
 <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -38,9 +40,11 @@
                     android:id="@+id/UserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/Username"
+                    android:hint="@string/Email"
                     android:inputType="textPersonName"
-                    android:autofillHints="no" tools:targetApi="o"/>
+                    android:autofillHints="no"
+                    android:maxLength="40"
+                    tools:targetApi="o"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/Senha"
                     android:inputType="textPassword"
+                    android:maxLength="15"
                     android:autofillHints="no" tools:targetApi="o"/>
 
         </com.google.android.material.textfield.TextInputLayout>

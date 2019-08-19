@@ -37,15 +37,15 @@ class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : Re
         val ChavePreferencial = Lista.filaPreferencial.keys.toList().asReversed()
         when(Modo){
             0 -> {
-                val ValorProgresso = Lista.filaNormal[ChaveNormal[position]].toString().toDouble() * 14.25
+                val ValorProgresso = Lista.filaNormal[ChaveNormal[position]].toString().toDouble() * 16.6
                 holder.setandoItens(ValorProgresso.toInt(), ChaveNormal[position].toInt())
             }
             1 -> {
-                val ValorProgresso = Lista.filaRapida[ChaveRapida[position]].toString().toDouble() * 14.25
+                val ValorProgresso = Lista.filaRapida[ChaveRapida[position]].toString().toDouble() * 16.6
                 holder.setandoItens(ValorProgresso.toInt(), ChaveRapida[position].toInt())
             }
             2 -> {
-                val ValorProgresso = Lista.filaPreferencial[ChavePreferencial[position]].toString().toDouble() * 14.25
+                val ValorProgresso = Lista.filaPreferencial[ChavePreferencial[position]].toString().toDouble() * 16.6
                 holder.setandoItens(ValorProgresso.toInt(), ChavePreferencial[position].toInt())
             }
         }

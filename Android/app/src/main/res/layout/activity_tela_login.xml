@@ -5,7 +5,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".telas.TelaLogin">
+        tools:context=".telas.TelaLogin"
+        android:background="@color/colorPrimary">
 
     <androidx.viewpager.widget.ViewPager
             android:layout_width="match_parent"
@@ -13,7 +14,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/TabLayout"
             android:id="@+id/VisualizarLogin"/>
 
     <com.google.android.material.tabs.TabLayout
