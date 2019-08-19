@@ -3,7 +3,6 @@ package dev.tantto.maistempo.fragmentos
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
-import com.xw.repo.BubbleSeekBar
+import com.ramotion.fluidslider.FluidSlider
 import dev.tantto.maistempo.adaptadores.AdaptadorFilas
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.classes.Alertas
@@ -23,6 +22,7 @@ import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaResumoLoja
 import java.util.*
 
+
 class FragmentResumo : Fragment(), FunctionsInterface {
 
     private lateinit var referencia:TelaResumoLoja
@@ -31,7 +31,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
     private var Lista:RecyclerView? = null
     private var NumeroAvaliacoes:TextView? = null
     private var EnviarFilaMomento:Button? = null
-    private var ProgressoFila:BubbleSeekBar? = null
+    private var ProgressoFila:FluidSlider? = null
     private var Tabs:TabLayout? = null
     private var LojaInfo:Lojas? = null
     private var NovaLoja:Lojas? = null
@@ -78,21 +78,25 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         recuperandoView()
         configurandoTab()
 
-        ProgressoFila?.setCustomSectionTextArray { _, array ->
-            array.clear()
+        ProgressoFila?.startText = "0"
+        ProgressoFila?.endText = "7"
+        ProgressoFila?.position = 0.0F
+        ProgressoFila?.textSize = 34F
+        ProgressoFila?.bubbleText = "< 10 min"
 
-            array.put(0, "5 min")
-            array.put(1, "10 min")
-            array.put(2, "20 min")
-            array.put(3, "30 min")
-            array.put(4, "40 min")
-            array.put(5, "50 min")
-            array.put(6, "60 min")
-            array.put(7, "Mais")
-
-            array
+        ProgressoFila?.positionListener = { pos ->
+            val valor = pos * 100
+            val value = when{
+                valor < 14.28 -> "< 10 min"
+                valor >= 14.28 && valor < 28.56 -> "10 a 20 min"
+                valor >= 28.56 && valor < 42.84 -> "20 a 30 min"
+                valor >= 42.84 && valor < 57.12 -> "30 a 40 min"
+                valor >= 57.12 && valor < 71.4 -> "40 a 50 min"
+                valor >= 71.4 && valor < 85.68 -> "50 a 60 min"
+                else -> "> 60 min"
+            }
+            ProgressoFila?.bubbleText = value
         }
-
 
         EnviarFilaMomento?.setOnClickListener {
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email
@@ -108,7 +112,19 @@ class FragmentResumo : Fragment(), FunctionsInterface {
                     else -> null
                 }
 
-                CloudFunctions.adicionarNotaFila(LojaInfo?.id!!, Tipo?.valor!!, ProgressoFila?.progress?.toDouble()!!, Horas.toString(), this)
+
+                val valor = ProgressoFila?.position!!
+                val valorNota = when {
+                    valor < 14.28 -> 0
+                    valor >= 14.28 && valor < 28.56 -> 1
+                    valor >= 28.56 && valor < 42.84 -> 2
+                    valor >= 42.84 && valor < 57.12 -> 3
+                    valor >= 57.12 && valor < 71.4 -> 4
+                    valor >= 71.4 && valor < 85.68 -> 5
+                    else -> 6
+                }
+
+                CloudFunctions.adicionarNotaFila(LojaInfo?.id!!, Tipo?.valor!!, valorNota.toDouble(), Horas.toString(), this)
                 Alertas.criarAlerter(referencia, R.string.EnviandoNota ,R.string.Enviando, 10000).show()
             }
         }
@@ -121,7 +137,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         NumeroAvaliacoes = this.view?.findViewById<TextView>(R.id.NumeroAvaliacoes)
         Tabs = this.view?.findViewById<TabLayout>(R.id.TabLayoutFila)
         EnviarFilaMomento = this.view?.findViewById<Button>(R.id.EnviarFila)
-            ProgressoFila = this.view?.findViewById<BubbleSeekBar>(R.id.ProgressoFilaVoto)
+        ProgressoFila = this.view?.findViewById<FluidSlider>(R.id.ProgressoFilaVoto)
     }
 
     private fun configurandoTab() {
@@ -172,7 +188,6 @@ class FragmentResumo : Fragment(), FunctionsInterface {
         DatabaseFirebaseRecuperar.recuperarDadosLoja(LojaInfo?.id!!, object : LojaRecuperada {
             override fun dados(Loja: Lojas?) {
                 if (Loja != null) {
-                    Log.i("Teste", Loja.toString())
                     if(LojaInfo?.quantidadeAvaliacoesFila != Loja.quantidadeAvaliacoesFila){
                         NovaLoja = Loja
                     }
@@ -189,7 +204,7 @@ class FragmentResumo : Fragment(), FunctionsInterface {
             referencia,
             "${getString(R.string.IntervaloFila)}: " +
                     "${
-                    when (ProgressoFila?.progress) {
+                    when (ProgressoFila?.position?.toInt()) {
                         0 -> getString(R.string.MenorQue10)
                         1 -> getString(R.string.Entre10e20)
                         2 -> getString(R.string.Entre20e30)

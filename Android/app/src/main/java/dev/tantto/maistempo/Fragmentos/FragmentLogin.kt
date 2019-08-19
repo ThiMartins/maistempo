@@ -17,6 +17,7 @@ import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.google.TiposErrosLogar
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaLogin
+import java.util.regex.Pattern
 
 class FragmentLogin: Fragment(), AutenticacaoLogin{
 
@@ -81,7 +82,7 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
         }
 
         EsqueciSenha?.setOnClickListener {
-            if(UserName?.text?.toString()?.isNotEmpty()!! && UserName?.text?.toString()?.contains("@")!! && UserName?.text?.toString()?.contains(".com")!!){
+            if(UserName?.text?.toString()?.isNotEmpty()!! && isEmailValido(UserName?.text?.toString()!!)){
                 Alertas.criarAlerter(referecencia!!, R.string.EnviandoPedido    , R.string.Atencao, 5000).show()
                 FirebaseAutenticacao.recuperarSenha(UserName?.text?.toString()!!, object : FirebaseAutenticacao.Mudanca{
                     override fun resultado(Modo: Boolean) {
@@ -99,28 +100,48 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
     }
 
     private fun verificar(){
-        if(UserName?.text?.isNotEmpty()!! && Senha?.text?.isNotEmpty()!!){
+        if(UserName?.text?.isEmpty()!!) {
+            Alertas.criarAlerter(referecencia!!, R.string.EmailVazio, R.string.Atencao, 5000).show()
+        } else if (Senha?.text?.isEmpty()!!){
+            Alertas.criarAlerter(referecencia!!, R.string.SenhaVazia, R.string.Atencao, 5000).show()
+        } else if(!UserName?.text?.toString()?.contains("@")!!){
+            Alertas.criarAlerter(referecencia!!, R.string.ErroEmail, R.string.Atencao, 5000).show()
+        } else if(!UserName?.text?.toString()?.contains(".com")!!){
+            Alertas.criarAlerter(referecencia!!, R.string.ErroEmail, R.string.Atencao, 5000).show()
+        } else if(Senha?.text?.length!! < 6){
+            Alertas.criarAlerter(referecencia!!, R.string.ErroSenha, R.string.Atencao, 5000).show()
+        } else if(referecencia != null){
             Alertas.criarAlerter(referecencia!!, R.string.AguardeConectando, R.string.Conectando, 30000).show()
             FirebaseAutenticacao.logarUsuario(UserName?.text.toString(), Senha?.text.toString(), this)
-        } else {
-            Alertas.criarAlerter(referecencia!!, R.string.CamposVazios, R.string.Atencao, 5000).show()
         }
     }
 
+    private fun isEmailValido(Email:String) : Boolean{
+        return Pattern.compile(
+            "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                    + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                    + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                    + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+        ).matcher(Email).matches()
+    }
+
     override fun usuarioLogado(User: FirebaseUser?) {
-        if(!SalvarUsuario?.isChecked!!){
-            Dados.salvarLogin(true, this.requireContext())
-        } else {
-            Dados.salvarLogin(false, this.requireContext())
+        val contexto = this.context
+
+        if(contexto != null){
+            if(!SalvarUsuario?.isChecked!!){
+                Dados.salvarLogin(true, contexto)
+            } else {
+                Dados.salvarLogin(false, contexto)
+            }
         }
+
         referecencia?.loginConcluido(User)
     }
 
     override fun erroLogar(Erro: TiposErrosLogar) {
-        if(Erro == TiposErrosLogar.CONTA_NAO_EXISTENTE){
-            Alertas.criarAlerter(referecencia!!, R.string.ContaNaoExistente, R.string.Atencao, 5000).show()
-        } else if(Erro == TiposErrosLogar.SENHA_INCORRETA){
-            Alertas.criarAlerter(referecencia!!, R.string.SenhaIncorreta, R.string.Atencao, 5000).show()
-        }
+        Alertas.criarAlerter(referecencia!!, R.string.ErroLogar, R.string.Atencao, 5000).show()
     }
 }

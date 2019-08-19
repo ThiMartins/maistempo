@@ -10,6 +10,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseUser
 import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.google.*
@@ -26,6 +29,7 @@ import dev.tantto.maistempo.telas.TelaLogin
 import java.io.IOException
 import java.text.DateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
@@ -39,7 +43,10 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private var Nome:EditText? = null
     private var Email:EditText? = null
     private var Senha:EditText? = null
+    private var SenhaConfirmar:EditText? = null
+    private var SenhaConfirmarInput:TextInputLayout? = null
     private var DataTexto:EditText? = null
+    private var DataTextoInput:TextInputLayout? = null
     private var Foto:ImageView? = null
     private var Criar:Button? = null
     private var CaminhoFoto:Uri? = null
@@ -51,6 +58,8 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private var AnoSpinner:Spinner? = null
     private var MesSpinner:Spinner? = null
     private var DiaSpinner:Spinner? = null
+    private var BackupData:String = ""
+    private var ListaCidades:MutableList<String> = mutableListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val Fragmento = inflater.inflate(R.layout.fragment_novo_usuario, container, false)
@@ -63,30 +72,34 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         Nome = Fragmento.findViewById<EditText>(R.id.NomeNovo)
         Email = Fragmento.findViewById<EditText>(R.id.EmailNovo)
         Senha = Fragmento.findViewById<EditText>(R.id.SenhaNovo)
+        SenhaConfirmar = Fragmento.findViewById<EditText>(R.id.SenhaConfirmarNovo)
+        SenhaConfirmarInput = Fragmento.findViewById<TextInputLayout>(R.id.SenhaConfirmarInputLayout)
         Foto = Fragmento.findViewById<ImageView>(R.id.FotoNovoUsuario)
         DataTexto = Fragmento.findViewById<EditText>(R.id.DataNascimento)
+        DataTextoInput = Fragmento.findViewById<TextInputLayout>(R.id.DataInputLayout)
         Criar = Fragmento.findViewById<Button>(R.id.CriarNovaConta)
         EscolherData = Fragmento.findViewById<Button>(R.id.AbrirDataPicker)
         Cidade = Fragmento.findViewById<Spinner>(R.id.CidadeReferencia)
         CheckTermos = Fragmento.findViewById<CheckBox>(R.id.ConcordoTermos)
         VerTermos = Fragmento.findViewById<TextView>(R.id.VerTermos)
 
-        val carregar = Alertas.alertaCarregando(this.requireContext())
-        carregar.show()
-
-        DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas{
-            override fun listaCidades(Lista: List<String>?) {
-                carregar.dismiss()
-                val contexto = this@FragmentNovoUsuario.context
-                if(contexto != null && Lista != null){
-                    val adapter = ArrayAdapter(contexto, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, Lista)
-                    Cidade?.adapter = adapter
-                }
-            }
-        })
+        configuraAdapter()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Foto?.clipToOutline = true
+        }
+    }
+
+    fun passandoCidades(Lista:List<String>){
+        ListaCidades.addAll(Lista)
+        configuraAdapter()
+    }
+
+    fun configuraAdapter(){
+        val contexto = this@FragmentNovoUsuario.context
+        if(contexto != null){
+            val adapter = ArrayAdapter(contexto, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, ListaCidades)
+            Cidade?.adapter = adapter
         }
     }
 
@@ -114,6 +127,64 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     }
 
     private fun eventos() {
+
+        SenhaConfirmar?.addTextChangedListener(object  : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(p0?.toString() != Senha?.text?.toString()){
+                    SenhaConfirmarInput?.error = getString(R.string.SenhaErrada)
+                } else {
+                    SenhaConfirmarInput?.isErrorEnabled = false
+                }
+            }
+        })
+
+        DataTexto?.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                if(p0 != null){
+                    BackupData = p0.toString()
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(p0 != null){
+                    if(p0.length == 2 && BackupData.length < p0.length){
+                        DataTexto?.setText(String.format("$p0/"))
+                        DataTexto?.setSelection(3)
+                        val Dia = String.format("${p0[0]}${p0[1]}")
+                        if (Dia.toInt() > 31){
+                            DataTextoInput?.error = getString(R.string.ErroDia)
+                        } else {
+                            DataTextoInput?.isErrorEnabled = false
+                        }
+                    } else if (p0.length == 5 && BackupData.length < p0.length){
+                        DataTexto?.setText(String.format("$p0/"))
+                        DataTexto?.setSelection(6)
+                        val Mes = String.format("${p0[3]}${p0[4]}")
+                        if (Mes.toInt() > 12){
+                            DataTextoInput?.error = getString(R.string.ErroMes)
+                        } else {
+                            DataTextoInput?.isErrorEnabled = false
+                        }
+                    } else {
+                        BackupData = DataTexto?.text?.toString()!!
+                        DataTextoInput?.isErrorEnabled = false
+                    }
+                }
+            }
+        })
+
         Criar?.setOnClickListener {
             verificar()
         }
@@ -136,7 +207,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 DataNascimento.setOnDateSetListener { _, year, month, dayOfMonth ->
                     val ConverterData = Calendar.getInstance()
                     ConverterData.set(year, month, dayOfMonth)
-                    val DataFormatada = DateFormat.getDateInstance().format(ConverterData.time)
+                    val DataFormatada = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(ConverterData.time)
                     DataTexto?.setText(DataFormatada)
                 }
             } else {
@@ -148,7 +219,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
                     val ConverterData = Calendar.getInstance()
                     ConverterData.set(Ano, Mes, Dia)
-                    val DataFormatada = DateFormat.getDateInstance().format(ConverterData.time)
+                    val DataFormatada = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(ConverterData.time)
                     DataTexto?.setText(DataFormatada)
                 }
                 TelaData.setNegativeButton(R.string.Cancelar) { _, _ ->
@@ -236,8 +307,8 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
     private fun verificar() {
         if(Nome?.text?.isNotEmpty()!! ){
-            if (Email?.text?.toString()?.contains("@")!! && Email?.text.toString().contains(".com")){
-                if (Senha?.text?.toString()?.length!! >= 6){
+            if (isEmailValido(Email?.text?.toString()!!)){
+                if (Senha?.text?.toString()?.length!! >= 6 && SenhaConfirmar?.text?.toString() == Senha?.text?.toString()){
                     if(Cidade?.selectedItem.toString().isNotEmpty()){
                         if(CheckTermos?.isChecked!!){
                             alerta(R.string.Atencao, R.string.Aguarde)
@@ -261,9 +332,13 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                         alerta(R.string.CidadeFaltando, R.string.Atencao)
                         Cidade?.requestFocus()
                     }
-                } else {
+                } else if(Senha?.text?.toString()?.length!! >= 6){
                     alerta(R.string.ErroSenha, R.string.Atencao)
                     Senha?.requestFocus()
+                }
+                else if (SenhaConfirmar?.text?.toString() != Senha?.text?.toString()){
+                    alerta(R.string.SenhaErrada, R.string.Atencao)
+                    SenhaConfirmar?.requestFocus()
                 }
             } else {
                 alerta(R.string.ErroEmail, R.string.Atencao)
@@ -273,6 +348,17 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
             alerta(R.string.ErroNome, R.string.Atencao)
             Nome?.requestFocus()
         }
+    }
+
+    private fun isEmailValido(Email:String) : Boolean{
+        return Pattern.compile(
+            "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                    + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                    + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                    + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
+        ).matcher(Email).matches()
     }
 
     private fun criarUsuario() {

@@ -11,7 +11,8 @@ enum class TiposErrosCriar{
 
 enum class TiposErrosLogar{
     CONTA_NAO_EXISTENTE,
-    SENHA_INCORRETA
+    SENHA_INCORRETA,
+    ERRO_GENERICO
 }
 
 class FirebaseAutenticacao{
@@ -31,6 +32,7 @@ class FirebaseAutenticacao{
                         when(Erro.errorCode){
                             "ERROR_USER_NOT_FOUND" -> Interface.erroLogar(TiposErrosLogar.CONTA_NAO_EXISTENTE)
                             "ERROR_WRONG_PASSWORD" -> Interface.erroLogar(TiposErrosLogar.SENHA_INCORRETA)
+                            else -> Interface.erroLogar(TiposErrosLogar.ERRO_GENERICO)
                         }
                     }
                 }

@@ -137,18 +137,33 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                 alertaCarregando.dismiss()
                 val Alerta = AlertDialog.Builder(this@TelaPrincipal)
                 Alerta
-                    .setView(R.layout.mudar_raio)
+                    .setView(R.layout.raio_layout)
                     .setTitle(R.string.MudarRaio)
                     .setPositiveButton(R.string.Enviar){ _, _ ->
                         if(ProgressoRaio?.progress != Pessoa.raio.toInt()){
-                            DatabaseFirebaseSalvar.mudarRaio(Pessoa.email, ProgressoRaio?.progress!!)
+                            val RaioFinal = when (ProgressoRaio?.progress!!){
+                                0 -> 1
+                                1 -> 12
+                                2 -> 25
+                                3 -> 35
+                                4 -> 50
+                                else -> 100
+                            }
+                            DatabaseFirebaseSalvar.mudarRaio(Pessoa.email, RaioFinal)
 
                         }
                     }.setNegativeButton(R.string.Cancelar, null)
                 val AlertaFechado = Alerta.create()
                 AlertaFechado.show()
                 ProgressoRaio = AlertaFechado.findViewById<SeekBar>(R.id.ValorMudarRaio)
-                ProgressoRaio?.progress = Pessoa.raio.toString().toInt()
+                ProgressoRaio?.progress = when (Pessoa.raio.toString().toInt()) {
+                    1 -> 0
+                    12 -> 1
+                    25 -> 2
+                    35 -> 3
+                    50 -> 4
+                    else -> 5
+                }
             }
         })
     }
@@ -166,32 +181,36 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     fun atualizarLista(){
         DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
             override fun pessoaRecebida(Pessoa: Perfil) {
-                val Raio = if(Pessoa.raio >= 5){
-                    50.0
+                if(Pessoa.raio != 100L){
+                    BuscarLojasProximas(this@TelaPrincipal, Pessoa.raio.toDouble() * 1000).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
+                        override fun resultado(Modo: Boolean) {
+                            buscarLojas()
+                        }
+                    })
                 } else {
-                    Pessoa.raio.toDouble()
+                    buscarLojas()
                 }
-                BuscarLojasProximas(this@TelaPrincipal, Raio / 100).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
-                    override fun resultado(Modo: Boolean) {
-                        BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
-                            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
-                                if(Lista != null  && ListaImagem != null){
-                                    if(Lista.isNotEmpty()){
-                                        ListaLocais.refazer(Lista)
-                                        ListaBitmap.refazer(ListaImagem)
-                                        TodosLocais.notificarMudanca()
-                                    }
-                                } else {
-                                    TodosLocais.cancelarAtualizacao()
-                                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
-                                }
-                            }
-                        })
-                    }
-                })
+
             }
         })
 
+    }
+
+    private fun buscarLojas() {
+        BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
+            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
+                if (Lista != null && ListaImagem != null) {
+                    if (Lista.isNotEmpty()) {
+                        ListaLocais.refazer(Lista)
+                        ListaBitmap.refazer(ListaImagem)
+                        TodosLocais.notificarMudanca()
+                    }
+                } else {
+                    TodosLocais.cancelarAtualizacao()
+                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
+                }
+            }
+        })
     }
 
 }

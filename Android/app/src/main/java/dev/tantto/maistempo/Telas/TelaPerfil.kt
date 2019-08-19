@@ -168,7 +168,7 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
             DatabaseFirebaseSalvar.mudarCidade(Pessoa?.email!!, Cidade?.selectedItem?.toString()!!)
         }
 
-        if(Senha?.text?.toString()?.isNotEmpty()!! && !Modo){
+        if(Senha?.text?.toString()?.isNotEmpty()!! && !Modo && Senha?.text?.toString() != getString(R.string.app_name)){
             if(Senha?.text?.toString()?.length!! >= 6){
                 Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando, 5000).show()
                 FirebaseAutenticacao.mudarSenha(Senha?.text.toString(), object : FirebaseAutenticacao.Mudanca{

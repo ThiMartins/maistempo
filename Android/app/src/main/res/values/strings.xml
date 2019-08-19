@@ -54,7 +54,7 @@
     <string name="Feedback">Feedback</string>
     <string name="FotoPerfilRanking">Foto Perfil Ranking</string>
     <string name="Nome">Nome</string>
-    <string name="Email">Email</string>
+    <string name="Email">E-mail</string>
     <string name="Data">Data de Nascimento</string>
     <string name="CriarConta">Criar Conta</string>
     <string name="Concordar">Concordo</string>
@@ -68,19 +68,19 @@
     <string name="Arquivos">Arquivos</string>
     <string name="Escolha">Aonde deseja buscar a foto ?</string>
     <string name="ErroNome">Por favor colocar seu nome</string>
-    <string name="ErroEmail">Email está fora do padrão</string>
+    <string name="ErroEmail">E-mail está fora do padrão</string>
     <string name="ErroSenha">Por favor coloque uma senha maior</string>
     <string name="DataTexto">Data</string>
     <string name="ErroCriar">Não foi possivel criar a conta</string>
     <string name="CriandoConta">Criando conta</string>
     <string name="ExceptionSenhaFraca">Senha muito fraca</string>
     <string name="ExceptionContaExistente">Conta já existente</string>
-    <string name="ExceptionEmailIncorrecto">Email fora do padrão</string>
+    <string name="ExceptionEmailIncorrecto">E-mail fora do padrão</string>
     <string name="SenhaIncorreta">Senha incorreta</string>
     <string name="ContaNaoExistente">Esta conta não existe</string>
     <string name="AddImagem">Adicionar Imagem</string>
     <string name="IrApresentacao">Apresentação</string>
-    <string name="IrNovoUsuario">Criar Usuario</string>
+    <string name="IrNovoUsuario">Criar Usuário</string>
     <string name="TermosDeUso">Termos de uso</string>
     <string name="Concordo">Não, eu concordo</string>
     <string name="Discordo">Sim, eu discordo</string>
@@ -94,8 +94,8 @@
     <string name="Endereco">Endereço:</string>
     <string name="Telefone">Telefone:</string>
     <string name="Status">Status:</string>
-    <string name="UmKM">1 KM</string>
-    <string name="CincoKM">5 KM</string>
+    <string name="UmKM">1 Km</string>
+    <string name="CincoKM">5 Km</string>
     <string name="HorarioHint">Escolha o horario</string>
     <string name="IntervaloFila">Intervalo de</string>
     <string name="ParaFila">para a fila do tipo:</string>
@@ -211,7 +211,7 @@
         O plano Free pode não estar disponível para contratação. Quando disponível, estará sujeito às seguintes regras:
 
         – Os sites EasyPress e e-mails do plano free terão publicidade da Site.com.br ou de terceiros inserida no corpo, de tamanho e posição variáveis, onde a receita desta publicidade é exclusiva da Site.com.br. É facultado ao plano Free fazer atualização para qualquer plano de assinatura paga, removendo assim as publicidades a adquirindo os recursos e direitos do novo plano contratado. Utilizar técnicas para remover ou ocultar esta publicidade, é falta grave, culminando com a rescisão deste contrato;
-        – Recursos limitados conforme descrição em nosso site, e possibilidade de utilizar domínio próprio e contas de emails dependerá do produto contratado;
+        – Recursos limitados conforme descrição em nosso site, e possibilidade de utilizar domínio próprio e contas de e-mails dependerá do produto contratado;
         – Pode ser excluído por não seguir as condições deste contrato ou por não sofrer nova edição por três meses consecutivos;
         – Pode ser excluído caso o Site.com.br cesse a disponibilização do plano Free em seu site;
         – O conteúdo do site precisa atender às exigências do contrato do Google Adsense (https://www.google.com/intl/pt-BR/policies/terms/).
@@ -236,7 +236,7 @@
 
         O serviço FTP, caso disponível no seu plano, não pode ser usado para baixar os arquivos originais do servidor, como plugins, templates, temas, módulos, imagens, fontes, e códigos de programas. Deve seu usados apenas para manusear seus próprios arquivos ou enviar plugins e temas licenciados a você ao seu site.
 
-        Nos planos WordPress, EasyPress, EasyShop e Hospedagens, e outros planos, o envio de emails sem usar SMTP externo, é bem restrito, existindo apenas para troca de senha e formulário de contato do site. Quaisquer módulos de envio de emails devem usar SMTP externos e se sujeitar às nossa políticas de envio de spam. Envios de campanhas de e-mail, mailing, mala-direta,qualquer tipo de email em massa, envios de e-mail de um para muitos, não são permitidos em nossos servidores.
+        Nos planos WordPress, EasyPress, EasyShop e Hospedagens, e outros planos, o envio de e-mails sem usar SMTP externo, é bem restrito, existindo apenas para troca de senha e formulário de contato do site. Quaisquer módulos de envio de emails devem usar SMTP externos e se sujeitar às nossa políticas de envio de spam. Envios de campanhas de e-mail, mailing, mala-direta,qualquer tipo de email em massa, envios de e-mail de um para muitos, não são permitidos em nossos servidores.
 
         NO CASO DO CLIENTE UTILIZAR MEIOS DE PAGAMENTOS EM SEU SITE, A UTILIZAÇÃO DOS SISTEMAS ORA CONTRATADOS NÃO IMPLICA EM QUALQUER PARTICIPAÇÃO DA SITE.COM.BR NAS OPERAÇÕES QUE VENHAM A GERAR OS PAGAMENTOS QUE SERÃO EFETUADOS ELETRONICAMENTE, TRANSAÇÕES ESSAS QUE OCORRERÃO SEM QUALQUER CONHECIMENTO, AUTORIZAÇÃO, PARTICIPAÇÃO OU INGERÊNCIA DA SITE.COM.BR E SOBRE AS QUAIS A SITE.COM.BR NÃO POSSUI NENHUMA RESPONSABILIDADE.
 
@@ -286,7 +286,7 @@
 
         Em caso de rescisão do presente acordo, oriunda da violação de quaisquer termos aqui especificados por parte do Usuário, o Site.com.br não restituirá ao mesmo as quantias já pagas.
 
-        Uma vêz rescindido este contrato, a Site.com.br poderá excluir todos os dados, arquivos, emails e informações do Usuário e dos serviços que este utilizava neste sistema ou nesta empresa.
+        Uma vêz rescindido este contrato, a Site.com.br poderá excluir todos os dados, arquivos, e-mails e informações do Usuário e dos serviços que este utilizava neste sistema ou nesta empresa.
 
         5. DA POLÍTICA DE PRIVACIDADE E SEGURANÇA
         O Site.com.br possui uma política de privacidade e segurança que visa proteger aos seus Usuários contra o uso indevido de suas informações pessoais por terceiros.
@@ -372,7 +372,7 @@
 
         Não são permitidos hospedagem de sites com seguintes conteúdos/finalidades nos planos gratuitos: Scripts de chat, usado para armazenamento de arquivos, Websites revendidos ou prestação de serviços para terceiros.
 
-        Nossos servidores não podem ser usados para fazer upload, postar, enviar por email, transmitir ou disponibilizar de qualquer maneira qualquer conteúdo, material ou publicidade que: Você não tenha permissão de disponibilizar sob qualquer lei ou sob relações contratuais ou fiduciárias (como informação interna, informação proprietária e confidencial aprendida ou revelada como parte de uma relação empregatícia ou sob acordos de sigilo). Infrinja qualquer patente, marca registrada, direito de cópia ou qualquer outro tipo de direito de propriedade de qualquer entidade ou indivíduo. Não seja solicitada ou não autorizada, materiais promocionais, junk mail, spam, emails de corrente, esquemas de pirâmide, ou qualquer outra forma de solicitação, exceto em áreas (como lojas) que são designadas para estes propósitos. Contenha vírus de computador, ou qualquer código, arquivos ou programas projetados para interromper, destruir, ou limitar a funcionalidade de qualquer computador , software e hardware, ou equipamento de telecomunicação. Tenha propósito de distribuir arquivos, retransmissão ou fins de Streaming. seja ilegal, prejudicial, ameaçador, abusivo, ofensivo, injurioso, difamatório, vulgar, obsceno, calunioso, invasivo da privacidade de outras pessoas, odioso, ou racial, étnico ou censurável. Ferir menores de qualquer maneira. Personificar qualquer pessoa ou identidade, “perseguir” e/ou assediar outros. Forjar cabeçalhos ou manipular identificadores de qualquer forma a fim de esconder a origem de qualquer conteúdo transmitido pelo serviço. Interferir ou prejudicar o serviço ou servidores ou rede conectadas ao serviço, ou desobedecer qualquer requerimentos, procedimentos, politicas ou regulamentações das redes conectadas ao serviço. Violar uma lei local, estadual, nacional ou Internacional, com ou sem Intenção. Promover suporte material ou recursos (ou esconder a natureza, localização, fonte ou propriedade do suporte material ou recursos) para qualquer organização(ões) designada(s) pelos Estados Unidos como organização(ões) terrorista(s) internacional(is). Coletar ou armazenar dados sobre outros usuários. Utilizar nossos sistemas de forma abusiva, prejudicando o funcionamento de parte ou todo o sistema, ou utilizando mais de 50% da capacidade de um servidor, em qualquer recurso.
+        Nossos servidores não podem ser usados para fazer upload, postar, enviar por e-mail, transmitir ou disponibilizar de qualquer maneira qualquer conteúdo, material ou publicidade que: Você não tenha permissão de disponibilizar sob qualquer lei ou sob relações contratuais ou fiduciárias (como informação interna, informação proprietária e confidencial aprendida ou revelada como parte de uma relação empregatícia ou sob acordos de sigilo). Infrinja qualquer patente, marca registrada, direito de cópia ou qualquer outro tipo de direito de propriedade de qualquer entidade ou indivíduo. Não seja solicitada ou não autorizada, materiais promocionais, junk mail, spam, emails de corrente, esquemas de pirâmide, ou qualquer outra forma de solicitação, exceto em áreas (como lojas) que são designadas para estes propósitos. Contenha vírus de computador, ou qualquer código, arquivos ou programas projetados para interromper, destruir, ou limitar a funcionalidade de qualquer computador , software e hardware, ou equipamento de telecomunicação. Tenha propósito de distribuir arquivos, retransmissão ou fins de Streaming. seja ilegal, prejudicial, ameaçador, abusivo, ofensivo, injurioso, difamatório, vulgar, obsceno, calunioso, invasivo da privacidade de outras pessoas, odioso, ou racial, étnico ou censurável. Ferir menores de qualquer maneira. Personificar qualquer pessoa ou identidade, “perseguir” e/ou assediar outros. Forjar cabeçalhos ou manipular identificadores de qualquer forma a fim de esconder a origem de qualquer conteúdo transmitido pelo serviço. Interferir ou prejudicar o serviço ou servidores ou rede conectadas ao serviço, ou desobedecer qualquer requerimentos, procedimentos, politicas ou regulamentações das redes conectadas ao serviço. Violar uma lei local, estadual, nacional ou Internacional, com ou sem Intenção. Promover suporte material ou recursos (ou esconder a natureza, localização, fonte ou propriedade do suporte material ou recursos) para qualquer organização(ões) designada(s) pelos Estados Unidos como organização(ões) terrorista(s) internacional(is). Coletar ou armazenar dados sobre outros usuários. Utilizar nossos sistemas de forma abusiva, prejudicando o funcionamento de parte ou todo o sistema, ou utilizando mais de 50% da capacidade de um servidor, em qualquer recurso.
 
         Caso haja violação a qualquer dessas disposições ou de quaisquer outras que estejam no presente Acordo de Utilização, o Site.com.br poderá, a seu critério, alterar ou suprimir o conteúdo do site, reduzir limites, encerrar a conta do usuário e bloquear em definitivo todo acesso ao site ou emails.
 
@@ -452,20 +452,30 @@
         será possivel determinar sua distância com a loja
     </string>
     <string name="GpsDesligado">Deseja ligar o GPS ?</string>
-    <string name="NovaSenha">Nova senha (opcional)</string>
+    <string name="NovaSenha">Trocar senha (opcional)</string>
     <string name="SenhaSalva">Senha salva com sucesso</string>
     <string name="ErroSenhaMudanca">Não foi possivel mudar a senha, verifique sua conexão ou tente mais tarde</string>
     <string name="EsqueciSenhaMinha">Esqueci minha senha</string>
-    <string name="CampoEmailSenha">Por favor colocar o email para recuperar a senha</string>
-    <string name="ErroEnviarRecupera">Não foi possivel enviar o email de recuperação, por favor verifique seu email se
+    <string name="CampoEmailSenha">Por favor colocar o e-mail para recuperar a senha</string>
+    <string name="ErroEnviarRecupera">Não foi possivel enviar o e-mail de recuperação, por favor verifique seu e-mail se
         está correto e ativo
     </string>
-    <string name="EnviadoRecuperaSenha">Entre no seu email para mudar a senha</string>
+    <string name="EnviadoRecuperaSenha">Entre no seu e-mail para mudar a senha</string>
     <string name="EnviandoPedido">Enviando pedido de recuperação de senha</string>
     <string name="ErroLojas">Não foi possivel encontrar lojas nessas configurações, mude o raio de pesquisa ou a cidade
         de referência
     </string>
-    <string name="Inforaio">Coloque no maximo para a leitura de 50Km</string>
+    <string name="Inforaio">Coloque no máximo para leituras sem filtro de km</string>
     <string name="CriarLojaMensagem">Criando Loja</string>
     <string name="ErroCriarLoja">Não foi possivel criar esta loja</string>
+    <string name="EmailVazio">Campo do e-mail esta vazio</string>
+    <string name="SenhaVazia">Campo senha está vazia</string>
+    <string name="ErroLogar">Desculpa mas não foi possivel logar, verifique o e-mail e/ou a senha</string>
+    <string name="SenhaConfirmar">Confirmar senha</string>
+    <string name="SenhaErrada">Senhas não coincidem</string>
+    <string name="ErroDia">Não existe este dia por favor colocar um dia existente</string>
+    <string name="ErroMes">Não existe este mês por favor colocar um mês existente</string>
+    <string name="Infinito">∞</string>
+    <string name="VinteCincoKM">25 Km</string>
+    <string name="CinquentaKM">50 Km</string>
 </resources>

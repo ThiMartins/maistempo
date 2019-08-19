@@ -20,6 +20,7 @@ class BitmapUtilitarios {
             return imagem
         }*/
 
+        @Suppress("DEPRECATION")
         @Throws(IOException::class)
         fun getImageUri(ImagemBitmap: Bitmap, Email:String, Contexto:Context): Uri {
             val bytes = ByteArrayOutputStream()

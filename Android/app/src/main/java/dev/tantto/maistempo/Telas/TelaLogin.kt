@@ -17,7 +17,10 @@ import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.chaves.Chave
+import dev.tantto.maistempo.classes.Alertas
 import dev.tantto.maistempo.classes.BuscarLojasImagem
+import dev.tantto.maistempo.google.CidadesRecuperadas
+import dev.tantto.maistempo.google.DatabaseFirebaseRecuperar
 
 class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
@@ -34,6 +37,7 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         configuracaoView()
         referenciandoFragments()
         setandoTela()
+        buscarCidade()
     }
 
     fun mudarTela(Valor:Int) {
@@ -66,6 +70,20 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         } else if(Pessoa != null){
             BuscarLojasImagem(Pessoa.cidade, Pessoa, this)
         }
+    }
+
+    private fun buscarCidade(){
+        val carregar = Alertas.alertaCarregando(this)
+        carregar.show()
+
+        DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas {
+            override fun listaCidades(Lista: List<String>?) {
+                carregar.dismiss()
+                if(Lista != null){
+                    Novo?.passandoCidades(Lista)
+                }
+            }
+        })
     }
 
     override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {

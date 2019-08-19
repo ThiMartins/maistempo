@@ -156,31 +156,31 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
     }
 
     private fun verificacaoGPS(Pessoa: Perfil) {
-        val Raio = if(Pessoa.raio >= 5){
-            50.0
-        } else {
-            Pessoa.raio.toDouble()
-        }
-        BuscarLojasProximas(this,   Raio / 100).procurarProximos(object :
-            BuscarLojasProximas.BuscaConcluida {
-            override fun resultado(Modo: Boolean) {
-                if(Pausado){
-                    PessoaPassada = Pessoa
-                } else {
-                    prepararInicio(Pessoa)
+        if(Pessoa.raio != 100L){
+            BuscarLojasProximas(this, Pessoa.raio.toDouble() * 1000).procurarProximos(object :
+                BuscarLojasProximas.BuscaConcluida {
+                override fun resultado(Modo: Boolean) {
+                    if(Pausado){
+                        PessoaPassada = Pessoa
+                    } else {
+                        prepararInicio(Pessoa)
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            prepararInicio(Pessoa)
+        }
+
     }
 
     private fun prepararInicio(Pessoa: Perfil?) {
         if (Pessoa?.acesso == Chave.CHAVE_ADM.valor) {
-            val iniciar = Intent(this@TelaSplash, TelaPrincipal::class.java)
+            val iniciar = Intent(this, TelaPrincipal::class.java)
             iniciar.putExtra(Chave.CHAVE_ACESSO.valor, Chave.CHAVE_ADM.valor)
             iniciarActivity(iniciar)
             finishAffinity()
         } else {
-            iniciarActivity(Intent(this@TelaSplash, TelaPrincipal::class.java))
+            iniciarActivity(Intent(this, TelaPrincipal::class.java))
             finishAffinity()
         }
     }
