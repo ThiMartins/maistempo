@@ -8,12 +8,15 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.android.material.textfield.TextInputLayout
 import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.modelos.Perfil
@@ -38,6 +41,7 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
     private var Pessoa:Perfil? = null
     private var Senha:EditText? = null
     private var Modo:Boolean = false
+    private var SenhaInput:TextInputLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +69,9 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
         PontosLocais = findViewById(R.id.AvaliacaoLocalPontos)
         PontosTotal = findViewById(R.id.TotalPontos)
         Senha = findViewById(R.id.SenhaNova)
+        SenhaInput = findViewById(R.id.SenhaNovaInput)
+
+        SenhaInput?.hint = getString(R.string.NovaSenhaOpcional)
 
         Foto?.setOnClickListener {
             exibirCaixa()
@@ -168,23 +175,100 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
             DatabaseFirebaseSalvar.mudarCidade(Pessoa?.email!!, Cidade?.selectedItem?.toString()!!)
         }
 
-        if(Senha?.text?.toString()?.isNotEmpty()!! && !Modo && Senha?.text?.toString() != getString(R.string.app_name)){
-            if(Senha?.text?.toString()?.length!! >= 6){
-                Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando, 5000).show()
-                FirebaseAutenticacao.mudarSenha(Senha?.text.toString(), object : FirebaseAutenticacao.Mudanca{
-                    override fun resultado(Modo: Boolean) {
-                        if(Modo){
-                            this@TelaPerfil.Modo = true
-                            Alertas.criarAlerter(this@TelaPerfil, R.string.SenhaSalva, R.string.Aguardando, 5000).show()
+        if(Senha?.text?.toString()?.isNotEmpty()!! && !Modo && Senha?.text?.toString() != getString(R.string.NovaSenha)){
+            var SenhaNova = ""
+            var SenhaNovaConfirmada = ""
+            var AlertaFechado:AlertDialog? = null
+            var InputSenhaVerificar:TextInputLayout? = null
+            val SenhaConfirmar:EditText?
+
+            val Alerta = AlertDialog.Builder(this)
+            Alerta.setView(R.layout.nova_senha)
+            Alerta.setPositiveButton(R.string.Ok) { _, _ ->
+                if(SenhaNova == SenhaNovaConfirmada){
+                    salvarSenha(SenhaNova)
+                } else {
+                    InputSenhaVerificar?.error = getString(R.string.SenhaErrada)
+                }
+            }
+            Alerta.setNegativeButton(R.string.Nao) { _, _ ->
+                AlertaFechado?.dismiss()
+            }
+            AlertaFechado = Alerta.create()
+            AlertaFechado?.setTitle(R.string.SenhaConfirmar)
+            AlertaFechado?.show()
+            SenhaConfirmar = AlertaFechado.findViewById(R.id.SenhaNovaConfirmacao)
+            InputSenhaVerificar = AlertaFechado.findViewById(R.id.SenhaNovaVerificarInput)
+            val SenhaVerificar = AlertaFechado.findViewById<EditText>(R.id.SenhaNovaVerificar)
+
+            SenhaConfirmar?.setText(Senha?.text?.toString())
+
+            SenhaConfirmar?.addTextChangedListener(object : TextWatcher{
+                override fun afterTextChanged(p0: Editable?) {
+                    if(p0 != null){
+                        SenhaNova = p0.toString()
+                        if(p0.toString() != SenhaVerificar?.text?.toString()){
+                            InputSenhaVerificar?.error = getString(R.string.SenhaErrada)
                         } else {
-                            Alertas.criarAlerter(this@TelaPerfil, R.string.ErroSenhaMudanca, R.string.Aguardando, 5000).show()
+                            InputSenhaVerificar?.isErrorEnabled = false
                         }
                     }
-                })
-            } else {
-                Alertas.criarAlerter(this, R.string.ErroSenha, R.string.Aguardando, 5000).show()
-            }
+                }
 
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if(p0 != null){
+                        SenhaNova = p0.toString()
+                        if(p0 != SenhaVerificar?.text?.toString()){
+                            InputSenhaVerificar?.error = getString(R.string.SenhaErrada)
+                        } else {
+                            InputSenhaVerificar?.isErrorEnabled = false
+                        }
+                    }
+                }
+            })
+
+            SenhaVerificar?.addTextChangedListener(object : TextWatcher{
+                override fun afterTextChanged(p0: Editable?) {
+                    if(p0 != null){
+                        SenhaNovaConfirmada = p0.toString()
+                        if(p0.toString() != SenhaConfirmar?.text?.toString()){
+                            InputSenhaVerificar?.error = getString(R.string.SenhaErrada)
+                        } else {
+                            InputSenhaVerificar?.isErrorEnabled = false
+                        }
+                    }
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+            })
+        }
+    }
+
+    private fun salvarSenha(Senha:String) {
+        if (Senha.length >= 6) {
+            Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando, 5000).show()
+            FirebaseAutenticacao.mudarSenha(Senha, object : FirebaseAutenticacao.Mudanca {
+                override fun resultado(Modo: Boolean) {
+                    if (Modo) {
+                        this@TelaPerfil.Modo = true
+                        Alertas.criarAlerter(this@TelaPerfil, R.string.SenhaSalva, R.string.Aguardando, 5000).show()
+                    } else {
+                        Alertas.criarAlerter(this@TelaPerfil, R.string.ErroSenhaMudanca, R.string.Aguardando, 5000).show()
+                    }
+                }
+            })
+        } else {
+            Alertas.criarAlerter(this, R.string.ErroSenhaMenor, R.string.Atencao, 5000).show()
         }
     }
 

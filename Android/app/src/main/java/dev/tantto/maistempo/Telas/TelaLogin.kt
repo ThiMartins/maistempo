@@ -45,8 +45,8 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
     }
 
     private fun configuracaoView() {
-        Pagina = findViewById<ViewPager>(R.id.VisualizarLogin)
-        TabIndicador = findViewById<TabLayout>(R.id.TabLayout)
+        Pagina = findViewById(R.id.VisualizarLogin)
+        TabIndicador = findViewById(R.id.TabLayout)
     }
 
     private fun setandoTela() {
@@ -56,6 +56,24 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         TabIndicador?.setupWithViewPager(Pagina, true)
         Pagina?.adapter = AdaptadorPager(Mananger, Lista)
         Pagina?.currentItem = 1
+
+        TabIndicador?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+                if (p0?.position == 2){
+                    Novo?.limparConteudo()
+                } else if (p0?.position == 1){
+                    Login?.limparConteudo()
+                }
+            }
+
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+
+            }
+        })
     }
 
     private fun referenciandoFragments() {
@@ -105,6 +123,8 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         if(intent.hasExtra(Chave.CHAVE_FECHAR.valor)){
             finishAffinity()
         }
+        Novo?.limparConteudo()
+        Login?.limparConteudo()
     }
 
 }

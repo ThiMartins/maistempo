@@ -109,34 +109,15 @@ exports.adicionarFila = functions.https.onCall( async (data, _context) => {
     }
 });
 
-exports.adicionarAvalicaoPonto = functions.https.onCall( async (data, _context) => {
-
-    const Documento = data['id'];
-
-    return await admin.firestore().doc('lojas/' + Documento).get().then(snapshot => {
-        const Dados = snapshot.data();
-
-        var Quantidade = Dados['quantidadeAvaliacoesRating'];
-        Dados['quantidadeAvaliacoesRating'] = Quantidade + 1;
-
-        admin.firestore().collection('lojas/').doc(Documento).set(Dados);
-
-        return "ok";
-    })
-    .catch(erro => {
-        console.log(erro);
-        return "erro";
-    });
-
-});
-
 exports.adicionarNotaLocal = functions.https.onCall(async (data, _context) =>{
 
     const email = data["email"];
     const valor = data["valor"];
     const loja = data["loja"];
 
-    return await admin.firestore().doc('notasUsuarios/' + loja).get().then(snapshot =>{
+    const Loja = await admin.firestore().collection('lojas/').doc(loja).get();
+
+    await admin.firestore().doc('notasUsuarios/' + loja).get().then(snapshot =>{
 
         const Dados = snapshot.data()
         const notas = Dados["notasRanking"];
@@ -150,7 +131,25 @@ exports.adicionarNotaLocal = functions.https.onCall(async (data, _context) =>{
             Object.assign(notas, { [email] : valor});
         }
 
+        var Notas = 0;
+        const Tamanho = NotasChaves.length;
+
+        NotasValues.forEach(element =>{
+            Notas += element;
+        });
+
+        const MediaFinal = Notas / Tamanho;
+
         admin.firestore().collection('notasUsuarios/').doc(loja).set(Dados);
+    
+        const DadosLojas = Loja.data();
+        var Quantidade = DadosLojas['quantidadeAvaliacoesRating'];
+        Quantidade = NotasChaves.length;
+        DadosLojas['quantidadeAvaliacoesRating'] = Quantidade;
+        DadosLojas['mediaRanking'] = MediaFinal;
+
+        admin.firestore().collection('lojas/').doc(loja).set(DadosLojas);
+        
         return "ok";
     })
     .catch(erro =>{

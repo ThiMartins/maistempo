@@ -41,8 +41,8 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_principal)
 
-        Tabs = findViewById<TabLayout>(R.id.TabPrincipal)
-        Pagina = findViewById<ViewPager>(R.id.PagerPrincipal)
+        Tabs = findViewById(R.id.TabPrincipal)
+        Pagina = findViewById(R.id.PagerPrincipal)
 
         configurandoPager()
         setandoTabItens()

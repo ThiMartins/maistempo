@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':barra_Progresso'
+project(':barra_Progresso').projectDir = new File('barraProgresso')

@@ -59,10 +59,10 @@ class AdaptadorRaking : RecyclerView.Adapter<AdaptadorRaking.ViewHolder>() {
         private var Posicao:TextView? = null
 
         fun setandoValor(){
-            Foto = Item.findViewById<ImageView>(R.id.FotoRanking)
-            Nome = Item.findViewById<TextView>(R.id.NomeRanking)
-            Pontos = Item.findViewById<TextView>(R.id.StatusRanking)
-            Posicao = Item.findViewById<TextView>(R.id.PosicaoRanking)
+            Foto = Item.findViewById(R.id.FotoRanking)
+            Nome = Item.findViewById(R.id.NomeRanking)
+            Pontos = Item.findViewById(R.id.StatusRanking)
+            Posicao = Item.findViewById(R.id.PosicaoRanking)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Foto?.clipToOutline = true

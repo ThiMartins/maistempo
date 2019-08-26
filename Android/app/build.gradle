@@ -31,10 +31,9 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
-        property 'sonar.projectName', 'Android'
-        property 'sonar.projectKey', 'Android'
+        property 'sonar.projectName', 'dev.tantto.maistempo'
+        property 'sonar.projectKey', 'dev.tantto.maistempo'
         property 'sonar.host.url', 'http://localhost:9000'
-        property 'sonar.sourceEnconding', 'UTF-8'
         property 'sonar.login', "admin"
         property 'sonar.password', "admin"
     }
@@ -70,4 +69,6 @@ dependencies {
     implementation 'com.airbnb.android:lottie:2.8.0'
     implementation 'com.ramotion.fluidslider:fluid-slider:0.3.1'
     implementation 'com.tapadoo.android:alerter:1.0.6'
+
+    implementation project(':barra_Progresso')
 }

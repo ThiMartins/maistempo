@@ -46,7 +46,7 @@ class TelaRanking : AppCompatActivity(), DatabaseRakingInterface, DatabasePessoa
     }
 
     override fun topRanking(Lista: MutableList<Perfil>) {
-        ListaRecycler = findViewById<RecyclerView>(R.id.ListaRanking)
+        ListaRecycler = findViewById(R.id.ListaRanking)
         val divisor = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         ListaRecycler?.addItemDecoration(divisor)
         adapter = AdaptadorRaking()

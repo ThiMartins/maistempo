@@ -3,7 +3,6 @@ package dev.tantto.maistempo.adaptadores
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +54,10 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
         }
 
         fun adicionandoValores(Elementos:Lojas, position: Int){
-            Titulo.text = Elementos.titulo
+            Titulo.text = when {
+                Elementos.titulo.length >= 15 -> String.format(Elementos.titulo.substring(0, 14) + "...")
+                else -> Elementos.titulo
+            }
             if(ListaBitmap.tamanho() >= position + 1){
                 Imagem.setImageBitmap(ListaBitmap.recuperar(Elementos.id))
             }
@@ -74,8 +76,6 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
                 val MinhaCoordenadas = LatLng(Valores.longitude, Valores.latitude)
                 val Resultado = NumberFormat.getInstance()
                 Resultado.maximumFractionDigits = 2
-                Log.i("Teste", MinhaCoordenadas.toString())
-                Log.i("Teste", Coordenadas.toString())
                 DistanciaLoja.text = String.format(Resultado.format((LocalizacaoPessoa.calcularDistancia(MinhaCoordenadas, Coordenadas)) / 1000) .toString() + "\n" + Contexto.getString(R.string.KM))
             }
 

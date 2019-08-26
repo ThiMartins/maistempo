@@ -64,8 +64,6 @@
                 android:launchMode="singleTask"
                 android:parentActivityName=".telas.TelaPrincipal"/>
 
-        <activity android:name=".telas.TelaTeste" />
-
     </application>
 
 </manifest>
