@@ -42,8 +42,8 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
         configurandoView()
         recuperarLoja()
 
-        Pagina = findViewById<ViewPager>(R.id.PaginaResumo)
-        TabIndicator = findViewById<TabLayout>(R.id.TabAvalicao)
+        Pagina = findViewById(R.id.PaginaResumo)
+        TabIndicator = findViewById(R.id.TabAvalicao)
         supportActionBar?.elevation = 0.0F
         configurandoPagina()
 
@@ -90,11 +90,11 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
     }
 
     private fun configurandoView() {
-        Endereco = findViewById<TextView>(R.id.EnderecoResumo)
-        Telefone = findViewById<TextView>(R.id.TelefoneResumo)
-        Status = findViewById<TextView>(R.id.StatusResumo)
-        Foto = findViewById<ImageView>(R.id.FotoResumo)
-        Swipe = findViewById<SwipeRefreshLayout>(R.id.SwipeResumo)
+        Endereco = findViewById(R.id.EnderecoResumo)
+        Telefone = findViewById(R.id.TelefoneResumo)
+        Status = findViewById(R.id.StatusResumo)
+        Foto = findViewById(R.id.FotoResumo)
+        Swipe = findViewById(R.id.SwipeResumo)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Foto?.clipToOutline = true
         }

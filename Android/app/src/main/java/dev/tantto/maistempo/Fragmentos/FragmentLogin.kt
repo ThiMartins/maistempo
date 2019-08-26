@@ -57,12 +57,17 @@ class FragmentLogin: Fragment(), AutenticacaoLogin{
         UserName = View.findViewById(R.id.UserName)
         Senha = View.findViewById(R.id.Senha)
         SalvarUsuario = View.findViewById(R.id.LembrarLogin)
-        Conectar = View.findViewById<Button>(R.id.ConectarUsuario)
-        BotaoApresentacao = View.findViewById<Button>(R.id.IrApresentacao)
-        BotaoNovo = View.findViewById<Button>(R.id.IrNovo)
-        EsqueciSenha = View.findViewById<Button>(R.id.EsqueciSenha)
+        Conectar = View.findViewById(R.id.ConectarUsuario)
+        BotaoApresentacao = View.findViewById(R.id.IrApresentacao)
+        BotaoNovo = View.findViewById(R.id.IrNovo)
+        EsqueciSenha = View.findViewById(R.id.EsqueciSenha)
 
         eventos()
+    }
+
+    fun limparConteudo(){
+        UserName?.setText("")
+        Senha?.setText("")
     }
 
     fun setandoReferencia(ref:TelaLogin) : FragmentLogin{

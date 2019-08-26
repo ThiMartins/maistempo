@@ -63,9 +63,9 @@ class AdaptadorPessoa(private val Contexto: Context, private val lista:List<Gera
         var card:CardView? = null
 
         fun setandoItens() {
-            Titulo = Item.findViewById<TextView>(R.id.TituloConfiguracao)
-            Imagem = Item.findViewById<ImageView>(R.id.ImagemConfiguracao)
-            card = Item.findViewById<CardView>(R.id.CardPerfil)
+            Titulo = Item.findViewById(R.id.TituloConfiguracao)
+            Imagem = Item.findViewById(R.id.ImagemConfiguracao)
+            card = Item.findViewById(R.id.CardPerfil)
         }
 
         fun adicionandoValores(elementos: Geral) {

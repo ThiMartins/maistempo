@@ -32,37 +32,44 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-        <com.ramotion.fluidslider.FluidSlider
-                android:id="@+id/ProgressoFilaVoto"
-                android:layout_width="0dp"
+        <LinearLayout
+                android:id="@+id/ProgresoLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/TabLayoutFila"
-                app:layout_constraintEnd_toStartOf="@id/EnviarFila"
-                app:size="normal"/>
-
-        <Button
-                android:id="@+id/EnviarFila"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/botao_arrendado_cinza"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/TabLayoutFila"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="52dp"/>
+                android:layout_marginTop="8dp">
 
+            <dev.tantto.barra_progresso.BarraProgresso
+                    android:id="@+id/ProgressoFilaVoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="16dp"
+                    app:barra_thumb_raio="30"
+                    app:barra_tick_enable="true"
+                    app:barra_tick_cor="@color/colorAccent"
+                    app:barra_tick_raio="20"
+                    app:barra_indicador_cor="@color/colorPrimary"
+                    app:barra_thumb_cor="@color/colorPrimary"
+                    app:barra_texto_cor="@android:color/white"
+                    app:barra_primaria_drawable="@drawable/barra_primaria"
+                    app:barra_secundaria_drawable="@drawable/barra_secundaria"
+                    app:barra_texto_size="medio"
+                    app:barra_texto="@array/Modos"/>
+
+        </LinearLayout>
 
         <TextView
                 android:id="@+id/PicoFilaTexto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/PicoFila"
-                app:layout_constraintTop_toBottomOf="@id/ProgressoFilaVoto"
+                app:layout_constraintTop_toBottomOf="@id/ProgresoLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_margin="16dp"
                 android:layout_marginTop="32dp"

@@ -63,6 +63,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/SenhaNovaInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/NomeInputGeral"
@@ -71,7 +72,6 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginLeft="32dp"
-                app:passwordToggleEnabled="true"
                 android:textColorHint="@android:color/white"
                 app:boxStrokeColor="@android:color/white"
                 app:layout_constraintStart_toEndOf="@+id/FotoPerfil">
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:hint="@string/NovaSenha"
-                    android:text="@string/app_name"
+                    android:text="@string/NovaSenha"
                     android:textColorHint="@android:color/white"
                     android:importantForAutofill="no"
                     android:maxLength="15"

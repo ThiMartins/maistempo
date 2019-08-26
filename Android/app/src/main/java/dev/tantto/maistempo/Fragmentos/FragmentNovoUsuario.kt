@@ -68,46 +68,6 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         return Fragmento
     }
 
-    private fun configurandoView(Fragmento:View) {
-        Nome = Fragmento.findViewById<EditText>(R.id.NomeNovo)
-        Email = Fragmento.findViewById<EditText>(R.id.EmailNovo)
-        Senha = Fragmento.findViewById<EditText>(R.id.SenhaNovo)
-        SenhaConfirmar = Fragmento.findViewById<EditText>(R.id.SenhaConfirmarNovo)
-        SenhaConfirmarInput = Fragmento.findViewById<TextInputLayout>(R.id.SenhaConfirmarInputLayout)
-        Foto = Fragmento.findViewById<ImageView>(R.id.FotoNovoUsuario)
-        DataTexto = Fragmento.findViewById<EditText>(R.id.DataNascimento)
-        DataTextoInput = Fragmento.findViewById<TextInputLayout>(R.id.DataInputLayout)
-        Criar = Fragmento.findViewById<Button>(R.id.CriarNovaConta)
-        EscolherData = Fragmento.findViewById<Button>(R.id.AbrirDataPicker)
-        Cidade = Fragmento.findViewById<Spinner>(R.id.CidadeReferencia)
-        CheckTermos = Fragmento.findViewById<CheckBox>(R.id.ConcordoTermos)
-        VerTermos = Fragmento.findViewById<TextView>(R.id.VerTermos)
-
-        configuraAdapter()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Foto?.clipToOutline = true
-        }
-    }
-
-    fun passandoCidades(Lista:List<String>){
-        ListaCidades.addAll(Lista)
-        configuraAdapter()
-    }
-
-    fun configuraAdapter(){
-        val contexto = this@FragmentNovoUsuario.context
-        if(contexto != null){
-            val adapter = ArrayAdapter(contexto, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, ListaCidades)
-            Cidade?.adapter = adapter
-        }
-    }
-
-    fun setandoReferencia(ref:TelaLogin) : FragmentNovoUsuario{
-        referenciaTela = ref
-        return this
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -123,6 +83,68 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
             CaminhoFoto = data.data
             Foto?.setImageURI(CaminhoFoto)
 
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            RequisicaoPermissao -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    pegarFoto()
+                } else{
+                    Alertas.criarAlerter(referenciaTela, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
+                }
+            }
+        }
+    }
+
+    fun passandoCidades(Lista:List<String>){
+        ListaCidades.addAll(Lista)
+        configuraAdapter()
+    }
+
+    fun setandoReferencia(ref:TelaLogin) : FragmentNovoUsuario{
+        referenciaTela = ref
+        return this
+    }
+
+    fun limparConteudo(){
+        Nome?.setText("")
+        Email?.setText("")
+        Senha?.setText("")
+        SenhaConfirmar?.setText("")
+        DataTexto?.setText("")
+        BackupData = ""
+    }
+
+    private fun configuraAdapter(){
+        val contexto = this@FragmentNovoUsuario.context
+        if(contexto != null){
+            val adapter = ArrayAdapter(contexto, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, ListaCidades)
+            Cidade?.adapter = adapter
+        }
+    }
+
+    private fun configurandoView(Fragmento:View) {
+        Nome = Fragmento.findViewById(R.id.NomeNovo)
+        Email = Fragmento.findViewById(R.id.EmailNovo)
+        Senha = Fragmento.findViewById(R.id.SenhaNovo)
+        SenhaConfirmar = Fragmento.findViewById(R.id.SenhaConfirmarNovo)
+        SenhaConfirmarInput = Fragmento.findViewById(R.id.SenhaConfirmarInputLayout)
+        Foto = Fragmento.findViewById(R.id.FotoNovoUsuario)
+        DataTexto = Fragmento.findViewById(R.id.DataNascimento)
+        DataTextoInput = Fragmento.findViewById(R.id.DataInputLayout)
+        Criar = Fragmento.findViewById(R.id.CriarNovaConta)
+        EscolherData = Fragmento.findViewById(R.id.AbrirDataPicker)
+        Cidade = Fragmento.findViewById(R.id.CidadeReferencia)
+        CheckTermos = Fragmento.findViewById(R.id.ConcordoTermos)
+        VerTermos = Fragmento.findViewById(R.id.VerTermos)
+
+        configuraAdapter()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Foto?.clipToOutline = true
         }
     }
 
@@ -163,11 +185,13 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                         DataTexto?.setText(String.format("$p0/"))
                         DataTexto?.setSelection(3)
                         val Dia = String.format("${p0[0]}${p0[1]}")
+
                         if (Dia.toInt() > 31){
                             DataTextoInput?.error = getString(R.string.ErroDia)
                         } else {
                             DataTextoInput?.isErrorEnabled = false
                         }
+
                     } else if (p0.length == 5 && BackupData.length < p0.length){
                         DataTexto?.setText(String.format("$p0/"))
                         DataTexto?.setSelection(6)
@@ -177,9 +201,31 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                         } else {
                             DataTextoInput?.isErrorEnabled = false
                         }
+
                     } else {
-                        BackupData = DataTexto?.text?.toString()!!
                         DataTextoInput?.isErrorEnabled = false
+                        if(p0.length == 3 && !p0.contains('/')){
+                            val novaString = String.format(p0[0].toString() + p0[1].toString() + "/" + p0[2].toString())
+                            DataTexto?.setText(novaString)
+                            DataTexto?.setSelection(3)
+                        } else if(p0.length == 6 && !DataTexto?.text.toString().contains("/${p0[3]}${p0[4]}/")){
+                            val novaString = String.format(p0[0].toString() + p0[1].toString() + p0[2].toString() + p0[3].toString() + p0[4].toString() + '/' + p0[5].toString())
+                            DataTexto?.setText(novaString)
+                            DataTexto?.setSelection(7)
+                        }
+                    }
+
+                    if(p0.length == 10){
+                        val Dia = String.format("${p0[0]}${p0[1]}")
+                        val Mes = String.format("${p0[3]}${p0[4]}")
+
+                        if (Dia.toInt() > 31){
+                            DataTextoInput?.error = getString(R.string.ErroDia)
+                        }
+
+                        if (Mes.toInt() > 12){
+                            DataTextoInput?.error = getString(R.string.ErroMes)
+                        }
                     }
                 }
             }
@@ -263,19 +309,6 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         return Lista.toList()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){
-            RequisicaoPermissao -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    pegarFoto()
-                } else{
-                    Alertas.criarAlerter(referenciaTela, R.string.ErroPermissaoFoto, R.string.Atencao, 5000)
-                }
-            }
-        }
-    }
-
     private fun alerta(Mensagem:Int, Titulo:Int, Duracao:Long = 10000) {
         Alertas.criarAlerter(referenciaTela, Mensagem, Titulo, Duracao).show()
     }
@@ -310,23 +343,27 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
             if (isEmailValido(Email?.text?.toString()!!)){
                 if (Senha?.text?.toString()?.length!! >= 6 && SenhaConfirmar?.text?.toString() == Senha?.text?.toString()){
                     if(Cidade?.selectedItem.toString().isNotEmpty()){
-                        if(CheckTermos?.isChecked!!){
-                            alerta(R.string.Atencao, R.string.Aguarde)
-                            when {
-                                CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
-                                FotoCamera != null -> {
-                                    try {
-                                        CaminhoFoto = BitmapUtilitarios.getImageUri(FotoCamera!!, Email?.text.toString(), referenciaTela)
-                                        CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
-                                    } catch (Erro:IOException){
-                                        Erro.printStackTrace()
+                        if(isDataValida(DataTexto?.text.toString())){
+                            if(CheckTermos?.isChecked!!){
+                                alerta(R.string.Atencao, R.string.Aguarde)
+                                when {
+                                    CaminhoFoto != null -> CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                                    FotoCamera != null -> {
+                                        try {
+                                            CaminhoFoto = BitmapUtilitarios.getImageUri(FotoCamera!!, Email?.text.toString(), referenciaTela)
+                                            CloudStorageFirebase.salvarFotoCloud(CaminhoFoto, Email?.text.toString(), this)
+                                        } catch (Erro:IOException){
+                                            Erro.printStackTrace()
+                                        }
                                     }
+                                    else -> criarUsuario()
                                 }
-                                else -> criarUsuario()
+                            } else {
+                                alerta(R.string.FaltaTermos, R.string.Atencao)
+                                CheckTermos?.requestFocus()
                             }
                         } else {
-                            alerta(R.string.FaltaTermos, R.string.Atencao)
-                            CheckTermos?.requestFocus()
+                            DataTexto?.requestFocus()
                         }
                     } else {
                         alerta(R.string.CidadeFaltando, R.string.Atencao)
@@ -339,6 +376,8 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 else if (SenhaConfirmar?.text?.toString() != Senha?.text?.toString()){
                     alerta(R.string.SenhaErrada, R.string.Atencao)
                     SenhaConfirmar?.requestFocus()
+                } else {
+                    alerta(R.string.ErroSenha, R.string.Atencao)
                 }
             } else {
                 alerta(R.string.ErroEmail, R.string.Atencao)
@@ -359,6 +398,27 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                     + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
                     + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
         ).matcher(Email).matches()
+    }
+
+    private fun isDataValida(Data:String) : Boolean {
+        if(Data.length == 10){
+            val Dia = String.format("${Data[0]}${Data[1]}")
+            val Mes = String.format("${Data[3]}${Data[4]}")
+
+            if (Dia.toInt() > 31){
+                DataTextoInput?.error = getString(R.string.ErroDia)
+                return false
+            }
+
+            if (Mes.toInt() > 12){
+                DataTextoInput?.error = getString(R.string.ErroMes)
+                return false
+            }
+        } else {
+            DataTextoInput?.error = getString(R.string.ErroAno)
+            return false
+        }
+        return true
     }
 
     private fun criarUsuario() {
@@ -396,4 +456,5 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     override fun enviarProgresso(Progresso: Double) {
         //Mostrar o andamento do envio da imagem
     }
+
 }

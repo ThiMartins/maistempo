@@ -43,6 +43,7 @@ class FragmentAvaliacao : Fragment() {
     fun setandoReferencias(Item:Lojas, ref:TelaResumoLoja){
         Loja = Item
         referencia = ref
+        setandoValores()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -58,11 +59,11 @@ class FragmentAvaliacao : Fragment() {
     }
 
     private fun configurandoView() {
-        Progresso = this.view?.findViewById<ProgressBar>(R.id.ProgressoVotosAvaliacao)
-        NumeroAvailicao = this.view?.findViewById<TextView>(R.id.NumeroAvaliacoesTexto)
-        RatingVoto = this.view?.findViewById<RatingBar>(R.id.RatingLocal)
-        Enviar = this.view?.findViewById<Button>(R.id.EnviarRating)
-        VerAvaliacoes = this.view?.findViewById<Button>(R.id.VerTodasAvaliacoes)
+        Progresso = this.view?.findViewById(R.id.ProgressoVotosAvaliacao)
+        NumeroAvailicao = this.view?.findViewById(R.id.NumeroAvaliacoesTexto)
+        RatingVoto = this.view?.findViewById(R.id.RatingLocal)
+        Enviar = this.view?.findViewById(R.id.EnviarRating)
+        VerAvaliacoes = this.view?.findViewById(R.id.VerTodasAvaliacoes)
 
         VerAvaliacoes?.setOnClickListener {
             val alertaCarregando = Alertas.alertaCarregando(this.requireContext())
@@ -89,7 +90,6 @@ class FragmentAvaliacao : Fragment() {
             //DatabaseFirebaseSalvar.enviarRanking(Loja?.id!!, email, nota.toDouble())
             DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_AVALIACAO)
             CloudFunctions.adicionarNotaLoja(email, nota.toDouble(), Loja?.id!!)
-            CloudFunctions.adicionarNovoVoto(Loja?.id!!)
         }
 
     }

@@ -37,6 +37,7 @@ class DatabaseFirebaseSalvar {
         fun salvarDados(Dados:Perfil){
             try {
                 FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Dados.email).set(Dados)
+
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
             }

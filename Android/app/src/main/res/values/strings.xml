@@ -69,7 +69,7 @@
     <string name="Escolha">Aonde deseja buscar a foto ?</string>
     <string name="ErroNome">Por favor colocar seu nome</string>
     <string name="ErroEmail">E-mail está fora do padrão</string>
-    <string name="ErroSenha">Por favor coloque uma senha maior</string>
+    <string name="ErroSenha">Por favor verifique a senha digitada</string>
     <string name="DataTexto">Data</string>
     <string name="ErroCriar">Não foi possivel criar a conta</string>
     <string name="CriandoConta">Criando conta</string>
@@ -452,7 +452,7 @@
         será possivel determinar sua distância com a loja
     </string>
     <string name="GpsDesligado">Deseja ligar o GPS ?</string>
-    <string name="NovaSenha">Trocar senha (opcional)</string>
+    <string name="NovaSenha">*****</string>
     <string name="SenhaSalva">Senha salva com sucesso</string>
     <string name="ErroSenhaMudanca">Não foi possivel mudar a senha, verifique sua conexão ou tente mais tarde</string>
     <string name="EsqueciSenhaMinha">Esqueci minha senha</string>
@@ -465,7 +465,7 @@
     <string name="ErroLojas">Não foi possivel encontrar lojas nessas configurações, mude o raio de pesquisa ou a cidade
         de referência
     </string>
-    <string name="Inforaio">Coloque no máximo para leituras sem filtro de km</string>
+    <string name="Inforaio">Coloque no máximo para leituras sem filtro de km.</string>
     <string name="CriarLojaMensagem">Criando Loja</string>
     <string name="ErroCriarLoja">Não foi possivel criar esta loja</string>
     <string name="EmailVazio">Campo do e-mail esta vazio</string>
@@ -478,4 +478,17 @@
     <string name="Infinito">∞</string>
     <string name="VinteCincoKM">25 Km</string>
     <string name="CinquentaKM">50 Km</string>
+    <string name="ErroAno">Esse ano não existe</string>
+    <string name="NovaSenhaOpcional">Nova senha (opcional)</string>
+    <string name="ErroSenhaMenor">Por favor colocar uma senha maior</string>
+
+    <array name="Modos">
+        <item><![CDATA[ <]]> 10 min</item>
+        <item> 10 a 20 min</item>
+        <item> 20 a 30 min</item>
+        <item> 30 a 40 min</item>
+        <item> 40 a 50 min</item>
+        <item> 50 a 60 min</item>
+        <item> > 60 min</item>
+    </array>
 </resources>
