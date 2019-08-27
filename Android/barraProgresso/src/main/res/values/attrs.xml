@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="BarraProgresso">
-        <attr name="barra_altura" format="dimension" />
-        <attr name="barra_primaria_color" format="color" />
-        <attr name="barra_primaria_drawable" format="reference" />
-        <attr name="barra_secundaria_color" format="color" />
-        <attr name="barra_secundaria_drawable" format="reference" />
-        <attr name="barra_thumb_cor" format="color" />
-        <attr name="barra_thumb_raio" format="integer" />
-        <attr name="barra_thumb_drawable" format="reference" />
-        <attr name="barra_max" format="float" />
-        <attr name="barra_min" format="float" />
-        <attr name="barra_progresso" format="float" />
-        <attr name="barra_indicador_cor" format="color" />
-        <attr name="barra_indicador_tamanho" format="dimension"/>
-        <attr name="barra_indicador_tipo">
-            <enum name="quadrado" value="0" />
-            <enum name="oval" value="1" />
-            <enum name="circular" value="2" />
-            <enum name="quadrado_arrendondado" value="3" />
-        </attr>
-        <attr name="barra_indicador_raio" format="float" />
-        <attr name="barra_indicador_raio_quadrado" format="float" />
-        <attr name="barra_indicador_distancia_thumb" format="float" />
-        <attr name="barra_texto_size">
-            <enum name="pequeno" value="1" />
-            <enum name="medio" value="2" />
-            <enum name="grande" value="3" />
-        </attr>
-        <attr name="barra_texto" format="string|reference" />
-        <attr name="barra_texto_cor" format="color" />
-        <attr name="barra_tick_enable" format="boolean" />
-        <attr name="barra_tick_cor" format="color" />
-        <attr name="barra_tick_raio" format="integer" />
-        <attr name="barra_tick_drawable" format="reference" />
-    </declare-styleable>
+<declare-styleable name="BarraProgresso">
+    <attr name="barra_altura" format="dimension" />
+    <attr name="barra_primaria_color" format="color" />
+    <attr name="barra_primaria_drawable" format="reference" />
+    <attr name="barra_secundaria_color" format="color" />
+    <attr name="barra_secundaria_drawable" format="reference" />
+    <attr name="barra_thumb_cor" format="color" />
+    <attr name="barra_thumb_raio" format="integer" />
+    <attr name="barra_thumb_drawable" format="reference" />
+    <attr name="barra_max" format="float" />
+    <attr name="barra_min" format="float" />
+    <attr name="barra_progresso" format="float" />
+    <attr name="barra_indicador_cor" format="color" />
+    <attr name="barra_indicador_tamanho" format="dimension"/>
+    <attr name="barra_indicador_tipo">
+        <enum name="quadrado" value="0" />
+        <enum name="oval" value="1" />
+        <enum name="circular" value="2" />
+        <enum name="quadrado_arrendondado" value="3" />
+    </attr>
+    <attr name="barra_indicador_raio" format="float" />
+    <attr name="barra_indicador_raio_quadrado" format="float" />
+    <attr name="barra_indicador_distancia_thumb" format="float" />
+    <attr name="barra_texto_size">
+        <enum name="pequeno" value="1" />
+        <enum name="medio" value="2" />
+        <enum name="grande" value="3" />
+    </attr>
+    <attr name="barra_texto" format="string|reference" />
+    <attr name="barra_texto_cor" format="color" />
+    <attr name="barra_tick_enable" format="boolean" />
+    <attr name="barra_tick_cor" format="color" />
+    <attr name="barra_tick_raio" format="integer" />
+    <attr name="barra_tick_drawable" format="reference" />
+</declare-styleable>
 
 </resources>

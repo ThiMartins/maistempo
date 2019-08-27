@@ -491,4 +491,6 @@
         <item> 50 a 60 min</item>
         <item> > 60 min</item>
     </array>
+    <string name="DesejaEnvia">Você deseja enviar essa nota ?</string>
+    <string name="ErroEnviarNovamente">Por favor espere até a próxima hora, para enviar uma nova nota</string>
 </resources>
