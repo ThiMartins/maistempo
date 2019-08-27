@@ -1,5 +1,6 @@
 package dev.tantto.barra_progresso;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -11,12 +12,10 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
-import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -66,6 +65,9 @@ public class BarraProgresso extends View {
     private float Barra_Max;
     private float Barra_Min;
     private float Barra_Altura;
+    private boolean Barra_IsEnable = true;
+    private Paint Barra_Cinza = new Paint();
+    private boolean Barra_Iniciado = false;
     private float Barra_Progresso = 0;
     private OnBarraChanged Barra_Change;
     private boolean Barra_IsPressing = false;
@@ -106,7 +108,6 @@ public class BarraProgresso extends View {
     private Bitmap TickNark_Bitmap;
     private Path TickMark = new Path();
     private Paint desenhoTickMark = new Paint();
-    private LinearInterpolator Interpolador = new LinearInterpolator();
 
     /** Variaveis do indicador */
 
@@ -168,6 +169,7 @@ public class BarraProgresso extends View {
         Altura = Math.round(Barra_Altura + PaddingTop + PaddingBottom + (int) Indicador_Distancia_Thumb + Indicador_Tamanho + Cima);
         Largura = Math.round(Largura_Minima_Padrao + PaddingStart + PaddingEnd);
         setMeasuredDimension(resolveSize(Largura, widthMeasureSpec), resolveSize(Altura, heightMeasureSpec));
+        Barra_Cinza.setColor(Color.argb(175, 175, 175, 175));
     }
 
     @Override
@@ -209,59 +211,68 @@ public class BarraProgresso extends View {
                     Barra_Change.setOnClickListener(this);
                 }
                 performClick();
-                invalidate();
+                if(Barra_IsEnable) invalidate();
                 return true;
             case MotionEvent.ACTION_MOVE:
+                performClick();
                 Barra_Progresso = limitacaoProgresso(event.getX());
                 if(Barra_Change != null){
                     Barra_Change.setOnBarraChangeListener(this, Barra_Progresso);
                 }
-                performClick();
-                invalidate();
+                if(Barra_IsEnable) invalidate();
                 return true;
             case MotionEvent.ACTION_UP:
                 Barra_IsPressing = false;
+
                 if(Barra_Change != null){
                     Barra_Change.setOnFinishListener(this);
                 }
-                invalidate();
+                if(Barra_IsEnable){
+                    ajustarTick();
+                    invalidate();
+                }
                 return true;
         }
         return super.onTouchEvent(event);
     }
 
     @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        Barra_IsEnable = enabled;
+        invalidate();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return Barra_IsEnable;
+    }
+
+    @Override
     protected synchronized void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-        desenharSecundario(canvas, PaddingStart + Esquerda, Baixo - PaddingBottom - Barra_Altura, Largura - PaddingEnd, Baixo - PaddingBottom);
-        desenharPrimario(canvas, PaddingStart + Esquerda, Baixo - PaddingBottom - Barra_Altura, converterProgressoEmPixel(), Baixo - PaddingBottom);
+        desenharSecundario(canvas, (float) (PaddingStart + Esquerda), (float) (Baixo - PaddingBottom - Barra_Altura), (float) (Largura - PaddingEnd), (float) (Baixo - PaddingBottom));
+        desenharPrimario(canvas, (float) (PaddingStart + Esquerda), (float) (Baixo - PaddingBottom - Barra_Altura), converterProgressoEmPixel(), (float) (Baixo - PaddingBottom));
         desenharThumb(canvas, converterProgressoEmPixel(), Barra_Primaria_Center_Y, true);
         desenharIndicador(canvas);
         desenharTexto(canvas);
         if(IsTickMark){
             desenharTickMark(canvas);
         }
+        Barra_Iniciado = true;
     }
-
 
 
     /** Metodos para desenhar os elementos no layout */
 
-    private void desenharTickMark(@NonNull Canvas canvas){
-        int Espacamento = (Largura - PaddingEnd - PaddingStart) / getTamanhoLista();
+    private void desenharTickMark(@NonNull final Canvas canvas){
+        int tamanho = getTamanhoLista();
+        tamanho = tamanho > 0 ? tamanho : 1;
+        final int Espacamento = (Largura - PaddingEnd - PaddingStart) / tamanho;
         for(int posicao = 0; posicao <= getTamanhoLista(); posicao++){
-            desenharThumb(canvas, (Espacamento * posicao) + PaddingStart + Esquerda, Barra_Primaria_Center_Y, false);
+            desenharThumb(canvas, (float) ((Espacamento * posicao) + PaddingStart + Esquerda), Barra_Primaria_Center_Y, false);
         }
-        if(!Barra_IsPressing){
-            float espaco = (Barra_Max - Barra_Min) / getTamanhoLista() == 0 ? 1 : getTamanhoLista();
-            float Valor = (Barra_Progresso - Barra_Min) / espaco;
-            float posicao = Barra_Progresso - Math.round(Valor);
-            if(posicao >= espaco / 2){
 
-            } else {
-
-            }
-        }
     }
 
     private void desenharTexto(@NonNull Canvas canvas){
@@ -269,18 +280,17 @@ public class BarraProgresso extends View {
         desenhoTexto.setTextSize(Texto_Tamanho);
 
         int Tamanho = getTamanhoLista();
+        Tamanho = Tamanho > 0 ? Tamanho : 1;
         int Posicao = getPosicao(Tamanho);
         String Elemento = getElemento(Tamanho, Posicao);
 
         float TamanhoTexto = Elemento.length() * getTamanhoTexto();
         float Bordas = (Indicador_Tamanho - TamanhoTexto) / 8;
 
-        //float PosicaoTexto = converterProgressoEmPixel() - (Indicador_Tamanho / 2) + Bordas < PaddingStart + Esquerda + Indicador_Tamanho / 2 + Bordas ? PaddingStart + Esquerda + Indicador_Tamanho / 2 + Bordas : converterProgressoEmPixel() - (Indicador_Tamanho / 2) + Bordas;
-        //float PosicaoFinal = PosicaoTexto  - TamanhoTexto + PaddingEnd >= Largura - PaddingEnd - (Indicador_Centro_Y + TamanhoTexto) - Tamanho ? Largura - PaddingEnd - TamanhoTexto / 2 : PosicaoTexto;
-
         float PosicaoFinal = Indicador_Centro_X - (TamanhoTexto / Tamanho) + Bordas;
 
         canvas.drawText(Elemento, PosicaoFinal, Indicador_Centro_Y, desenhoTexto);
+
     }
 
     private void desenharIndicador(@NonNull Canvas canvas){
@@ -305,7 +315,7 @@ public class BarraProgresso extends View {
 
             RectF square = new RectF(Tamanho, Barra_Primaria_Center_Y - Indicador_Distancia_Thumb - Indicador_Tamanho, TamanhoFinal, Barra_Primaria_Center_Y - Indicador_Distancia_Thumb);
             Indicador.addRoundRect(square, Indicador_Raio_Quadrado, Indicador_Raio_Quadrado, Path.Direction.CCW);
-            canvas.drawPath(Indicador, desenhoIndicador);
+            canvas.drawPath(Indicador, Barra_IsEnable ? desenhoIndicador : Barra_Cinza);
         }
         if(Indicador_Tipo == IndicadoresTipos.Circular.valor){
             Indicador = new Path();
@@ -316,7 +326,7 @@ public class BarraProgresso extends View {
             Indicador_Centro_Y = Barra_Primaria_Center_Y - (Indicador_Distancia_Thumb * 1.25F);
 
             Indicador.addCircle(Tamanho, Barra_Primaria_Center_Y - (Indicador_Distancia_Thumb * 1.1255F), Indicador_Raio, Path.Direction.CCW);
-            canvas.drawPath(Indicador, desenhoIndicador);
+            canvas.drawPath(Indicador, Barra_IsEnable ? desenhoIndicador : Barra_Cinza);
         }
         if(Indicador_Tipo == IndicadoresTipos.Oval.valor){
             Indicador = new Path();
@@ -327,7 +337,7 @@ public class BarraProgresso extends View {
             Indicador_Centro_Y = Barra_Primaria_Center_Y - (Indicador_Distancia_Thumb * 1.125F);
 
             Indicador.addCircle(Tamanho, Barra_Primaria_Center_Y - (Indicador_Distancia_Thumb * 1.5F), Indicador_Raio, Path.Direction.CCW);
-            canvas.drawPath(Indicador, desenhoIndicador);
+            canvas.drawPath(Indicador, Barra_IsEnable ? desenhoIndicador : Barra_Cinza);
         }
         if(Indicador_Tipo == IndicadoresTipos.Quadrado.valor){
             Indicador = new Path();
@@ -341,7 +351,7 @@ public class BarraProgresso extends View {
 
             RectF square = new RectF(Tamanho, Barra_Primaria_Center_Y - Indicador_Distancia_Thumb - Indicador_Tamanho, TamanhoFinal, Barra_Primaria_Center_Y - Indicador_Distancia_Thumb);
             Indicador.addRect(square, Path.Direction.CCW);
-            canvas.drawPath(Indicador, desenhoIndicador);
+            canvas.drawPath(Indicador, Barra_IsEnable ? desenhoIndicador : Barra_Cinza);
         }
     }
 
@@ -351,24 +361,24 @@ public class BarraProgresso extends View {
                 Thumb = new Path();
                 desenhoThumb.setColor(Thumb_Cor);
                 Thumb.addCircle(X0, Y0, Thumb_Raio, Path.Direction.CCW);
-                canvas.drawPath(Thumb, desenhoThumb);
+                canvas.drawPath(Thumb, Barra_IsEnable ? desenhoThumb : Barra_Cinza);
             } else {
                 if(Thumb_Bitmap == null){
                     Thumb_Bitmap = drawableToBitmap(getResources().getDrawable(Thumb_Drawable), Thumb_Raio, Thumb_Raio);
                 }
-                canvas.drawBitmap(Thumb_Bitmap, X0 - (Thumb_Raio / 2F), Y0 - (Thumb_Raio / 2F), desenhoThumb);
+                canvas.drawBitmap(Thumb_Bitmap, X0 - (Thumb_Raio / 2F), Y0 - (Thumb_Raio / 2F), Barra_IsEnable ? desenhoThumb : Barra_Cinza);
             }
         } else {
             if(TickMark_Drawable == 0){
                 TickMark = new Path();
                 desenhoTickMark.setColor(TickMark_Cor);
                 TickMark.addCircle(X0, Y0, TickMark_Raio, Path.Direction.CCW);
-                canvas.drawPath(TickMark, desenhoTickMark);
+                canvas.drawPath(TickMark, Barra_IsEnable ? desenhoThumb : Barra_Cinza);
             } else {
                 if(TickNark_Bitmap == null){
                     TickNark_Bitmap = drawableToBitmap(getResources().getDrawable(TickMark_Drawable), TickMark_Raio, TickMark_Raio);
                 }
-                canvas.drawBitmap(TickNark_Bitmap, X0 - (TickMark_Raio / 2F), Y0 - (TickMark_Raio / 2F), desenhoTickMark);
+                canvas.drawBitmap(TickNark_Bitmap, X0 - (TickMark_Raio / 2F), Y0 - (TickMark_Raio / 2F), Barra_IsEnable ? desenhoThumb : Barra_Cinza);
             }
         }
     }
@@ -383,12 +393,12 @@ public class BarraProgresso extends View {
             Barra_Primaria.lineTo(X0, Y0);
             Barra_Primaria.close();
             desenhoProgressoPrimaria.setColor(Barra_Primaria_Cor);
-            canvas.drawPath(Barra_Primaria, desenhoProgressoPrimaria);
+            canvas.drawPath(Barra_Primaria, Barra_IsEnable ? desenhoProgressoPrimaria : Barra_Cinza);
         } else {
             float LarguraBitmap =  (X1 - X0);
             if(LarguraBitmap > 0){
                 Barra_Primaria_Bitmap = drawableToBitmap(getResources().getDrawable(Barra_Primaria_Drawable), (int) LarguraBitmap, (int) Barra_Altura);
-                canvas.drawBitmap(Barra_Primaria_Bitmap, X0, Y0, desenhoProgressoPrimaria);
+                canvas.drawBitmap(Barra_Primaria_Bitmap, X0, Y0, Barra_IsEnable ? desenhoProgressoPrimaria : Barra_Cinza);
             }
         }
         Barra_Primaria_Center_Y = Y0 + ((Y1 - Y0) / 2);
@@ -404,15 +414,47 @@ public class BarraProgresso extends View {
             Barra_Secundaria.lineTo(X0, Y0);
             Barra_Secundaria.close();
             desenhoProgressoSecundario.setColor(Barra_Secundaria_Cor);
-            canvas.drawPath(Barra_Secundaria, desenhoProgressoSecundario);
+            canvas.drawPath(Barra_Secundaria, Barra_IsEnable ? desenhoProgressoSecundario : Barra_Cinza);
         } else {
             if(Barra_Secundaria_Bitmap == null){
                 Barra_Secundaria_Bitmap = drawableToBitmap(getResources().getDrawable(Barra_Secundaria_Drawable), (int) (X1 - X0), (int) Barra_Altura);
             }
-            canvas.drawBitmap(Barra_Secundaria_Bitmap, X0, Y0, desenhoProgressoSecundario);
+            canvas.drawBitmap(Barra_Secundaria_Bitmap, X0, Y0, Barra_IsEnable ? desenhoProgressoSecundario : Barra_Cinza);
         }
     }
 
+    private void ajustarTick() {
+        int tamanho = getTamanhoLista();
+        tamanho = tamanho > 0 ? tamanho : 1;
+        final int Espacamento = (Largura - PaddingEnd - PaddingStart) / tamanho;
+        if(!Barra_IsPressing && Barra_Iniciado){
+            for(int posicao = 0; posicao <= getTamanhoLista(); posicao ++){
+                if(posicao * Espacamento >= converterProgressoEmPixel()){
+                    float mudar;
+                    if(converterProgressoEmPixel() >= ((posicao - 1) * Espacamento) + (Espacamento / 2F) + PaddingStart){
+                        mudar = (float) ((posicao * Espacamento) + PaddingStart);
+                    } else {
+                        mudar = (float) (((posicao - 1) * Espacamento) + PaddingStart);
+                    }
+                    animacao(converterProgressoEmPixel(), mudar);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private void animacao(float momento, float direcao){
+        final ValueAnimator animacao = ValueAnimator.ofFloat(momento, direcao);
+        animacao.start();
+        animacao.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                Barra_Progresso = converterPixelEmProgresso((float) animacao.getAnimatedValue());
+                invalidate();
+            }
+        });
+    }
 
 
     /** Metodos de ferramentas */
@@ -432,7 +474,7 @@ public class BarraProgresso extends View {
     }
 
     private int getTamanhoLista() {
-        return Texto_Valores != null ? Texto_Valores.size() : 0;
+        return Texto_Valores != null ? Texto_Valores.size() - 1 : 0;
     }
 
     private void recuperarPaddinds(){

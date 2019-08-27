@@ -32,9 +32,9 @@ class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : Re
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ChaveNormal = Lista.filaNormal.keys.toList().asReversed()
-        val ChaveRapida = Lista.filaRapida.keys.toList().asReversed()
-        val ChavePreferencial = Lista.filaPreferencial.keys.toList().asReversed()
+        val ChaveNormal = Lista.filaNormal.keys.toList().sortedBy { it.toInt() }
+        val ChaveRapida = Lista.filaRapida.keys.toList().sortedBy { it.toInt() }
+        val ChavePreferencial = Lista.filaPreferencial.keys.sortedBy { it.toInt() }
         when(Modo){
             0 -> {
                 val ValorProgresso = Lista.filaNormal[ChaveNormal[position]].toString().toDouble() * 16.6
@@ -69,7 +69,7 @@ class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : Re
                 else -> Item.findViewById<TextView>(R.id.HorarioFila).text = String.format("$Horario:00")
             }
             val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila1)
-            ProgressoBarra.progress = 0
+            ProgressoBarra.progress = 100
 
             setandoCor(Progresso, ProgressoBarra)
             colocandoAnimacao(ProgressoBarra, Progresso)
@@ -79,9 +79,9 @@ class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : Re
         private fun colocandoAnimacao(ProgressoBarra: ProgressBar?, Progresso: Int) {
             val Animacao = ObjectAnimator.ofInt(ProgressoBarra, "progress", Progresso)
             when {
-                Progresso >= 50 -> Animacao.duration = 1000
+                Progresso >= 50 -> Animacao.duration = 250
                 Progresso >= 25 -> Animacao.duration = 500
-                Progresso < 25 -> Animacao.duration = 250
+                Progresso < 25 -> Animacao.duration = 1000
             }
             Animacao.interpolator = LinearInterpolator()
             Animacao.start()

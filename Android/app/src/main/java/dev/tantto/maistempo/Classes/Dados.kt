@@ -17,6 +17,17 @@ class Dados {
             return Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE).getBoolean("Login", false)
         }
 
+        fun salvarLoja(Contexto: Context, Id:String, Horario:String){
+            val Preferencias = Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE)
+            val Editor = Preferencias.edit()
+            Editor.putString(Id, Horario)
+            Editor.apply()
+        }
+
+        fun verificarLojaHorario(Contexto: Context, Id: String) : String? {
+            return Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE).getString(Id, "")
+        }
+
     }
 
 

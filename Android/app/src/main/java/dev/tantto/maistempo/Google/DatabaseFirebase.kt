@@ -38,7 +38,7 @@ class DatabaseFirebaseSalvar {
             try {
                 FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Dados.email).set(Dados)
 
-            } catch (Erro:FirebaseFirestoreException){
+            } catch (Erro:Throwable){
                 Erro.printStackTrace()
             }
         }
@@ -217,7 +217,7 @@ class DatabaseFirebaseRecuperar {
                                     longitude = Item["longitude"].toString().toDouble(),
                                     local = Item["local"].toString(),
                                     filaNormal = Item["filaNormal"] as HashMap<String, Double>,
-                                    cidade = Item["cidade"].toString().toLowerCase(),
+                                    cidade = Item["cidade"].toString(),
                                     telefone = Item["telefone"].toString(),
                                     quantidadeAvaliacoesFila = Item["quantidadeAvaliacoesFila"].toString().toInt(),
                                     quantidadeAvaliacoesRating = Item["quantidadeAvaliacoesRating"].toString().toInt(),
@@ -307,7 +307,7 @@ class DatabaseFirebaseRecuperar {
                                 longitude = Item["longitude"].toString().toDouble(),
                                 local = Item["local"].toString(),
                                 filaNormal = Item["filaNormal"] as HashMap<String, Double>,
-                                cidade = Item["cidade"].toString().toLowerCase(),
+                                cidade = Item["cidade"].toString(),
                                 telefone = Item["telefone"].toString(),
                                 quantidadeAvaliacoesFila = Item["quantidadeAvaliacoesFila"].toString().toInt(),
                                 quantidadeAvaliacoesRating = Item["quantidadeAvaliacoesRating"].toString().toInt(),
