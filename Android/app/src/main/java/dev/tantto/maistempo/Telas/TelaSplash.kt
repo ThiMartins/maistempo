@@ -22,6 +22,7 @@ import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.chaves.Requisicoes
+import kotlin.collections.HashMap
 
 class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
@@ -35,7 +36,6 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_splash)
         supportActionBar?.elevation = 0F
-
     }
 
     override fun onPause() {

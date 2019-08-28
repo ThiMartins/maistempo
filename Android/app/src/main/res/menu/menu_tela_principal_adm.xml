@@ -27,4 +27,19 @@
             app:showAsAction="ifRoom"
             android:title="@string/AdicionarLoja" />
 
+    <item
+            android:id="@+id/LimparLista"
+            app:showAsAction="ifRoom"
+            android:title="@string/LimparBanco" />
+
+    <item
+            android:id="@+id/DesabilitarAlarme"
+            app:showAsAction="ifRoom"
+            android:title="@string/DesabilitarAlarme" />
+
+    <item
+            android:id="@+id/HabilitarAlarme"
+            app:showAsAction="ifRoom"
+            android:title="@string/HabilitarAlarme" />
+
 </menu>

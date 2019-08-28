@@ -1,7 +1,11 @@
 package dev.tantto.maistempo.google
 
+import android.util.Log
 import com.google.firebase.functions.FirebaseFunctions
 import dev.tantto.maistempo.chaves.Chave
+import dev.tantto.maistempo.modelos.NotasUsuarios
+import java.text.DateFormat
+import java.util.*
 
 enum class Resultado(val valor:String){
     SUCESSO("sucesso"),
@@ -41,6 +45,14 @@ class CloudFunctions {
             FirebaseFunctions.getInstance().getHttpsCallable(Chave.CHAVE_NOTA_LOJA.valor).call(Dados)
         }
 
+        fun atualizarLista() {
+            val Dia = Calendar.getInstance().time
+            var Dataformatada = DateFormat.getInstance().format(Dia)
+            Dataformatada = Dataformatada.replace('/', ' ')
+            Dataformatada = Dataformatada.replace(':', '-')
+            val dados = hashMapOf(Pair("doc", Dataformatada))
+            FirebaseFunctions.getInstance().getHttpsCallable("atualizarLista").call(dados)
+        }
     }
 
 }

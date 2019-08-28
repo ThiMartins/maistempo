@@ -159,6 +159,36 @@ exports.adicionarNotaLocal = functions.https.onCall(async (data, _context) =>{
 
 })
 
+exports.atualizarLista = functions.https.onCall(async (data, _context) =>{
+
+    const NovoDoc = data["doc"];
+
+    const Documentos = await admin.firestore().collection('notasUsuarios').get();
+
+    Documentos.forEach(elemento =>{
+         elemento.ref.get().then(valor =>{
+            admin.firestore().collection(NovoDoc).doc(valor.id).set(valor.data());
+            const valores = valor.data();
+            valores["filaNormal"] = {};
+            valores["filaRapida"] = {};
+            valores["filaPreferencial"] = {};
+            valores["notasRanking"] = {};
+            admin.firestore().collection('notasUsuarios').doc(valor.id).set(valores);
+            admin.firestore().collection('lojas').doc(valor.id).update("filaNormal", {});
+            admin.firestore().collection('lojas').doc(valor.id).update("filaRapida", {});
+            admin.firestore().collection('lojas').doc(valor.id).update("filaPreferencial", {});
+            admin.firestore().collection('lojas').doc(valor.id).update("quantidadeAvaliacoesFila", 0);
+            admin.firestore().collection('lojas').doc(valor.id).update("quantidadeAvaliacoesRating", 0);
+            return "ok"
+        })
+        .catch(erro =>{
+            console.log(erro);
+            return "erro";
+        })
+    })
+    return "ok";
+})
+
 exports.fazerMedia = functions.firestore.document('usuarios/{uid}').onWrite((change, context) => {
 
     const data = change.after.data();

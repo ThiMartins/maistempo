@@ -22,6 +22,8 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/googleMapsKey" />
 
+        <receiver android:name=".classes.Alarme" />
+
         <activity
                 android:name=".telas.TelaSplash"
                 android:screenOrientation="portrait">
