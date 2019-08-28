@@ -19,7 +19,8 @@ enum class Chave(val valor:String) {
     CHAVE_ACESSO("Acesso"),
     CHAVE_FECHAR("Fechar"),
     CHAVE_MINHA_LOCALIZCAO("localizacao"),
-    CHAVE_NOTA_LOJA("adicionarNotaLocal")
+    CHAVE_NOTA_LOJA("adicionarNotaLocal"),
+    CHAVE_ALARME("alarmeAtualizar")
 
 }
 

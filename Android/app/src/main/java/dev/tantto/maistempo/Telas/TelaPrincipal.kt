@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
@@ -121,11 +122,26 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
         }
 
         if(NivelAcesso == Chave.CHAVE_ADM.valor){
-            if(R.id.AdicionarLoja == item?.itemId){
-                startActivity(Intent(this, TelaAdicionarLoja::class.java))
+            when (item?.itemId){
+                R.id.AdicionarLoja -> startActivity(Intent(this, TelaAdicionarLoja::class.java))
+                R.id.LimparLista -> {
+                    val AlertaBuilder = AlertDialog.Builder(this)
+                    AlertaBuilder.setTitle(R.string.Atencao).setMessage(R.string.ConfirmarLimparBanco)
+                    AlertaBuilder.setPositiveButton(R.string.Sim){ _, _ ->
+                        CloudFunctions.atualizarLista()
+                    }.setNegativeButton(R.string.Nao, null)
+                    AlertaBuilder.create().show()
+                }
+                R.id.DesabilitarAlarme -> {
+                    Alarme.desabilitarAlarme(this)
+                    Toast.makeText(this, R.string.AlarmeHabilitado, Toast.LENGTH_LONG).show()
+                }
+                R.id.HabilitarAlarme ->{
+                    Alarme.habilitarAlarme(this)
+                    Toast.makeText(this, R.string.AlarmeDesabilitado, Toast.LENGTH_LONG).show()
+                }
             }
         }
-
         return super.onOptionsItemSelected(item!!)
     }
 

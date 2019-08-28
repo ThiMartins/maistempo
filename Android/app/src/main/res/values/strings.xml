@@ -493,4 +493,12 @@
     </array>
     <string name="DesejaEnvia">Você deseja enviar essa nota ?</string>
     <string name="ErroEnviarNovamente">Por favor espere até a próxima hora, para enviar uma nova nota</string>
+    <string name="LimparBanco">Limpar banco dia</string>
+    <string name="ConfirmarLimparBanco">Tem certeza que deseja apagar o banco em relação aos valores atuais</string>
+    <string name="AtualizandoBanco">O Banco está sendo atualizado</string>
+    <string name="BancoMudanca">O banco está sendo atualizado para uma nova tabela referente a este novo dia</string>
+    <string name="DesabilitarAlarme">Desabilitar alarme</string>
+    <string name="HabilitarAlarme">Habilitar alarme</string>
+    <string name="AlarmeHabilitado">Alarme habilitado</string>
+    <string name="AlarmeDesabilitado">Alarme desabilitado</string>
 </resources>
