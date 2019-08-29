@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.ListaPerfil
 import dev.tantto.maistempo.modelos.Geral
-import dev.tantto.maistempo.modelos.Tipo
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaPerfil
 import dev.tantto.maistempo.telas.TelaLogin
@@ -34,18 +33,18 @@ class AdaptadorPessoa(private val Contexto: Context, private val lista:List<Gera
         holder.adicionandoValores(lista[position])
         holder.card?.setOnClickListener {
             val Modo = ListaPerfil().recuperar(position).Modo
-            if(Modo == Tipo.SAIR){
+            if(Modo == Geral.Tipo.SAIR){
                 FirebaseAutenticacao.deslogarUser()
             }
             iniciarTela(Modo)
         }
     }
 
-    private fun iniciarTela(Modo: Tipo) {
+    private fun iniciarTela(Modo: Geral.Tipo) {
         val Iniciar:Intent = when (Modo) {
-            Tipo.GERAL -> Intent(Contexto, TelaPerfil::class.java)
-            Tipo.RANKING -> Intent(Contexto, TelaRanking::class.java)
-            Tipo.TERMOS -> Intent(Contexto, TelaTermo::class.java)
+            Geral.Tipo.GERAL -> Intent(Contexto, TelaPerfil::class.java)
+            Geral.Tipo.RANKING -> Intent(Contexto, TelaRanking::class.java)
+            Geral.Tipo.TERMOS -> Intent(Contexto, TelaTermo::class.java)
             else -> {
                 FirebaseAutenticacao.deslogarUser()
                 val iniciar = Intent(Contexto, TelaLogin::class.java)

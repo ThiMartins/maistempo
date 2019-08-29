@@ -474,7 +474,7 @@ public class BarraProgresso extends View {
     }
 
     private int getTamanhoLista() {
-        return Texto_Valores != null ? Texto_Valores.size() - 1 : 0;
+        return Texto_Valores != null ? Texto_Valores.size() : 0;
     }
 
     private void recuperarPaddinds(){

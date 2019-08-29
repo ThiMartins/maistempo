@@ -1,9 +1,10 @@
 package dev.tantto.maistempo.google
 
-import android.util.Log
+import android.content.Context
+import com.google.firebase.FirebaseApp
 import com.google.firebase.functions.FirebaseFunctions
 import dev.tantto.maistempo.chaves.Chave
-import dev.tantto.maistempo.modelos.NotasUsuarios
+import java.lang.Exception
 import java.text.DateFormat
 import java.util.*
 
@@ -45,14 +46,20 @@ class CloudFunctions {
             FirebaseFunctions.getInstance().getHttpsCallable(Chave.CHAVE_NOTA_LOJA.valor).call(Dados)
         }
 
-        fun atualizarLista() {
+        fun atualizarLista(Contexto:Context? = null) {
             val Dia = Calendar.getInstance().time
             var Dataformatada = DateFormat.getInstance().format(Dia)
             Dataformatada = Dataformatada.replace('/', ' ')
             Dataformatada = Dataformatada.replace(':', '-')
             val dados = hashMapOf(Pair("doc", Dataformatada))
-            FirebaseFunctions.getInstance().getHttpsCallable("atualizarLista").call(dados)
+            try {
+                FirebaseApp.initializeApp(Contexto!!)
+                FirebaseFunctions.getInstance().getHttpsCallable("atualizarLista").call(dados)
+            } catch (Erro:Exception){
+                Erro.printStackTrace()
+            }
         }
+
     }
 
 }

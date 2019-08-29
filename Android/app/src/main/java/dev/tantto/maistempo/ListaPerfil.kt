@@ -1,15 +1,14 @@
 package dev.tantto.maistempo
 
 import dev.tantto.maistempo.modelos.Geral
-import dev.tantto.maistempo.modelos.Tipo
 
 class ListaPerfil {
 
     private var lista:MutableList<Geral> = mutableListOf(
-        Geral("Geral", R.drawable.setting_dark, Tipo.GERAL),
-        Geral("Ranking", R.drawable.star_black, Tipo.RANKING),
-        Geral("Termos de Utilização", R.drawable.termos_dark, Tipo.TERMOS),
-        Geral("Sair", R.drawable.sair_dark, Tipo.SAIR)
+        Geral("Geral", R.drawable.setting_dark, Geral.Tipo.GERAL),
+        Geral("Ranking", R.drawable.star_black, Geral.Tipo.RANKING),
+        Geral("Termos de Utilização", R.drawable.termos_dark, Geral.Tipo.TERMOS),
+        Geral("Sair", R.drawable.sair_dark, Geral.Tipo.SAIR)
     )
 
     fun recuperarTudo() : MutableList<Geral>{
