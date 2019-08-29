@@ -278,9 +278,9 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                 val AdaptadorMes= ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, criarArray(1, 12))
                 val AdaptadorDia = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, criarArray(1, 31))
 
-                AnoSpinner = TelaFinal.findViewById<Spinner>(R.id.AnoSpinner)
-                MesSpinner = TelaFinal.findViewById<Spinner>(R.id.MesSpinner)
-                DiaSpinner = TelaFinal.findViewById<Spinner>(R.id.DiaSpinner)
+                AnoSpinner = TelaFinal.findViewById(R.id.AnoSpinner)
+                MesSpinner = TelaFinal.findViewById(R.id.MesSpinner)
+                DiaSpinner = TelaFinal.findViewById(R.id.DiaSpinner)
 
                 AnoSpinner?.adapter = AdaptadorAno
                 MesSpinner?.adapter = AdaptadorMes

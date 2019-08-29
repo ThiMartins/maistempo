@@ -134,11 +134,11 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                 }
                 R.id.DesabilitarAlarme -> {
                     Alarme.desabilitarAlarme(this)
-                    Toast.makeText(this, R.string.AlarmeHabilitado, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, R.string.AlarmeDesabilitado, Toast.LENGTH_LONG).show()
                 }
                 R.id.HabilitarAlarme ->{
                     Alarme.habilitarAlarme(this)
-                    Toast.makeText(this, R.string.AlarmeDesabilitado, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, R.string.AlarmeHabilitado, Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -171,7 +171,7 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                     }.setNegativeButton(R.string.Cancelar, null)
                 val AlertaFechado = Alerta.create()
                 AlertaFechado.show()
-                ProgressoRaio = AlertaFechado.findViewById<SeekBar>(R.id.ValorMudarRaio)
+                ProgressoRaio = AlertaFechado.findViewById(R.id.ValorMudarRaio)
                 ProgressoRaio?.progress = when (Pessoa.raio.toString().toInt()) {
                     1 -> 0
                     12 -> 1
