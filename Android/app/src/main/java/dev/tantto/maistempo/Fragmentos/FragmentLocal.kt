@@ -35,6 +35,10 @@ class FragmentLocal: Fragment() {
         adaptador?.notifyDataSetChanged()
     }
 
+    fun atualizando(){
+        swipe?.isRefreshing = true
+    }
+
     fun passandoReferencia(Passando:TelaPrincipal){
         Referencia = Passando
     }

@@ -156,20 +156,16 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
     }
 
     private fun verificacaoGPS(Pessoa: Perfil) {
-        if(Pessoa.raio != 100L){
-            BuscarLojasProximas(this, Pessoa.raio.toDouble() * 1000).procurarProximos(object :
-                BuscarLojasProximas.BuscaConcluida {
-                override fun resultado(Modo: Boolean) {
-                    if(Pausado){
-                        PessoaPassada = Pessoa
-                    } else {
-                        prepararInicio(Pessoa)
-                    }
+        BuscarLojasProximas(this, Pessoa.raio.toDouble() * 1000).procurarProximos(object :
+            BuscarLojasProximas.BuscaConcluida {
+            override fun resultado(Modo: Boolean) {
+                if(Pausado){
+                    PessoaPassada = Pessoa
+                } else {
+                    prepararInicio(Pessoa)
                 }
-            })
-        } else {
-            prepararInicio(Pessoa)
-        }
+            }
+        })
 
     }
 

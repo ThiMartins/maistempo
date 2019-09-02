@@ -148,8 +148,6 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
         Aletar.setPositiveButton(R.string.Sim) { _, _ ->
             if(Pessoa != null){
                 DatabaseFirebaseSalvar.deletarConta(Pessoa?.email!!)
-                FirebaseAutenticacao.apagarConta()
-                FirebaseAutenticacao.deslogarUser()
                 startActivity(Intent(this, TelaLogin::class.java))
                 finishAffinity()
             }
@@ -181,12 +179,17 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
             var AlertaFechado:AlertDialog? = null
             var InputSenhaVerificar:TextInputLayout? = null
             val SenhaConfirmar:EditText?
+            var SenhaAntiga:EditText? = null
 
             val Alerta = AlertDialog.Builder(this)
             Alerta.setView(R.layout.nova_senha)
             Alerta.setPositiveButton(R.string.Ok) { _, _ ->
                 if(SenhaNova == SenhaNovaConfirmada){
-                    salvarSenha(SenhaNova)
+                    val Email = FirebaseAutenticacao.Autenticacao.currentUser?.email
+                    val VelhaSenha = SenhaAntiga?.text?.toString()
+                    if(!VelhaSenha.isNullOrEmpty() && !Email.isNullOrEmpty()){
+                        salvarSenha(SenhaNova, Email, VelhaSenha)
+                    }
                 } else {
                     InputSenhaVerificar?.error = getString(R.string.SenhaErrada)
                 }
@@ -199,6 +202,7 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
             AlertaFechado?.show()
             SenhaConfirmar = AlertaFechado.findViewById(R.id.SenhaNovaConfirmacao)
             InputSenhaVerificar = AlertaFechado.findViewById(R.id.SenhaNovaVerificarInput)
+            SenhaAntiga = AlertaFechado.findViewById(R.id.SenhaVelha)
             val SenhaVerificar = AlertaFechado.findViewById<EditText>(R.id.SenhaNovaVerificar)
 
             SenhaConfirmar?.setText(Senha?.text?.toString())
@@ -254,10 +258,10 @@ class TelaPerfil : AppCompatActivity(), DatabasePessoaInterface, DownloadFotoClo
         }
     }
 
-    private fun salvarSenha(Senha:String) {
+    private fun salvarSenha(Senha:String, Email:String, SenhaAntiga: String) {
         if (Senha.length >= 6) {
             Alertas.criarAlerter(this, R.string.SalvandoAlteracoes, R.string.Aguardando, 5000).show()
-            FirebaseAutenticacao.mudarSenha(Senha, object : FirebaseAutenticacao.Mudanca {
+            FirebaseAutenticacao.mudarSenha(Senha , Email, SenhaAntiga, object : FirebaseAutenticacao.Mudanca {
                 override fun resultado(Modo: Boolean) {
                     if (Modo) {
                         this@TelaPerfil.Modo = true

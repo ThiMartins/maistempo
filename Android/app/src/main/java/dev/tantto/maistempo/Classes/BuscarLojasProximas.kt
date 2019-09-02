@@ -21,12 +21,10 @@ class BuscarLojasProximas(private val Tela:Activity, private val Raio:Double) : 
 
         when {
             Permissao.veficarPermissao(Tela, Permissao.Permissoes.LOCALIZACAO_FINE) == Permissao.TipoDePermissao.PERMITIDO && LocalizacaoPessoa.providerAtivo(Tela, LocationManager.GPS_PROVIDER) -> {
-                ListaProximos.limpar()
                 localizacaoPrecisa(true, 100, 0.1F, LocationManager.GPS_PROVIDER)
                 localizacaoPrecisa(false, 60000, 100F, LocationManager.GPS_PROVIDER)
             }
             Permissao.veficarPermissao(Tela, Permissao.Permissoes.LOCALIZACAO_COARSE) == Permissao.TipoDePermissao.PERMITIDO && LocalizacaoPessoa.providerAtivo(Tela, LocationManager.NETWORK_PROVIDER) -> {
-                ListaProximos.limpar()
                 localizacaoPrecisa(true, 100, 0.1F, LocationManager.NETWORK_PROVIDER)
                 localizacaoPrecisa(false, 60000, 100F, LocationManager.NETWORK_PROVIDER)
             }

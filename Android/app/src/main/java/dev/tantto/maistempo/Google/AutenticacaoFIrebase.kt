@@ -35,6 +35,7 @@ class FirebaseAutenticacao{
                             else -> Interface.erroLogar(TiposErrosLogar.ERRO_GENERICO)
                         }
                     }
+
                 }
             }
         }
@@ -63,12 +64,20 @@ class FirebaseAutenticacao{
             Autenticacao.currentUser?.delete()
         }
 
-        fun mudarSenha(NovaSenha:String, Interface:Mudanca){
-            Autenticacao.currentUser?.updatePassword(NovaSenha)?.addOnCompleteListener {
-                if(it.isSuccessful){
-                    Interface.resultado(true)
+        fun mudarSenha(NovaSenha:String, Email: String, Senha: String, Interface:Mudanca){
+            val Credenciais = EmailAuthProvider.getCredential(Email, Senha)
+            Autenticacao.currentUser?.reauthenticate(Credenciais)?.addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Autenticacao.currentUser?.updatePassword(NovaSenha)?.addOnCompleteListener {
+                        if(it.isSuccessful){
+                            Interface.resultado(true)
+                        }
+                    }
+                } else {
+                    Interface.resultado(false)
                 }
             }
+
         }
 
         fun recuperarSenha(Email:String, Interface:Mudanca){

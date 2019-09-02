@@ -6,7 +6,7 @@ class ListaProximos {
 
     companion object {
 
-        private var Lista:MutableMap<String, GeoLocation> = mutableMapOf()
+         var Lista:MutableMap<String, GeoLocation> = mutableMapOf()
 
         fun adicionar(Id:String, Local:GeoLocation){
             if(!Lista.contains(Id)){

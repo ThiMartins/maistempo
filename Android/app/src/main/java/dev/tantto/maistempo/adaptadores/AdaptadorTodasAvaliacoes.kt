@@ -27,7 +27,7 @@ class AdaptadorTodasAvaliacoes(private val Lista:MutableMap<String, Double>) : R
     class ViewHolder(private val Item:View) : RecyclerView.ViewHolder(Item){
 
         fun configurandoElementos(Nome:String, Valor:Double){
-            Item.findViewById<TextView>(R.id.NomePessoa).text = Nome
+            Item.findViewById<TextView>(R.id.NomePessoa).text = Nome.substring(Nome.indexOf("/") + 1)
             Item.findViewById<RatingBar>(R.id.VotoPessoa).rating = Valor.toFloat()
         }
 
