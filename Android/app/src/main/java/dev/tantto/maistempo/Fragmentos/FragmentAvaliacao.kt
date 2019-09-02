@@ -17,6 +17,7 @@ import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.adaptadores.AdaptadorTodasAvaliacoes
+import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.telas.TelaResumoLoja
 
 class FragmentAvaliacao : Fragment() {
@@ -86,10 +87,15 @@ class FragmentAvaliacao : Fragment() {
             RatingVoto?.isEnabled = false
 
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email!!
+            DatabaseFirebaseRecuperar.recuperaDadosPessoa(email, object : DatabasePessoaInterface{
+                override fun pessoaRecebida(Pessoa: Perfil) {
+                    val nome = Pessoa.titulo
+                    val idNota = String.format("$email/$nome")
 
-            //DatabaseFirebaseSalvar.enviarRanking(Loja?.id!!, email, nota.toDouble())
-            DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_AVALIACAO)
-            CloudFunctions.adicionarNotaLoja(email, nota.toDouble(), Loja?.id!!)
+                    DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_AVALIACAO)
+                    CloudFunctions.adicionarNotaLoja(idNota, nota.toDouble(), Loja?.id!!)
+                }
+            })
         }
 
     }

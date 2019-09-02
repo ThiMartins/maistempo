@@ -28,6 +28,17 @@ class Dados {
             return Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE).getString(Id, "")
         }
 
+        fun salvarLocal(Contexto: Context, Local:String) {
+            val Preferencias = Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE)
+            val Editor = Preferencias.edit()
+            Editor.putString("Local", Local)
+            Editor.apply()
+        }
+
+        fun verificarLocal(Contexto: Context) : String? {
+            return Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE).getString("Local", "")
+        }
+
     }
 
 

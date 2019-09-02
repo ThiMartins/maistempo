@@ -6,6 +6,7 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
@@ -17,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
+import dev.tantto.maistempo.ListaProximos
 import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.adaptadores.AdaptadorPager
 import dev.tantto.maistempo.fragmentos.FragmentFavoritos
@@ -156,17 +158,19 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                     .setView(R.layout.raio_layout)
                     .setTitle(R.string.MudarRaio)
                     .setPositiveButton(R.string.Enviar){ _, _ ->
-                        if(ProgressoRaio?.progress != Pessoa.raio.toInt()){
-                            val RaioFinal = when (ProgressoRaio?.progress!!){
-                                0 -> 1
-                                1 -> 12
-                                2 -> 25
-                                3 -> 35
-                                4 -> 50
-                                else -> 100
-                            }
-                            DatabaseFirebaseSalvar.mudarRaio(Pessoa.email, RaioFinal)
 
+                        val RaioFinal = when (ProgressoRaio?.progress!!){
+                            0 -> 1
+                            1 -> 12
+                            2 -> 25
+                            3 -> 35
+                            4 -> 50
+                            else -> 100
+                        }
+
+                        if(RaioFinal != Pessoa.raio.toInt()){
+                            atualizarLista()
+                            DatabaseFirebaseSalvar.mudarRaio(Pessoa.email, RaioFinal)
                         }
                     }.setNegativeButton(R.string.Cancelar, null)
                 val AlertaFechado = Alerta.create()
@@ -195,6 +199,8 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     }
 
     fun atualizarLista(){
+        TodosLocais.atualizando()
+        ListaProximos.limpar()
         DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
             override fun pessoaRecebida(Pessoa: Perfil) {
                 if(Pessoa.raio != 100L){
@@ -204,7 +210,11 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                         }
                     })
                 } else {
-                    buscarLojas()
+                    BuscarLojasProximas(this@TelaPrincipal, (9999 * 1000).toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
+                        override fun resultado(Modo: Boolean) {
+                            buscarLojas()
+                        }
+                    })
                 }
 
             }
@@ -213,18 +223,24 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     }
 
     private fun buscarLojas() {
-        BuscarLojasImagem(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : BuscarLojasImagem.BuscarConcluida {
-            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
-                if (Lista != null && ListaImagem != null) {
-                    if (Lista.isNotEmpty()) {
-                        ListaLocais.refazer(Lista)
-                        ListaBitmap.refazer(ListaImagem)
-                        TodosLocais.notificarMudanca()
+        DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
+            override fun pessoaRecebida(Pessoa: Perfil) {
+                BuscarLojasProximas(this@TelaPrincipal, Pessoa.raio.toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
+                    override fun resultado(Modo: Boolean) {
+                        BuscarLojasImagem(Pessoa.email, object : BuscarLojasImagem.BuscarConcluida {
+                            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
+                                if (Lista != null && ListaImagem != null) {
+                                    ListaLocais.refazer(Lista)
+                                    ListaBitmap.refazer(ListaImagem)
+                                    TodosLocais.notificarMudanca()
+                                } else {
+                                    TodosLocais.cancelarAtualizacao()
+                                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
+                                }
+                            }
+                        })
                     }
-                } else {
-                    TodosLocais.cancelarAtualizacao()
-                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
-                }
+                })
             }
         })
     }

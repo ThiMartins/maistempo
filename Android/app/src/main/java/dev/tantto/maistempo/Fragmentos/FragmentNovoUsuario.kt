@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.telas.TelaLogin
 import java.io.IOException
+import java.lang.IllegalStateException
 import java.text.DateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -43,6 +45,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private var Nome:EditText? = null
     private var Email:EditText? = null
     private var Senha:EditText? = null
+    private var SenhaInput:TextInputLayout? = null
     private var SenhaConfirmar:EditText? = null
     private var SenhaConfirmarInput:TextInputLayout? = null
     private var DataTexto:EditText? = null
@@ -102,6 +105,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     fun passandoCidades(Lista:List<String>){
         ListaCidades.addAll(Lista)
         configuraAdapter()
+        Log.i("Teste", "Recuperado")
     }
 
     fun setandoReferencia(ref:TelaLogin) : FragmentNovoUsuario{
@@ -130,6 +134,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
         Nome = Fragmento.findViewById(R.id.NomeNovo)
         Email = Fragmento.findViewById(R.id.EmailNovo)
         Senha = Fragmento.findViewById(R.id.SenhaNovo)
+        SenhaInput = Fragmento.findViewById(R.id.SenhaInputLayout)
         SenhaConfirmar = Fragmento.findViewById(R.id.SenhaConfirmarNovo)
         SenhaConfirmarInput = Fragmento.findViewById(R.id.SenhaConfirmarInputLayout)
         Foto = Fragmento.findViewById(R.id.FotoNovoUsuario)
@@ -149,6 +154,22 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     }
 
     private fun eventos() {
+
+        Senha?.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(p0 != null){
+                    verificarSenhaValida(p0.toString())
+                }
+            }
+        })
 
         SenhaConfirmar?.addTextChangedListener(object  : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
@@ -301,6 +322,35 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
     }
 
+    private fun verificarSenhaValida(p0: String) : Boolean {
+        var letraMaiuscula = false
+        var caractereEspecial = false
+        for (letra in p0) {
+            if (letra.isLetter() && letra.isUpperCase()) {
+                letraMaiuscula = true
+            }
+            if (!letra.isLetter()) {
+                caractereEspecial = true
+            }
+        }
+        if (!letraMaiuscula || !caractereEspecial) {
+            try {
+                SenhaInput?.error = getString(R.string.LetraMaiuscula)
+            } catch (Erro:IllegalStateException){
+                Erro.printStackTrace()
+            }
+            return false
+        } else {
+            if (p0.length > 6) {
+                SenhaInput?.isErrorEnabled = false
+            } else {
+                SenhaInput?.error = getString(R.string.SenhaMaior)
+                return false
+            }
+        }
+        return true
+    }
+
     private fun criarArray(Inicio:Int, Fim:Int) : List<Int>{
         val Lista = mutableListOf<Int>()
         for (i in Inicio..Fim ){
@@ -341,7 +391,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     private fun verificar() {
         if(Nome?.text?.isNotEmpty()!! ){
             if (isEmailValido(Email?.text?.toString()!!)){
-                if (Senha?.text?.toString()?.length!! >= 6 && SenhaConfirmar?.text?.toString() == Senha?.text?.toString()){
+                if (Senha?.text?.toString()?.length!! >= 6 && SenhaConfirmar?.text?.toString() == Senha?.text?.toString() && verificarSenhaValida(Senha?.text?.toString()!!)){
                     if(Cidade?.selectedItem.toString().isNotEmpty()){
                         if(isDataValida(DataTexto?.text.toString())){
                             if(CheckTermos?.isChecked!!){
@@ -378,6 +428,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
                     SenhaConfirmar?.requestFocus()
                 } else {
                     alerta(R.string.ErroSenha, R.string.Atencao)
+                    Senha?.requestFocus()
                 }
             } else {
                 alerta(R.string.ErroEmail, R.string.Atencao)

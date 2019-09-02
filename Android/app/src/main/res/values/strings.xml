@@ -454,7 +454,7 @@
     <string name="GpsDesligado">Deseja ligar o GPS ?</string>
     <string name="NovaSenha">*****</string>
     <string name="SenhaSalva">Senha salva com sucesso</string>
-    <string name="ErroSenhaMudanca">Não foi possivel mudar a senha, verifique sua conexão ou tente mais tarde</string>
+    <string name="ErroSenhaMudanca">Não foi possivel mudar a senha, verifique sua conexão ou a se a senha está correta</string>
     <string name="EsqueciSenhaMinha">Esqueci minha senha</string>
     <string name="CampoEmailSenha">Por favor colocar o e-mail para recuperar a senha</string>
     <string name="ErroEnviarRecupera">Não foi possivel enviar o e-mail de recuperação, por favor verifique seu e-mail se
@@ -501,4 +501,7 @@
     <string name="HabilitarAlarme">Habilitar alarme</string>
     <string name="AlarmeHabilitado">Alarme habilitado</string>
     <string name="AlarmeDesabilitado">Alarme desabilitado</string>
+    <string name="LetraMaiuscula">A senha deve conter letra maiscula e caracteres especiais</string>
+    <string name="SenhaMaior">Coloque uma senha maior</string>
+    <string name="SenhaAntiga">Senha Antiga</string>
 </resources>

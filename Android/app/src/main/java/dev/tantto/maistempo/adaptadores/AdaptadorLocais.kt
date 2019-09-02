@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.geofire.GeoLocation
 import com.google.android.gms.maps.model.LatLng
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.ListaBitmap
@@ -17,6 +18,7 @@ import dev.tantto.maistempo.ListaLocais
 import dev.tantto.maistempo.ListaProximos
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.classes.Dados
 import dev.tantto.maistempo.classes.LocalizacaoPessoa
 import dev.tantto.maistempo.telas.TelaResumoLoja
 import java.text.NumberFormat
@@ -35,7 +37,6 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.adicionandoValores(ListaLocais.recuperar(position), position)
         holder.click(ListaLocais.recuperar(position), position)
-
     }
 
     class Holder(Item:View, private val Contexto: Context) : RecyclerView.ViewHolder(Item) {
@@ -71,15 +72,35 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
             }
 
             if(ListaProximos.contem(Chave.CHAVE_MINHA_LOCALIZCAO.valor)){
-                val Coordenadas = LatLng(Elementos.latitude, Elementos.longitude)
-                val Valores = ListaProximos.recuperar(Chave.CHAVE_MINHA_LOCALIZCAO.valor)
-                val MinhaCoordenadas = LatLng(Valores.longitude, Valores.latitude)
-                val Resultado = NumberFormat.getInstance()
-                Resultado.maximumFractionDigits = 2
-                DistanciaLoja.text = String.format(Resultado.format((LocalizacaoPessoa.calcularDistancia(MinhaCoordenadas, Coordenadas)) / 1000) .toString() + "\n" + Contexto.getString(R.string.KM))
+                val Local = ListaProximos.recuperar(Chave.CHAVE_MINHA_LOCALIZCAO.valor)
+                Dados.salvarLocal(Contexto, String.format("${Local.latitude}/${Local.longitude}"))
+                calcularDistancia(Elementos)
+            } else {
+                val Local = Dados.verificarLocal(Contexto)
+                if(!Local.isNullOrEmpty()){
+                    val Coordenadas = Local.split("/")
+                    ListaProximos.adicionar(Chave.CHAVE_MINHA_LOCALIZCAO.valor, GeoLocation(Coordenadas[0].toDouble(), Coordenadas[1].toDouble()))
+                    calcularDistancia(Elementos)
+                }
             }
 
             setandoBackground(fazerMedia(Elementos, Horas))
+        }
+
+        private fun calcularDistancia(Elementos: Lojas) {
+            val Coordenadas = LatLng(Elementos.latitude, Elementos.longitude)
+            val Valores = ListaProximos.recuperar(Chave.CHAVE_MINHA_LOCALIZCAO.valor)
+            val MinhaCoordenadas = LatLng(Valores.longitude, Valores.latitude)
+            val Resultado = NumberFormat.getInstance()
+            Resultado.maximumFractionDigits = 2
+            DistanciaLoja.text = String.format(
+                Resultado.format(
+                    (LocalizacaoPessoa.calcularDistancia(
+                        MinhaCoordenadas,
+                        Coordenadas
+                    )) / 1000
+                ).toString() + "\n" + Contexto.getString(R.string.KM)
+            )
         }
 
         private fun setandoBackground(MediaFinal: Double) {

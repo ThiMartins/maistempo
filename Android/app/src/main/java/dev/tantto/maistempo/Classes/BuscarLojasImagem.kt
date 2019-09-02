@@ -1,6 +1,7 @@
 package dev.tantto.maistempo.classes
 
 import android.graphics.Bitmap
+import android.util.Log
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.modelos.Perfil
 import dev.tantto.maistempo.google.*
@@ -46,10 +47,10 @@ class BuscarLojasImagem() : DatabasePessoaInterface, DatabaseLocaisInterface, Do
                     CloudStorageFirebase().donwloadCloud("${Item.id}.jpg", TipoDonwload.ICONE, this)
                 }
             } else {
-                InterfaceBusca?.concluido(false, null, null, Pessoa)
+                InterfaceBusca?.concluido(false, mutableListOf(), hashMapOf(), Pessoa)
             }
         } else {
-            InterfaceBusca?.concluido(false, null, null, Pessoa)
+            InterfaceBusca?.concluido(false, mutableListOf(), hashMapOf(), Pessoa)
         }
     }
 

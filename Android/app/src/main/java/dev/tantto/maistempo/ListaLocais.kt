@@ -23,6 +23,7 @@ class ListaLocais {
 
         fun refazer(Tabela:MutableList<Lojas>){
             ListaLojas = Tabela
+
             BackupLojas = ListaLojas
         }
 
@@ -32,7 +33,7 @@ class ListaLocais {
         }
 
         fun recuperarTudo() : MutableList<Lojas>{
-            return ListaLojas
+            return ListaLojas.filter { ListaProximos.contem(it.id) } as MutableList<Lojas>
         }
 
         fun recuperar(Index:Int): Lojas {
@@ -40,7 +41,7 @@ class ListaLocais {
         }
 
         fun tamanho() : Int{
-            return ListaLojas.size
+            return (ListaLojas.filter { ListaProximos.contem(it.id) }).size
         }
 
         fun contemFavoritos(Valor:String?): Boolean{

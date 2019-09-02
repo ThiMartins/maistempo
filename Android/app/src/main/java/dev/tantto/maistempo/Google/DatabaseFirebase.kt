@@ -157,6 +157,8 @@ class DatabaseFirebaseSalvar {
             try {
                 FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).delete()
                 CloudStorageFirebase.deletarImagem(Email)
+                FirebaseAutenticacao.apagarConta()
+                FirebaseAutenticacao.deslogarUser()
             } catch (Erro:FirebaseFirestoreException){
                 Erro.printStackTrace()
             }
@@ -266,12 +268,18 @@ class DatabaseFirebaseRecuperar {
 
         @Suppress("UNCHECKED_CAST")
         fun recuperarFavoritos(Email:String, Interface:FavoritosRecuperados){
-            FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
-                if(documentSnapshot?.exists()!!){
-                    val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
-                    ListaLocais.refazerFavoritos(ListaTemp)
-                    Interface.recuperadoFavoritos()
+            try {
+                FirebaseFirestore.getInstance().collection(Chave.CHAVE_USUARIO.valor).document(Email).addSnapshotListener { documentSnapshot, _ ->
+                    if(documentSnapshot?.exists()!!){
+                        val ListaTemp = documentSnapshot["lojasFavoritas"] as MutableList<String>
+                        ListaLocais.refazerFavoritos(ListaTemp)
+                        Interface.recuperadoFavoritos()
+                    }
                 }
+            } catch (Erro:FirebaseFirestoreException){
+                Erro.printStackTrace()
+            } catch (Erro:KotlinNullPointerException){
+                Erro.printStackTrace()
             }
         }
 
