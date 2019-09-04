@@ -93,6 +93,7 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
             val MinhaCoordenadas = LatLng(Valores.longitude, Valores.latitude)
             val Resultado = NumberFormat.getInstance()
             Resultado.maximumFractionDigits = 2
+            Resultado.minimumFractionDigits = 2
             DistanciaLoja.text = String.format(
                 Resultado.format(
                     (LocalizacaoPessoa.calcularDistancia(
@@ -104,9 +105,9 @@ class AdaptadorLocais(private val Contexto:Context) : RecyclerView.Adapter<Adapt
         }
 
         private fun setandoBackground(MediaFinal: Double) {
-            if (MediaFinal <= 33.0) {
+            if (MediaFinal <= 2.33) {
                 ResumoFila.setBackgroundResource(R.drawable.modo_fila_vazio)
-            } else if (MediaFinal > 33.0 && MediaFinal <= 66.0) {
+            } else if (MediaFinal > 2.33 && MediaFinal <= 4.66) {
                 ResumoFila.setBackgroundResource(R.drawable.modo_fila_medio)
             } else {
                 ResumoFila.setBackgroundResource(R.drawable.modo_fila_lotado)

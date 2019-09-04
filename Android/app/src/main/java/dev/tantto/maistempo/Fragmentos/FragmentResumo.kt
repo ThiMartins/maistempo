@@ -144,12 +144,8 @@ class FragmentResumo : Fragment(), FunctionsInterface {
                 else -> 6
             }
 
-            CloudFunctions.adicionarNotaFila(
-                LojaInfo?.id!!,
-                Tipo?.valor!!,
-                valorNota.toDouble(),
-                Horas.toString(),
-                this@FragmentResumo
+            CloudFunctions.adicionarNotaFila(LojaInfo?.id!!, Tipo?.valor!!,
+                valorNota.toDouble(), Horas.toString(), this@FragmentResumo
             )
             if (referencia != null) {
                 Alertas.criarAlerter(referencia!!, R.string.EnviandoNota, R.string.Enviando, 10000)

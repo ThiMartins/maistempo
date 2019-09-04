@@ -369,30 +369,6 @@ class DatabaseFirebaseRecuperar {
             }
         }
 
-        @Suppress("UNCHECKED_CAST")
-        fun recuperarNotasRanking(Interface:Ranking){
-            try {
-                FirebaseFirestore.getInstance().collection(Chave.CHAVE_NOTAS_USUARIOS.valor).limit(10).get().addOnCompleteListener {
-                    if (it.isSuccessful){
-                        val valores = it.result?.documents!!
-                        val Lista = mutableMapOf<String, Double>()
-                        for (Item in valores){
-                            Lista.putAll(Item["notasRanking"] as HashMap<String, Double>)
-                        }
-                        Interface.notas(Lista)
-                    }
-                }
-            } catch (Erro:FirebaseFirestoreException){
-                Erro.printStackTrace()
-            }
-        }
-
-    }
-
-    interface Ranking{
-
-        fun notas(Lista:MutableMap<String, Double>)
-
     }
 
 }

@@ -47,6 +47,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

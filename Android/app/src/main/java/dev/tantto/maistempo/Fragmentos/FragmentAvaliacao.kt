@@ -29,7 +29,7 @@ class FragmentAvaliacao : Fragment() {
     private var Loja:Lojas? = null
     private var VerAvaliacoes:Button? = null
 
-    private lateinit var referencia:TelaResumoLoja
+    private var referencia:TelaResumoLoja? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_avaliacao_local, container, false)
@@ -69,21 +69,25 @@ class FragmentAvaliacao : Fragment() {
         VerAvaliacoes?.setOnClickListener {
             val alertaCarregando = Alertas.alertaCarregando(this.requireContext())
             alertaCarregando.show()
-            DatabaseFirebaseRecuperar.recuperarNotasRanking(object : DatabaseFirebaseRecuperar.Ranking{
-                override fun notas(Lista: MutableMap<String, Double>) {
+            CloudFunctions.recuperarRaking(Loja?.id!!, object  : CloudFunctions.ListaRanking{
+                override fun resultado(lista: HashMap<String, Double>?) {
                     alertaCarregando.dismiss()
-                    val ListaBottom = BottomSheetDialog(this@FragmentAvaliacao.requireContext())
-                    ListaBottom.setContentView(R.layout.todas_avaliacao)
-                    ListaBottom.show()
-                    val ListaRecycler = ListaBottom.findViewById<RecyclerView>(R.id.TodasAvaliacoes)
-                    ListaRecycler?.adapter = AdaptadorTodasAvaliacoes(Lista)
+                    if(lista != null){
+                        val ListaBottom = BottomSheetDialog(this@FragmentAvaliacao.requireContext())
+                        ListaBottom.setContentView(R.layout.todas_avaliacao)
+                        ListaBottom.show()
+                        val ListaRecycler = ListaBottom.findViewById<RecyclerView>(R.id.TodasAvaliacoes)
+                        ListaRecycler?.adapter = AdaptadorTodasAvaliacoes(lista.toMutableMap())
+                    }
                 }
             })
         }
 
         Enviar?.setOnClickListener {
             val nota = RatingVoto?.rating!!
-            Alertas.criarAlerter(referencia, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
+            if(referencia != null){
+                Alertas.criarAlerter(referencia!!, getString(R.string.RatingAlerta) + RatingVoto?.rating.toString(), R.string.Enviando, 5000).show()
+            }
             RatingVoto?.isEnabled = false
 
             val email = FirebaseAutenticacao.Autenticacao.currentUser?.email!!
@@ -94,6 +98,10 @@ class FragmentAvaliacao : Fragment() {
 
                     DatabaseFirebaseSalvar.adicionarPontos(email, 1, TipoPontos.PONTOS_AVALIACAO)
                     CloudFunctions.adicionarNotaLoja(idNota, nota.toDouble(), Loja?.id!!)
+                    if(referencia != null){
+                        Alertas.criarAlerter(referencia!!, R.string.Atualizando, R.string.Aguardando).show()
+                    }
+                    referencia?.recuperarLoja(Loja?.id!!)
                 }
             })
         }
