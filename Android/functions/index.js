@@ -122,8 +122,8 @@ exports.adicionarNotaLocal = functions.https.onCall(async (data, _context) =>{
         const Dados = snapshot.data()
         const notas = Dados["notasRanking"];
 
-        const NotasChaves = Object.keys(notas);
-        const NotasValues = Object.values(notas);
+        var NotasChaves = Object.keys(notas);
+        var NotasValues = Object.values(notas);
 
         if(NotasChaves.hasOwnProperty(email)){
             notas[email] = valor;
@@ -132,6 +132,8 @@ exports.adicionarNotaLocal = functions.https.onCall(async (data, _context) =>{
         }
 
         var Notas = 0;
+        NotasChaves = Object.keys(notas);
+        NotasValues = Object.values(notas);
         const Tamanho = NotasChaves.length;
 
         NotasValues.forEach(element =>{
@@ -200,3 +202,29 @@ exports.fazerMedia = functions.firestore.document('usuarios/{uid}').onWrite((cha
 
     return change.after.ref.set({ pontosTotais: Soma}, {merge: true});
 });
+
+exports.recuperarRaking = functions.https.onCall(async (data, _context) =>{
+
+    const id = data['id'];
+
+    return await admin.firestore().collection('notasUsuarios').doc(id).get().then(snapshot =>{
+        const dataS = snapshot.data();
+        const notas = dataS['notasRanking'];
+        
+        var ans = new Map();
+        const chaves = Object.keys(notas);
+
+        var posicao = 0;
+        
+        for (let index = 0; index < chaves.length && index < 20; index++) {
+            var valorChave = chaves[index];
+            ans[valorChave] = notas[valorChave];
+        }
+        return ans;
+    })
+    .catch(erro =>{
+        console.log(erro);
+        return null;
+    });
+
+})

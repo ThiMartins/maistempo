@@ -11,12 +11,15 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
+import com.firebase.geofire.GeoLocation
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import dev.tantto.maistempo.classes.*
 import dev.tantto.maistempo.google.*
 import dev.tantto.maistempo.ListaBitmap
 import dev.tantto.maistempo.ListaLocais
+import dev.tantto.maistempo.ListaProximos
 import dev.tantto.maistempo.R
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.modelos.Perfil
@@ -144,7 +147,23 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
     override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
         if(Lista != null && ListaImagem != null){
-            ListaLocais.refazer(Lista)
+
+            val novaLista = mutableListOf<Lojas>()
+            val Local = Dados.verificarLocal(this@TelaSplash)
+            if(!Local.isNullOrEmpty()){
+                val Coordenadas = Local.split("/")
+                val latitude = Coordenadas[0].toDouble()
+                val longitude = Coordenadas[1].toDouble()
+
+                for (Item in Lista){
+
+                    if(calcularDistancia(Pessoa?.raio!!, Item.latitude, Item.longitude, longitude, latitude)){
+                        novaLista.add(Item)
+                    }
+                }
+            }
+
+            ListaLocais.refazer(novaLista)
             ListaBitmap.refazer(ListaImagem)
             if(Pessoa != null){
                 ListaLocais.refazerFavoritos(Pessoa.lojasFavoritas)
@@ -155,10 +174,23 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         }
     }
 
+    private fun calcularDistancia(Raio: Long, LatitudeLoja:Double, LongitudeLoja:Double, LatitudePessoa: Double, LongitudePessoa: Double) : Boolean{
+        val distancia = LocalizacaoPessoa.calcularDistancia(LatLng(LatitudeLoja, LongitudeLoja), LatLng(LatitudePessoa, LongitudePessoa)) / 1000
+        return distancia <= Raio
+    }
+
     private fun verificacaoGPS(Pessoa: Perfil) {
         BuscarLojasProximas(this, Pessoa.raio.toDouble() * 1000).procurarProximos(object :
             BuscarLojasProximas.BuscaConcluida {
             override fun resultado(Modo: Boolean) {
+                if(!Modo){
+                    val Local = Dados.verificarLocal(this@TelaSplash)
+                    if(!Local.isNullOrEmpty()){
+                        val Coordenadas = Local.split("/")
+                        ListaProximos.adicionar(Chave.CHAVE_MINHA_LOCALIZCAO.valor, GeoLocation(Coordenadas[0].toDouble(), Coordenadas[1].toDouble()))
+                    }
+
+                }
                 if(Pausado){
                     PessoaPassada = Pessoa
                 } else {

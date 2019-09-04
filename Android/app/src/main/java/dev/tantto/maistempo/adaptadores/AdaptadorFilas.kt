@@ -71,8 +71,8 @@ class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : Re
             val ProgressoBarra = Item.findViewById<ProgressBar>(R.id.ProgressoFila1)
             ProgressoBarra.progress = 100
 
-            setandoCor(Progresso, ProgressoBarra)
-            colocandoAnimacao(ProgressoBarra, Progresso)
+            setandoCor(Progresso + 1, ProgressoBarra)
+            colocandoAnimacao(ProgressoBarra, Progresso + 1)
 
         }
 

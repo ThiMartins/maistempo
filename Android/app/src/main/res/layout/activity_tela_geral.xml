@@ -16,7 +16,8 @@
                 android:layout_height="175dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:background="@color/colorPrimary" app:layout_constraintEnd_toEndOf="parent"/>
+                android:background="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView
                 android:layout_width="100dp"
@@ -48,6 +49,8 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginLeft="32dp"
+                android:textColorHint="@android:color/white"
+                app:boxStrokeColor="@android:color/white"
                 app:layout_constraintStart_toEndOf="@+id/FotoPerfil">
 
             <EditText

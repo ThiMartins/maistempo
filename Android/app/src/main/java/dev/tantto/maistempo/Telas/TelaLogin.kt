@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseUser
@@ -98,6 +99,7 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
             override fun listaCidades(Lista: List<String>?) {
                 carregar.dismiss()
                 if(Lista != null){
+                    Log.i("Teste", Lista.toString())
                     Novo?.passandoCidades(Lista)
                 }
             }

@@ -7,6 +7,7 @@ import dev.tantto.maistempo.chaves.Chave
 import java.lang.Exception
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 enum class Resultado(val valor:String){
     SUCESSO("sucesso"),
@@ -59,6 +60,22 @@ class CloudFunctions {
                 Erro.printStackTrace()
             }
         }
+
+        @Suppress("UNCHECKED_CAST")
+        fun recuperarRaking(Id: String, Interface:ListaRanking){
+            FirebaseFunctions.getInstance().getHttpsCallable("recuperarRaking").call(hashMapOf(Pair("id", Id))).addOnCompleteListener {
+                if(it.isSuccessful){
+                    val valores = it.result?.data as HashMap<String, Double>
+                    Interface.resultado(valores)
+                }
+            }
+        }
+
+    }
+
+    interface ListaRanking{
+
+        fun resultado(lista:HashMap<String, Double>?)
 
     }
 
