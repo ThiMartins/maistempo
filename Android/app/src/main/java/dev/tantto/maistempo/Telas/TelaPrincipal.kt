@@ -14,8 +14,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.viewpager.widget.ViewPager
-import com.firebase.geofire.GeoLocation
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import dev.tantto.maistempo.ListaBitmap
@@ -111,13 +109,6 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Pesquisa.onActionViewCollapsed()
-                if(Tabs?.selectedTabPosition == 0){
-                    TodosLocais.filtro(query!!)
-                } else if(Tabs?.selectedTabPosition == 1){
-                    FavoritosLocais.filtro(query!!)
-                }
-                Pesquisa.setQuery(query!!, false)
                 return false
             }
         })
@@ -178,8 +169,8 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                         }
 
                         if(RaioFinal != Pessoa.raio.toInt()){
-                            DatabaseFirebaseSalvar.mudarRaio(Pessoa.email, RaioFinal)
                             atualizarLista()
+                            DatabaseFirebaseSalvar.mudarRaio(Pessoa.email, RaioFinal)
                         }
                     }.setNegativeButton(R.string.Cancelar, null)
                 val AlertaFechado = Alerta.create()
@@ -208,36 +199,20 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     }
 
     fun atualizarLista(){
-        ListaProximos.limpar()
-        ListaLocais.limpar()
-        ListaBitmap.limpar()
         TodosLocais.atualizando()
+        ListaProximos.limpar()
         DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
             override fun pessoaRecebida(Pessoa: Perfil) {
                 if(Pessoa.raio != 100L){
                     BuscarLojasProximas(this@TelaPrincipal, Pessoa.raio.toDouble() * 1000).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
                         override fun resultado(Modo: Boolean) {
-                            if(!Modo){
-                                val Local = Dados.verificarLocal(this@TelaPrincipal)
-                                if(!Local.isNullOrEmpty()){
-                                    val Coordenadas = Local.split("/")
-                                    ListaProximos.adicionar(Chave.CHAVE_MINHA_LOCALIZCAO.valor, GeoLocation(Coordenadas[0].toDouble(), Coordenadas[1].toDouble()))
-                                }
-                            }
-                            buscarLojas(Pessoa.email, Pessoa.raio)
+                            buscarLojas()
                         }
                     })
                 } else {
                     BuscarLojasProximas(this@TelaPrincipal, (9999 * 1000).toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
                         override fun resultado(Modo: Boolean) {
-                            if(!Modo){
-                                val Local = Dados.verificarLocal(this@TelaPrincipal)
-                                if(!Local.isNullOrEmpty()){
-                                    val Coordenadas = Local.split("/")
-                                    ListaProximos.adicionar(Chave.CHAVE_MINHA_LOCALIZCAO.valor, GeoLocation(Coordenadas[0].toDouble(), Coordenadas[1].toDouble()))
-                                }
-                            }
-                            buscarLojas(Pessoa.email, (9999 * 1000).toLong())
+                            buscarLojas()
                         }
                     })
                 }
@@ -247,39 +222,27 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
     }
 
-    private fun buscarLojas(Email:String, Raio:Long) {
-        BuscarLojasImagem(Email, object : BuscarLojasImagem.BuscarConcluida {
-            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
-                if (Lista != null && ListaImagem != null) {
-                    val novaLista = mutableListOf<Lojas>()
-                    val Local = Dados.verificarLocal(this@TelaPrincipal)
-                    if(!Local.isNullOrEmpty()){
-                        val Coordenadas = Local.split("/")
-                        val latitude = Coordenadas[0].toDouble()
-                        val longitude = Coordenadas[1].toDouble()
-
-                        for (Item in Lista){
-
-                            if(calcularDistancia(Raio, Item.latitude, Item.longitude, longitude, latitude)){
-                                novaLista.add(Item)
+    private fun buscarLojas() {
+        DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
+            override fun pessoaRecebida(Pessoa: Perfil) {
+                BuscarLojasProximas(this@TelaPrincipal, Pessoa.raio.toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
+                    override fun resultado(Modo: Boolean) {
+                        BuscarLojasImagem(Pessoa.email, object : BuscarLojasImagem.BuscarConcluida {
+                            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
+                                if (Lista != null && ListaImagem != null) {
+                                    ListaLocais.refazer(Lista)
+                                    ListaBitmap.refazer(ListaImagem)
+                                    TodosLocais.notificarMudanca()
+                                } else {
+                                    TodosLocais.cancelarAtualizacao()
+                                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
+                                }
                             }
-                        }
+                        })
                     }
-
-                    ListaLocais.refazer(novaLista)
-                    ListaBitmap.refazer(ListaImagem)
-                    TodosLocais.notificarMudanca()
-                } else {
-                    TodosLocais.cancelarAtualizacao()
-                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
-                }
+                })
             }
         })
-    }
-
-    private fun calcularDistancia(Raio: Long, LatitudeLoja:Double, LongitudeLoja:Double, LatitudePessoa: Double, LongitudePessoa: Double) : Boolean{
-        val distancia = LocalizacaoPessoa.calcularDistancia(LatLng(LatitudeLoja, LongitudeLoja), LatLng(LatitudePessoa, LongitudePessoa)) / 1000
-        return distancia <= Raio
     }
 
 }

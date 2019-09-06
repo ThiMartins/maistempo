@@ -20,10 +20,6 @@ class ListaBitmap {
             this.Lista = Lista
         }
 
-        fun limpar(){
-            Lista.clear()
-        }
-
     }
 
 }

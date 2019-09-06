@@ -23,16 +23,8 @@ class ListaLocais {
 
         fun refazer(Tabela:MutableList<Lojas>){
             ListaLojas = Tabela
-            BackupLojas = ListaLojas
-        }
 
-        fun editar(Loja:Lojas){
-            val index = ListaLojas.find { it.id == Loja.id }
-            if(index != null){
-                val posicao = ListaLojas.indexOf(index)
-                ListaLojas[posicao] = Loja
-                BackupLojas?.set(posicao, Loja)
-            }
+            BackupLojas = ListaLojas
         }
 
         fun refazerFavoritos(Tabela:MutableList<String>) {
@@ -41,28 +33,15 @@ class ListaLocais {
         }
 
         fun recuperarTudo() : MutableList<Lojas>{
-            return when (ListaProximos.tamanho()) {
-                0 -> mutableListOf()
-                1 -> ListaLojas
-                else -> { ListaLojas.filter { ListaProximos.contem(it.id) } as MutableList<Lojas> }
-            }
+            return ListaLojas.filter { ListaProximos.contem(it.id) } as MutableList<Lojas>
         }
 
         fun recuperar(Index:Int): Lojas {
             return ListaLojas[Index]
         }
 
-        fun tamanho() : Int {
-            return when (ListaProximos.tamanho()) {
-                0 -> 0
-                1 -> ListaLojas.size
-                else -> { (ListaLojas.filter { ListaProximos.contem(it.id) }).size }
-            }
-        }
-
-        fun limpar(){
-            ListaLojas.clear()
-            BackupLojas?.clear()
+        fun tamanho() : Int{
+            return (ListaLojas.filter { ListaProximos.contem(it.id) }).size
         }
 
         fun contemFavoritos(Valor:String?): Boolean{

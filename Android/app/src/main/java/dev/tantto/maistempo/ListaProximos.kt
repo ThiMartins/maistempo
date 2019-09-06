@@ -26,10 +26,6 @@ class ListaProximos {
             return Lista.containsKey(Id)
         }
 
-        fun tamanho() : Int{
-            return Lista.size
-        }
-
     }
 
 }

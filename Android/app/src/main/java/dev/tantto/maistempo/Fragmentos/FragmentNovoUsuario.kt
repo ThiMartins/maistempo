@@ -105,6 +105,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
     fun passandoCidades(Lista:List<String>){
         ListaCidades.addAll(Lista)
         configuraAdapter()
+        Log.i("Teste", "Recuperado")
     }
 
     fun setandoReferencia(ref:TelaLogin) : FragmentNovoUsuario{
@@ -165,9 +166,7 @@ class FragmentNovoUsuario : Fragment(), EnviarFotoCloud, AutenticacaoCriar{
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if(p0 != null){
-                    if(p0.isNotEmpty()){
-                        verificarSenhaValida(p0.toString())
-                    }
+                    verificarSenhaValida(p0.toString())
                 }
             }
         })

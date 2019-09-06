@@ -3,6 +3,7 @@ package dev.tantto.maistempo.google
 import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.FirebaseFunctionsException
 import dev.tantto.maistempo.chaves.Chave
 import java.lang.Exception
 import java.text.DateFormat
@@ -62,23 +63,30 @@ class CloudFunctions {
         }
 
         @Suppress("UNCHECKED_CAST")
-        fun recuperarRaking(Id: String, Interface:ListaRanking){
-            FirebaseFunctions.getInstance().getHttpsCallable("recuperarRaking").call(hashMapOf(Pair("id", Id))).addOnCompleteListener {
-                if(it.isSuccessful){
-                    val valores = it.result?.data as HashMap<String, Double>
-                    Interface.resultado(valores)
+        fun recuperarRanking(Id: String, Interface:ListaRanking){
+            try {
+                FirebaseFunctions.getInstance().getHttpsCallable("recuperarRaking").call(hashMapOf(Pair("id", Id))).addOnCompleteListener {
+                    if(it.isSuccessful){
+                        if(it.result?.data != null){
+                            val itens = it.result!!.data as HashMap<String, Double>
+                            Interface.recuperado(itens)
+                        } else {
+                            Interface.recuperado(hashMapOf())
+                        }
+                    } else {
+                        Interface.recuperado(hashMapOf())
+                    }
                 }
+            }catch (Erro:FirebaseFunctionsException){
+                Erro.printStackTrace()
             }
         }
 
     }
 
     interface ListaRanking{
-
-        fun resultado(lista:HashMap<String, Double>?)
-
+        fun recuperado(Lista:HashMap<String, Double>)
     }
-
 }
 
 interface FunctionsInterface {
