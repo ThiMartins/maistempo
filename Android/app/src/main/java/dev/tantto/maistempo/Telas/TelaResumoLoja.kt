@@ -78,10 +78,6 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
         }
     }
 
-    fun recuperarLoja(Id:String){
-        DatabaseFirebaseRecuperar.recuperarDadosLoja(Id, this)
-    }
-
     private fun configurandoPagina() {
         TabIndicator?.setupWithViewPager(Pagina)
         FilaResumo.passandoLja(LojaInfo!!, this)
@@ -110,7 +106,6 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
 
     override fun dados(Loja: Lojas?) {
         if(Loja != null){
-            ListaLocais.editar(Loja)
             LojaInfo = Loja
             FilaResumo.atualizarLoja(Loja)
             AvaliacaoResumo.atualizarLoja(Loja)
@@ -118,6 +113,9 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
         }
     }
 
+    private fun recuperarLoja(Id:String){
+        DatabaseFirebaseRecuperar.recuperarDadosLoja(Id, this)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_favoritar, menu)

@@ -15,9 +15,4 @@ data class Perfil(
     var lojasFavoritas:MutableList<String> = mutableListOf(),
     var cidade:String = "",
     var acesso:String = "user"
-) : Serializable {
-
-public fun getNome() : String {
-        return titulo
-    }
-}
+) : Serializable
