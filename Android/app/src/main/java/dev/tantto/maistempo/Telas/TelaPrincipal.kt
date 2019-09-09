@@ -6,7 +6,6 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SeekBar
@@ -109,6 +108,9 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
+                if(query != null){
+                    Pesquisa.setQuery(query, false)
+                }
                 return false
             }
         })
@@ -206,13 +208,23 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                 if(Pessoa.raio != 100L){
                     BuscarLojasProximas(this@TelaPrincipal, Pessoa.raio.toDouble() * 1000).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
                         override fun resultado(Modo: Boolean) {
-                            buscarLojas()
+                            if(Modo) {
+                                ListaLocais.Modo = 0
+                            } else {
+                                ListaLocais.Modo = 1
+                            }
+                            buscarLojas(Pessoa.email)
                         }
                     })
                 } else {
                     BuscarLojasProximas(this@TelaPrincipal, (9999 * 1000).toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
                         override fun resultado(Modo: Boolean) {
-                            buscarLojas()
+                            if(Modo) {
+                                ListaLocais.Modo = 0
+                            } else {
+                                ListaLocais.Modo = 1
+                            }
+                            buscarLojas(Pessoa.email)
                         }
                     })
                 }
@@ -222,25 +234,17 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
 
     }
 
-    private fun buscarLojas() {
-        DatabaseFirebaseRecuperar.recuperaDadosPessoa(FirebaseAutenticacao.Autenticacao.currentUser?.email!!, object : DatabasePessoaInterface{
-            override fun pessoaRecebida(Pessoa: Perfil) {
-                BuscarLojasProximas(this@TelaPrincipal, Pessoa.raio.toDouble()).procurarProximos(object : BuscarLojasProximas.BuscaConcluida{
-                    override fun resultado(Modo: Boolean) {
-                        BuscarLojasImagem(Pessoa.email, object : BuscarLojasImagem.BuscarConcluida {
-                            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
-                                if (Lista != null && ListaImagem != null) {
-                                    ListaLocais.refazer(Lista)
-                                    ListaBitmap.refazer(ListaImagem)
-                                    TodosLocais.notificarMudanca()
-                                } else {
-                                    TodosLocais.cancelarAtualizacao()
-                                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
-                                }
-                            }
-                        })
-                    }
-                })
+    private fun buscarLojas(Email:String) {
+        BuscarLojasImagem(Email, object : BuscarLojasImagem.BuscarConcluida {
+            override fun concluido(Modo: Boolean, Lista: MutableList<Lojas>?, ListaImagem: HashMap<String, Bitmap>?, Pessoa: Perfil?) {
+                if (Lista != null && ListaImagem != null) {
+                    ListaLocais.refazer(Lista)
+                    ListaBitmap.refazer(ListaImagem)
+                    TodosLocais.notificarMudanca()
+                } else {
+                    TodosLocais.cancelarAtualizacao()
+                    Alertas.criarAlerter(this@TelaPrincipal, R.string.ErroLojas, R.string.Atencao).show()
+                }
             }
         })
     }

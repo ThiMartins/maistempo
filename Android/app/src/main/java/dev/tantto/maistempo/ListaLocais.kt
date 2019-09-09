@@ -6,6 +6,7 @@ class ListaLocais {
 
     companion object {
 
+        var Modo:Int = 0
         private var ListaFavoritos = mutableListOf<String>()
         private var BackupFavortios = mutableListOf<String>()
         private var BackupLojas:MutableList<Lojas>? = mutableListOf()
@@ -33,7 +34,11 @@ class ListaLocais {
         }
 
         fun recuperarTudo() : MutableList<Lojas>{
-            return ListaLojas.filter { ListaProximos.contem(it.id) } as MutableList<Lojas>
+            return when {
+                Modo == 0 -> ListaLojas.filter { ListaProximos.contem(it.id) } as MutableList<Lojas>
+                Modo == 1 -> ListaLojas
+                else -> ListaLojas
+            }
         }
 
         fun recuperar(Index:Int): Lojas {
@@ -41,7 +46,11 @@ class ListaLocais {
         }
 
         fun tamanho() : Int{
-            return (ListaLojas.filter { ListaProximos.contem(it.id) }).size
+            return when {
+                Modo == 0 -> (ListaLojas.filter { ListaProximos.contem(it.id) }).size
+                Modo == 1 -> ListaLojas.size
+                else -> ListaLojas.size
+            }
         }
 
         fun contemFavoritos(Valor:String?): Boolean{

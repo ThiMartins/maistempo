@@ -36,6 +36,7 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela_splash)
         supportActionBar?.elevation = 0F
+
     }
 
     override fun onPause() {
@@ -54,6 +55,7 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
     override fun onPostResume() {
         super.onPostResume()
         veficarRequisicoes()
+
     }
 
     private fun veficarRequisicoes() {
@@ -163,6 +165,9 @@ class TelaSplash : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
                     PessoaPassada = Pessoa
                 } else {
                     prepararInicio(Pessoa)
+                }
+                if(!Modo){
+                    ListaLocais.Modo = 1
                 }
             }
         })

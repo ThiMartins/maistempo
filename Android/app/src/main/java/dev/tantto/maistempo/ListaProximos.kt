@@ -26,6 +26,10 @@ class ListaProximos {
             return Lista.containsKey(Id)
         }
 
+        fun todos() : MutableMap<String, GeoLocation>{
+            return Lista
+        }
+
     }
 
 }
