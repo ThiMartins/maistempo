@@ -19,8 +19,7 @@ import dev.tantto.maistempo.R
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.classes.Alertas
 import dev.tantto.maistempo.classes.BuscarLojasImagem
-import dev.tantto.maistempo.google.CidadesRecuperadas
-import dev.tantto.maistempo.google.DatabaseFirebaseRecuperar
+import dev.tantto.maistempo.google.*
 
 class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
@@ -96,7 +95,9 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
 
         DatabaseFirebaseRecuperar.recuperarCidades(object : CidadesRecuperadas {
             override fun listaCidades(Lista: List<String>?) {
-                carregar.dismiss()
+                if(carregar.isShowing){
+                    carregar.dismiss()
+                }
                 if(Lista != null){
                     Novo?.passandoCidades(Lista)
                 }
