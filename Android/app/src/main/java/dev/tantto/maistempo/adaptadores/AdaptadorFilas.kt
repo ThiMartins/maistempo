@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dev.tantto.maistempo.modelos.Lojas
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.google.FirebaseAutenticacao
 
 class AdaptadorFilas(private var Contexto:Context, private var Lista:Lojas) : RecyclerView.Adapter<AdaptadorFilas.ViewHolder>() {
 
