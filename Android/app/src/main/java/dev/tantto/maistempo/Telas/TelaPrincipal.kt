@@ -132,7 +132,7 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
                     val AlertaBuilder = AlertDialog.Builder(this)
                     AlertaBuilder.setTitle(R.string.Atencao).setMessage(R.string.ConfirmarLimparBanco)
                     AlertaBuilder.setPositiveButton(R.string.Sim){ _, _ ->
-                        CloudFunctions.atualizarLista()
+                        CloudFunctions.atualizarLista(this)
                     }.setNegativeButton(R.string.Nao, null)
                     AlertaBuilder.create().show()
                 }
