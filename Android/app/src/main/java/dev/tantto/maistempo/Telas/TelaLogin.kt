@@ -19,6 +19,7 @@ import dev.tantto.maistempo.R
 import dev.tantto.maistempo.chaves.Chave
 import dev.tantto.maistempo.classes.Alertas
 import dev.tantto.maistempo.classes.BuscarLojasImagem
+import dev.tantto.maistempo.classes.Dados
 import dev.tantto.maistempo.google.*
 
 class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
@@ -109,6 +110,7 @@ class TelaLogin : AppCompatActivity(), BuscarLojasImagem.BuscarConcluida {
         if(Modo && Lista != null && ListaImagem != null && Pessoa != null){
             val Iniciar = Intent(this, TelaPrincipal::class.java)
             if(Pessoa.acesso == Chave.CHAVE_ADM.valor){
+                Dados.salvarAutorizacao(this, true)
                 Iniciar.putExtra(Chave.CHAVE_ACESSO.valor, Chave.CHAVE_ADM.valor)
             }
             ListaLocais.refazer(Lista)

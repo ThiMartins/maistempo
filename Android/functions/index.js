@@ -19,7 +19,7 @@ exports.rankingPessoa = functions.https.onCall( async (data, _context) => {
             } else {
                     Index += 1;
             }
-        } 
+        }
         return Index;
     })
     .catch(erro => {
@@ -46,7 +46,7 @@ exports.adicionarFila = functions.https.onCall( async (data, _context) => {
         const ValorChaves = Object.keys(FilaMudanca);
         const ValorValues = Object.values(FilaMudanca);
         const ValorEntidades = Object.entries(FilaMudanca);
-        
+
         if(FilaMudanca.hasOwnProperty(HorarioPassado)){
             const ListaNova = new Array();
             FilaMudanca[HorarioPassado].forEach(element => {
@@ -79,7 +79,7 @@ exports.adicionarFila = functions.https.onCall( async (data, _context) => {
         admin.firestore().collection('lojas/').doc(DocumentoPassado).get()
         .then(snapshotDoc =>{
             const DadosMedia = snapshotDoc.data();
-        
+
             const FilaMedia = DadosMedia[TipoFila];
             const ValorNovo = Object.values(FilaMedia);
 
@@ -181,6 +181,7 @@ exports.atualizarLista = functions.https.onCall(async (data, _context) =>{
             admin.firestore().collection('lojas').doc(valor.id).update("filaPreferencial", {});
             admin.firestore().collection('lojas').doc(valor.id).update("quantidadeAvaliacoesFila", 0);
             admin.firestore().collection('lojas').doc(valor.id).update("quantidadeAvaliacoesRating", 0);
+            console.log("Coleção " + NovoDoc + " Criado com sucesso");
             return "ok"
         })
         .catch(erro =>{

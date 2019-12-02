@@ -67,6 +67,7 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     override fun onRestart() {
         super.onRestart()
         FavoritosLocais.reloadLista()
+        atualizarLista()
     }
 
     override fun recuperadoFavoritos() {
@@ -88,7 +89,7 @@ class TelaPrincipal : AppCompatActivity(), FavoritosRecuperados{
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if(intent.hasExtra(Chave.CHAVE_ACESSO.valor)){
+        if(Dados.verificarAutorizacao(this)){
             NivelAcesso = Chave.CHAVE_ADM.valor
             menuInflater.inflate(R.menu.menu_tela_principal_adm, menu)
         } else {

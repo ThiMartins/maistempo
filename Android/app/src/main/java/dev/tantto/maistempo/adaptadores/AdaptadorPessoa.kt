@@ -13,6 +13,7 @@ import dev.tantto.maistempo.google.FirebaseAutenticacao
 import dev.tantto.maistempo.ListaPerfil
 import dev.tantto.maistempo.modelos.Geral
 import dev.tantto.maistempo.R
+import dev.tantto.maistempo.classes.Dados
 import dev.tantto.maistempo.telas.TelaPerfil
 import dev.tantto.maistempo.telas.TelaLogin
 import dev.tantto.maistempo.telas.TelaRanking
@@ -47,6 +48,7 @@ class AdaptadorPessoa(private val Contexto: Context, private val lista:List<Gera
             Geral.Tipo.TERMOS -> Intent(Contexto, TelaTermo::class.java)
             else -> {
                 FirebaseAutenticacao.deslogarUser()
+                Dados.salvarAutorizacao(Contexto, false)
                 val iniciar = Intent(Contexto, TelaLogin::class.java)
                 iniciar.putExtra("Fechar", "Fechar")
             }
