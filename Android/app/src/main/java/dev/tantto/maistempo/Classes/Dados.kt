@@ -39,6 +39,18 @@ class Dados {
             return Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE).getString("Local", "")
         }
 
+        fun salvarAutorizacao(Contexto: Context, Modo: Boolean) {
+            val Preferencias = Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE)
+            val Editor = Preferencias.edit()
+            Editor.putBoolean("ADM", Modo)
+            Editor.apply()
+        }
+
+        fun verificarAutorizacao(Contexto: Context) : Boolean {
+            return Contexto.getSharedPreferences("+Tempo", Context.MODE_PRIVATE).getBoolean("ADM", false)
+        }
+
+
     }
 
 
