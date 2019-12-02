@@ -145,7 +145,7 @@ exports.adicionarNotaLocal = functions.https.onCall(async (data, _context) =>{
         admin.firestore().collection('notasUsuarios/').doc(loja).set(Dados);
 
         const DadosLojas = Loja.data();
-        var Quantidade = DadosLojas['quantidadeAvaliacoesRating'];
+        let Quantidade = DadosLojas['quantidadeAvaliacoesRating'];
         Quantidade = NotasChaves.length;
         DadosLojas['quantidadeAvaliacoesRating'] = Quantidade;
         DadosLojas['mediaRanking'] = MediaFinal;
@@ -191,7 +191,7 @@ exports.atualizarLista = functions.https.onCall(async (data, _context) =>{
     return "ok";
 })
 
-exports.fazerMedia = functions.firestore.document('usuarios/{uid}').onWrite((change, context) => {
+exports.fazerMedia = functions.firestore.document('usuarios/{uid}').onWrite((change, _context) => {
 
     const data = change.after.data();
     const Cadastro = data['pontosCadastro'];
@@ -211,13 +211,11 @@ exports.recuperarRaking = functions.https.onCall(async (data, _context) =>{
         const dataS = snapshot.data();
         const notas = dataS['notasRanking'];
 
-        var ans = new Map();
+        let ans = new Map();
         const chaves = Object.keys(notas);
 
-        var posicao = 0;
-
         for (let index = 0; index < chaves.length && index < 20; index++) {
-            var valorChave = chaves[index];
+            let valorChave = chaves[index];
             ans[valorChave] = notas[valorChave];
         }
         return ans;
