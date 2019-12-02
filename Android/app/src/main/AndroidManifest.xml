@@ -53,8 +53,8 @@
 
         <activity
             android:name=".telas.TelaResumoLoja"
-            android:launchMode="singleTask"
-            android:parentActivityName=".telas.TelaPrincipal"/>
+            android:parentActivityName=".telas.TelaPrincipal"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".telas.TelaTermo"

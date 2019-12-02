@@ -2,11 +2,10 @@ package dev.tantto.maistempo.telas
 
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -34,10 +33,11 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
     private var LojaInfo:Lojas? = null
     private var Swipe:SwipeRefreshLayout? = null
 
+    private lateinit var barra:Toolbar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resumo_local)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         configurandoView()
         recuperarLoja()
@@ -60,7 +60,7 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
             Endereco?.text = String.format(getString(R.string.Endereco)+ " " + LojaInfo?.local)
             Telefone?.text = String.format(getString(R.string.Telefone) + " " + LojaInfo?.telefone)
 
-            title = LojaInfo?.titulo
+            barra.title = LojaInfo?.titulo
 
             if(ListaBitmap.tamanho() > 0){
                 Foto?.setImageBitmap(ListaBitmap.recuperar(LojaInfo?.id!!))
@@ -102,6 +102,34 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
         Swipe?.setOnRefreshListener {
             recuperarLoja(LojaInfo?.id!!)
         }
+
+        barra = findViewById(R.id.Barra)
+
+        barra.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        barra.inflateMenu(R.menu.menu_favoritar)
+        if(ListaLocais.contemFavoritos(LojaInfo?.id)){
+            barra.menu.findItem(R.id.Favoritar)?.setIcon(R.drawable.star_full_white)
+        }
+        barra.setOnMenuItemClickListener {
+            val Id = it.itemId
+
+            if(Id == R.id.Favoritar){
+                if(ListaLocais.contemFavoritos(LojaInfo?.id)){
+                    it.setIcon(R.drawable.star_clear)
+                    DatabaseFirebaseSalvar.removerFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
+                    ListaLocais.removerFavoritos(LojaInfo?.id!!)
+                } else {
+                    it.setIcon(R.drawable.star_full_white)
+                    DatabaseFirebaseSalvar.adicionarFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
+                    DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
+                    ListaLocais.adicionarFavorito(LojaInfo?.id!!)
+                }
+            }
+
+            return@setOnMenuItemClickListener true
+        }
     }
 
     override fun dados(Loja: Lojas?) {
@@ -115,34 +143,6 @@ class TelaResumoLoja : AppCompatActivity(), FavoritosRecuperados, LojaRecuperada
 
     private fun recuperarLoja(Id:String){
         DatabaseFirebaseRecuperar.recuperarDadosLoja(Id, this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_favoritar, menu)
-        if(ListaLocais.contemFavoritos(LojaInfo?.id)){
-            menu?.findItem(R.id.Favoritar)?.setIcon(R.drawable.star_full_white)
-        }
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val Id = item?.itemId
-
-        if(Id == R.id.Favoritar){
-            if(ListaLocais.contemFavoritos(LojaInfo?.id)){
-                item.setIcon(R.drawable.star_clear)
-                DatabaseFirebaseSalvar.removerFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
-                ListaLocais.removerFavoritos(LojaInfo?.id!!)
-            } else {
-                item.setIcon(R.drawable.star_full_white)
-                DatabaseFirebaseSalvar.adicionarFavorito(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), LojaInfo?.id!!)
-                DatabaseFirebaseRecuperar.recuperarFavoritos(FirebaseAutenticacao.Autenticacao.currentUser?.email.toString(), this)
-                ListaLocais.adicionarFavorito(LojaInfo?.id!!)
-            }
-
-        }
-
-        return super.onOptionsItemSelected(item!!)
     }
 
     override fun recuperadoFavoritos() {

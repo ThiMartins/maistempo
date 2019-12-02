@@ -7,95 +7,120 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             style="@style/AppTheme.Constrainst">
 
-        <ImageView
-                android:id="@+id/FotoResumo"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:contentDescription="@string/DescricaoImagemLocal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="16dp"
-                android:scaleType="centerCrop"
-                android:background="@drawable/borda_imagem"/>
-
-        <TextView
-                android:id="@+id/EnderecoResumo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/FotoResumo"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:textColor="@android:color/white"
-                tools:text="Endereco:"/>
-
-        <TextView
-                android:id="@+id/TelefoneResumo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/FotoResumo"
-                app:layout_constraintTop_toBottomOf="@id/EnderecoResumo"
-                android:layout_margin="8dp"
-                android:textColor="@android:color/white"
-                tools:text="Telefone:"/>
-
-        <TextView
-                android:id="@+id/StatusResumo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/FotoResumo"
-                app:layout_constraintTop_toBottomOf="@id/TelefoneResumo"
-                android:layout_margin="8dp"
-                android:textColor="@android:color/white"
-                tools:text="Aberto - Fecha as 22:00"/>
-
-        <View
-                android:id="@+id/View"
+        <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/FotoResumo"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"/>
+                app:elevation="0dp">
 
-        <com.google.android.material.tabs.TabLayout
-                android:id="@+id/TabAvalicao"
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/Barra"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:navigationIcon="@drawable/seta_esquerda_branca"
+                    android:background="@android:color/transparent"
+                    app:titleTextColor="@android:color/white"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/View" >
+                android:layout_height="match_parent"
+                style="@style/AppTheme.Constrainst">
 
-            <com.google.android.material.tabs.TabItem
+            <ImageView
+                    android:id="@+id/FotoResumo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:contentDescription="@string/DescricaoImagemLocal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="16dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/borda_imagem"/>
+
+            <TextView
+                    android:id="@+id/EnderecoResumo"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/FotoResumo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@android:color/white"
+                    tools:text="Endereco:"/>
 
-            <com.google.android.material.tabs.TabItem
+            <TextView
+                    android:id="@+id/TelefoneResumo"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/FotoResumo"
+                    app:layout_constraintTop_toBottomOf="@id/EnderecoResumo"
+                    android:layout_margin="8dp"
+                    android:textColor="@android:color/white"
+                    tools:text="Telefone:"/>
 
-        </com.google.android.material.tabs.TabLayout>
+            <TextView
+                    android:id="@+id/StatusResumo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/FotoResumo"
+                    app:layout_constraintTop_toBottomOf="@id/TelefoneResumo"
+                    android:layout_margin="8dp"
+                    android:textColor="@android:color/white"
+                    tools:text="Aberto - Fecha as 22:00"/>
 
-        <androidx.viewpager.widget.ViewPager
-                android:id="@+id/PaginaResumo"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/TabAvalicao"
-                android:background="@android:color/white"/>
+            <View
+                    android:id="@+id/View"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/StatusResumo"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/TabAvalicao"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/View"
+                    android:background="@color/colorPrimary">
+
+                <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/PaginaResumo"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/TabAvalicao"
+                    android:background="@android:color/white"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
