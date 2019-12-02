@@ -35,7 +35,8 @@
                 app:layout_constraintStart_toEndOf="@+id/ComoSente"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:gravity="end|center_vertical"/>
+                android:gravity="end|center_vertical"
+                style="@style/AppTheme"/>
         <ImageView
                 android:id="@+id/Triste"
                 android:layout_width="50dp"
